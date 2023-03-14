@@ -5,6 +5,8 @@ import 'package:tracker_habit/authentication/login.dart';
 import 'package:dio/dio.dart';
 import 'package:tracker_habit/country.dart';
 
+import '../geolocation.dart';
+
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
@@ -27,22 +29,22 @@ class _MySignupState extends State<SignUp> {
   @override
   void initState() {
     super.initState();
-    fetchCountries();
+    // fetchCountries();
   }
 
-  fetchCountries() async{
-    final response = await Dio().get('https://restcountries.com/v2/all?fields=name,capital,callingCodes,flags');
-    final jsonData = response.data;
-    List <Country> countries=[];
-    for(var country in jsonData){
-      var item = Country.fromJson(country);
-      countries.add(item);
-    }
-    setState(() {
-      _country=countries;
-    });
-    print("length ${_country.length}");
-  }
+  // fetchCountries() async{
+  //   final response = await Dio().get('https://restcountries.com/v2/all?fields=name,capital,callingCodes,flags');
+  //   final jsonData = response.data;
+  //   List <Country> countries=[];
+  //   for(var country in jsonData){
+  //     var item = Country.fromJson(country);
+  //     countries.add(item);
+  //   }
+  //   setState(() {
+  //     _country=countries;
+  //   });
+  //   print("length ${_country.length}");
+  // }
 
   void _Register() async {
     print("Signing up...");

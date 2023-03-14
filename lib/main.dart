@@ -14,8 +14,8 @@ Future<void> main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    // initialRoute: 'geolocation',
-    initialRoute: 'signup',
+    initialRoute: 'geolocation',
+    //initialRoute: 'signup',
     theme: ThemeData(
       primarySwatch: Colors.deepOrange,
     ),
