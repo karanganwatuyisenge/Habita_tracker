@@ -28,9 +28,8 @@ class LocationState extends State<Location> {
   Country? _selectedCountry;
   List<Region> _region = [];
   Region? _selectedRegion;
-  List<City> _city =[];
+  List<City> _city = [];
   City? _selectedCity;
-
 
   @override
   void initState() {
@@ -53,7 +52,7 @@ class LocationState extends State<Location> {
     List<Country> countries = [];
     for (var country in jsonData['data']) {
       var item = Country.fromJson(country);
-      print(item.code);
+      print(item.wikiDataId);
       countries.add(item);
     }
     setState(() {
@@ -62,9 +61,9 @@ class LocationState extends State<Location> {
     //print("length ${_country.length}");
   }
 
-  fetchRegions(String code) async {
+  fetchRegions(String wikiDataId) async {
     final response = await Dio().get(
-      'https://wft-geo-db.p.rapidapi.com/v1/geo/countries/$code/regions',
+      'https://wft-geo-db.p.rapidapi.com/v1/geo/countries/$wikiDataId/regions',
       options: Options(
         headers: {
           'X-RapidAPI-Key':
@@ -82,16 +81,15 @@ class LocationState extends State<Location> {
     setState(() {
       _region = regions;
     });
-    print("Length ${_region[0].name}");
   }
 
-  fetchCities(String regionName, String isoCode) async {
+  fetchCities(String isoCode, String wikiDataId) async {
     final response = await Dio().get(
-      'https://wft-geo-db.p.rapidapi.com/v1/geo/countries/$isoCode/regions/$regionName/cities',
+      'https://wft-geo-db.p.rapidapi.com/v1/geo/countries/$wikiDataId/regions/$isoCode/cities',
       options: Options(
         headers: {
           'X-RapidAPI-Key':
-          '1c5c14744fmsha74fb3aaae95219p1e43d2jsnbf987ff4ee8e',
+              '1c5c14744fmsha74fb3aaae95219p1e43d2jsnbf987ff4ee8e',
           'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com',
         },
       ),
@@ -103,36 +101,10 @@ class LocationState extends State<Location> {
       cities.add(item);
     }
     setState(() {
-      _city = cities;
+      _city = cities??[];
     });
-    print(cities);
-    print("Length ${_city[0].name}");
+    return cities;
   }
-
-
-  // fetchCities(String code,String isoCode) async{
-  //
-  //   final response = await Dio().get(
-  //     'https://wft-geo-db.p.rapidapi.com/v1/geo/countries/$code/regions/$isoCode/cities',
-  //     options: Options(
-  //       headers: {
-  //         'X-RapidAPI-Key':
-  //         '1c5c14744fmsha74fb3aaae95219p1e43d2jsnbf987ff4ee8e',
-  //         'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com',
-  //       },
-  //     ),
-  //   );
-  //   final jsonData = response.data;
-  //   List<City> cities =[];
-  //   for(var city in jsonData['data']){
-  //     var item = City.fromJson(city);
-  //     cities.add(item);
-  //   }
-  //   setState(() {
-  //     _city = cities;
-  //   });
-  // }
-
 
   void _Register() async {
     print("Signing up...");
@@ -274,7 +246,7 @@ class LocationState extends State<Location> {
                       setState(() {
                         _selectedCountry = newValue;
                       });
-                      fetchRegions(newValue!.code);
+                      fetchRegions(newValue!.wikiDataId);
                     },
                   ),
                   const SizedBox(
@@ -291,21 +263,21 @@ class LocationState extends State<Location> {
                     hint: const Text('Region'),
                     items: _region.isNotEmpty
                         ? _region
-                        .map((e) =>
-                        DropdownMenuItem(value: e, child: Text(e.name)))
-                        .toList()
+                            .map((e) =>
+                                DropdownMenuItem(value: e, child: Text(e.name)))
+                            .toList()
                         : [],
                     onChanged: (newValue) async {
                       setState(() {
                         _selectedRegion = newValue;
                       });
-                      var cities = await fetchCities(newValue!.name, newValue.isoCode);
+                      var cities = await fetchCities(
+                          newValue!.isoCode, newValue.countryCode);
                       setState(() {
                         _city = cities;
                       });
                     },
                   ),
-
                   const SizedBox(
                     height: 20,
                   ),
@@ -320,37 +292,14 @@ class LocationState extends State<Location> {
                     hint: const Text('City'),
                     items: _city.isNotEmpty
                         ? _city
-                        .map((e) =>
-                        DropdownMenuItem(value: e, child: Text(e.name)))
-                        .toList()
+                            .map((e) =>
+                                DropdownMenuItem(value: e, child: Text(e.name)))
+                            .toList()
                         : [],
                     onChanged: (newValue) async {
-                      setState(() {
-                        _selectedCity = newValue;
-                      });
+
                     },
                   ),
-                  // DropdownButtonFormField<City>(
-                  //   isExpanded: true,
-                  //   decoration: InputDecoration(
-                  //       labelText: 'City',
-                  //       border: OutlineInputBorder(
-                  //         borderRadius: BorderRadius.circular(10),
-                  //       )),
-                  //   value: _selectedCity,
-                  //   hint: const Text('City'),
-                  //   items: _city.isNotEmpty
-                  //       ? _city
-                  //       .map((e) =>
-                  //       DropdownMenuItem(value: e, child: Text(e.name)))
-                  //       .toList()
-                  //       : [],
-                  //   onChanged: (newValue) {
-                  //     setState(() {
-                  //       _selectedCity = newValue;
-                  //     });
-                  //   },
-                  // ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -412,10 +361,3 @@ class LocationState extends State<Location> {
   }
 }
 
-//   validator: (value){
-//   if(value == null){
-//     return 'Please select your country';
-//   }
-//   return null;
-//   },
-// ),

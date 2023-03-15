@@ -1,6 +1,6 @@
 class Country {
   String name;
-  String code;
+  String wikiDataId;
   // List<String> callingCodes = [];
   // Flag flag;
 
@@ -8,7 +8,7 @@ class Country {
 
   Country({
     required this.name,
-    required this.code,
+    required this.wikiDataId,
     // required this.callingCodes,
     // required this.flag,
     // required this.independent,
@@ -16,7 +16,7 @@ class Country {
 
   factory Country.fromJson(Map<String, dynamic> json) => Country(
       name: json["name"],
-      code: json["code"]);
+      wikiDataId: json["wikiDataId"]);
       // callingCodes: (List<String>.from(json["callingCodes"] )),
       // flag: Flag.fromJson(json["flags"]),
       // independent: json["independent"]);

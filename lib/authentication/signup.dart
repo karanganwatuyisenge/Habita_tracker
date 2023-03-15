@@ -5,7 +5,9 @@ import 'package:tracker_habit/authentication/login.dart';
 import 'package:dio/dio.dart';
 import 'package:tracker_habit/country.dart';
 
+import '../city.dart';
 import '../geolocation.dart';
+import '../region.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -15,37 +17,95 @@ class SignUp extends StatefulWidget {
 }
 
 class _MySignupState extends State<SignUp> {
-  // String _selectedValue = 'Rwanda';
-  // final List<String> _options = ['Rwanda', 'Kenya', 'Tanzania', 'Uganda', 'Burundi',];
-
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  List <Country> _country= [];
+  final TextEditingController _countryController = TextEditingController();
+  final TextEditingController _regionController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  List<Country> _country = [];
   Country? _selectedCountry;
+  List<Region> _region = [];
+  Region? _selectedRegion;
+  List<City> _city = [];
+  City? _selectedCity;
 
   @override
   void initState() {
     super.initState();
-    // fetchCountries();
+    fetchCountries();
   }
 
-  // fetchCountries() async{
-  //   final response = await Dio().get('https://restcountries.com/v2/all?fields=name,capital,callingCodes,flags');
-  //   final jsonData = response.data;
-  //   List <Country> countries=[];
-  //   for(var country in jsonData){
-  //     var item = Country.fromJson(country);
-  //     countries.add(item);
-  //   }
-  //   setState(() {
-  //     _country=countries;
-  //   });
-  //   print("length ${_country.length}");
-  // }
+  fetchCountries() async {
+    final response = await Dio().get(
+      'https://wft-geo-db.p.rapidapi.com/v1/geo/countries',
+      options: Options(
+        headers: {
+          'X-RapidAPI-Key':
+          '1c5c14744fmsha74fb3aaae95219p1e43d2jsnbf987ff4ee8e',
+          'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com',
+        },
+      ),
+    );
+    final jsonData = response.data;
+    List<Country> countries = [];
+    for (var country in jsonData['data']) {
+      var item = Country.fromJson(country);
+      print(item.wikiDataId);
+      countries.add(item);
+    }
+    setState(() {
+      _country = countries;
+    });
+    //print("length ${_country.length}");
+  }
 
+  fetchRegions(String wikiDataId) async {
+    final response = await Dio().get(
+      'https://wft-geo-db.p.rapidapi.com/v1/geo/countries/$wikiDataId/regions',
+      options: Options(
+        headers: {
+          'X-RapidAPI-Key':
+          '1c5c14744fmsha74fb3aaae95219p1e43d2jsnbf987ff4ee8e',
+          'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com',
+        },
+      ),
+    );
+    final jsonData = response.data;
+    List<Region> regions = [];
+    for (var region in jsonData['data']) {
+      var item = Region.fromJson(region);
+      regions.add(item);
+    }
+    setState(() {
+      _region = regions;
+    });
+  }
+
+  fetchCities(String isoCode, String wikiDataId) async {
+    final response = await Dio().get(
+      'https://wft-geo-db.p.rapidapi.com/v1/geo/countries/$wikiDataId/regions/$isoCode/cities',
+      options: Options(
+        headers: {
+          'X-RapidAPI-Key':
+          '1c5c14744fmsha74fb3aaae95219p1e43d2jsnbf987ff4ee8e',
+          'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com',
+        },
+      ),
+    );
+    final jsonData = response.data;
+    List<City> cities = [];
+    for (var city in jsonData['data']) {
+      var item = City.fromJson(city);
+      cities.add(item);
+    }
+    setState(() {
+      _city = cities??[];
+    });
+    return cities;
+  }
   void _Register() async {
     print("Signing up...");
     try {
@@ -58,8 +118,13 @@ class _MySignupState extends State<SignUp> {
           .set({
         'name': _nameController.text,
         'email': _emailController.text,
+        'country': _selectedCountry?.name,
+        'region': _selectedRegion?.name,
+        'city': _selectedCity?.name,
       });
-      Navigator.pop(context);
+      Navigator.push(context,
+      MaterialPageRoute(builder: (context) => SignUp())
+      );
     }
     on FirebaseAuthException catch (e) {
       print("Exception here ${e.code}");
@@ -76,35 +141,42 @@ class _MySignupState extends State<SignUp> {
       print(e);
     }
   }
-  
+
 
   @override
   Widget build(BuildContext context) {
-    print("length ${_country.length}");
+    //print("length ${_country.length}");
     return Scaffold(
         backgroundColor: const Color(0xFFEDEDED),
         body: Form(
           key: _formKey,
           child: Padding(
-            padding: const EdgeInsets.only(top: 88.0, left: 25.0, right: 25.0,),
+            padding: const EdgeInsets.only(
+              top: 88.0,
+              left: 25.0,
+              right: 25.0,
+            ),
             child: ClipRect(
               child: ListView(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Sign Up', style:
-                      TextStyle(
-                        color: Color(0xff4c505b),
-                        fontSize: 27,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      const Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          color: Color(0xff4c505b),
+                          fontSize: 27,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       Row(
                         children: [
                           TextButton(
-                            child: const Text('Log In', style: TextStyle(color: Colors
-                                .deepOrangeAccent),),
+                            child: const Text(
+                              'Log In',
+                              style: TextStyle(color: Colors.deepOrangeAccent),
+                            ),
                             onPressed: () {
                               // print('Login');
                               Navigator.of(context).pushNamed('login');
@@ -114,13 +186,13 @@ class _MySignupState extends State<SignUp> {
                             child: IconButton(
                               color: Colors.deepOrangeAccent,
                               onPressed: () {
-                                Navigator.push(context,
+                                Navigator.push(
+                                    context,
                                     MaterialPageRoute(
                                         builder: (context) => const MyLogin()));
                               },
                               icon: const Icon(Icons.arrow_forward_ios),
                             ),
-
                           ),
                         ],
                       )
@@ -142,8 +214,7 @@ class _MySignupState extends State<SignUp> {
                           return 'Please enter your name';
                         }
                         return null;
-                      }
-                  ),
+                      }),
                   const SizedBox(
                     height: 20,
                   ),
@@ -155,7 +226,6 @@ class _MySignupState extends State<SignUp> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-
                     ),
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
@@ -168,23 +238,81 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   DropdownButtonFormField<Country>(
-                    isExpanded: true,
-                    decoration: InputDecoration(labelText: 'Country',
+
+                    decoration: InputDecoration(
+                        labelText: 'Country',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                        ) ),
-                      value: _selectedCountry,
-                      hint: Text('Country'),
-                      items: _country.map((e) => DropdownMenuItem(
-                        value: e,
-                          child: Text(e.name))).toList(),
+                        )),
+                    value: _selectedCountry,
+                    hint: const Text('Country'),
+                    items: _country
+                        .map((e) =>
+                        DropdownMenuItem(value: e, child: Text(e.name)))
+                        .toList(),
                     onChanged: (newValue) {
                       setState(() {
-                        _selectedCountry=newValue;
+                        _selectedCountry = newValue;
+                      });
+                      fetchRegions(newValue!.wikiDataId);
+                    },
+                    validator: (value) => value == null ? 'Please select country' : null,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DropdownButtonFormField<Region>(
+
+                    decoration: InputDecoration(
+                        labelText: 'Region',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
+                    value: _selectedRegion,
+                    hint: const Text('Region'),
+                    items: _region.isNotEmpty
+                        ? _region
+                        .map((e) =>
+                        DropdownMenuItem(value: e, child: Text(e.name)))
+                        .toList()
+                        : [],
+                    onChanged: (newValue) async {
+                      setState(() {
+                        _selectedRegion = newValue;
+                      });
+                      var cities = await fetchCities(
+                          newValue!.isoCode, newValue.countryCode);
+                      setState(() {
+                        _city = cities;
                       });
                     },
+                    validator: (value) => value == null ? 'Please select region' : null,
                   ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DropdownButtonFormField<City>(
+                    decoration: InputDecoration(
+                        labelText: 'City',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
+                    value: _selectedCity,
+                    hint: const Text('City'),
+                    items: _city.isNotEmpty
+                        ? _city
+                        .map((e) =>
+                        DropdownMenuItem(value: e, child: Text(e.name)))
+                        .toList()
+                        : [],
+                    onChanged: (newValue) async {
+                      setState(() {
+                        _selectedCity=newValue;
+                      });
+                    },
+                    validator: (value) => value == null ? 'Please select a city' : null,
 
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -195,8 +323,7 @@ class _MySignupState extends State<SignUp> {
                         labelText: 'Password',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                        )
-                    ),
+                        )),
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return 'Please enter your password';
@@ -214,8 +341,7 @@ class _MySignupState extends State<SignUp> {
                         labelText: 'Confirm Password',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                        )
-                    ),
+                        )),
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return 'Please enter yur confirm password';
@@ -226,7 +352,9 @@ class _MySignupState extends State<SignUp> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 40,),
+                  const SizedBox(
+                    height: 40,
+                  ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50), // NEW
@@ -239,20 +367,9 @@ class _MySignupState extends State<SignUp> {
                     child: const Text('Sign Up'),
                   )
                 ],
-
               ),
             ),
           ),
-        )
-    );
+        ));
   }
 }
-
-
-//   validator: (value){
-//   if(value == null){
-//     return 'Please select your country';
-//   }
-//   return null;
-//   },
-// ),

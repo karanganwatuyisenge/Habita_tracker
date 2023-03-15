@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tracker_habit/authentication/signup.dart';
 import 'package:tracker_habit/authentication/forgotpassword.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../homepage.dart';
+
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
 
@@ -11,7 +12,34 @@ class MyLogin extends StatefulWidget {
 }
 
 class _MyLoginState extends State<MyLogin> {
+  final FirebaseAuth _auth=FirebaseAuth.instance;
+  TextEditingController _emailController =TextEditingController();
+  TextEditingController _passwordController=TextEditingController();
+  String _errorMessage='';
   bool showvalue=false;
+
+  _login() async{
+    try{
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    }
+    on FirebaseAuthException catch (e) {
+      if(e.code == 'user-not-found'){
+        setState(() {
+          _errorMessage ='User not found. Please register first';
+        });
+      }
+      else if(e.code == 'wrong-password'){
+        setState(() {
+          _errorMessage ='Wrong pssword.Please try again';
+        });
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -124,14 +152,10 @@ class _MyLoginState extends State<MyLogin> {
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent)),
                             child:Text('Log In'),
                             onPressed: (){
-                              Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => HomePage())
-                              );
+                              _login();
+                            }),
 
-
-                            },
                           ),
-                        ),
                       ],
                     )
                   ],
@@ -144,3 +168,4 @@ class _MyLoginState extends State<MyLogin> {
     );
   }
 }
+
