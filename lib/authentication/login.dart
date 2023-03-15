@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker_habit/authentication/signup.dart';
 import 'package:tracker_habit/authentication/forgotpassword.dart';
@@ -18,28 +19,37 @@ class _MyLoginState extends State<MyLogin> {
   String _errorMessage='';
   bool showvalue=false;
 
-  _login() async{
+  final auth = FirebaseAuth.instance;
+
+
+
+  void Login() async{
+    //print('hello');
     try{
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text);
-      Navigator.of(context).pushReplacement(
+      Navigator.push(
+        context,
         MaterialPageRoute(builder: (context) => HomePage()),
       );
+
     }
-    on FirebaseAuthException catch (e) {
+    on FirebaseAuthException catch(e){
       if(e.code == 'user-not-found'){
-        setState(() {
-          _errorMessage ='User not found. Please register first';
-        });
+        print('No user found for that email');
       }
       else if(e.code == 'wrong-password'){
-        setState(() {
-          _errorMessage ='Wrong pssword.Please try again';
-        });
+        print('Wrong password provided for that user.');
+      }
+      else{
+        print('${e.message}');
       }
     }
+
+
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -96,6 +106,7 @@ class _MyLoginState extends State<MyLogin> {
                 child: Column(
                   children: [
                     TextField(
+                      controller: _emailController,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
@@ -109,6 +120,7 @@ class _MyLoginState extends State<MyLogin> {
                       height: 30,
                     ),
                     TextField(
+                      controller: _passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
@@ -152,7 +164,7 @@ class _MyLoginState extends State<MyLogin> {
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent)),
                             child:Text('Log In'),
                             onPressed: (){
-                              _login();
+                              Login();
                             }),
 
                           ),
