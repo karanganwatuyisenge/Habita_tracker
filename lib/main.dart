@@ -1,3 +1,5 @@
+import 'package:tracker_habit/homepage.dart';
+
 import 'geolocation.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker_habit/authentication/login.dart';
@@ -15,7 +17,8 @@ Future<void> main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     //initialRoute: 'geolocation',
-    initialRoute: 'signup',
+    //initialRoute: 'signup',
+    initialRoute:'habit',
     theme: ThemeData(
       primarySwatch: Colors.deepOrange,
     ),
@@ -23,6 +26,7 @@ Future<void> main() async {
       'geolocation':(context) => Location(),
       'login':(context) => MyLogin(),
       'signup':(context) => SignUp(),
+      'habit':(context) => HomePage(),
 
       // background: linear-gradient(89.76deg, #37C871 4.24%, #5FE394 69.76%);
       // background: linear-gradient(48.62deg, #FFA450 11.85%, #FF5C00 66.77%);

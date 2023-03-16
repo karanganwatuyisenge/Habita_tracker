@@ -1,4 +1,4 @@
-import 'package:tracker_habit/country.dart';
+import 'package:tracker_habit/models/country.dart';
 
 class Region {
   String name;

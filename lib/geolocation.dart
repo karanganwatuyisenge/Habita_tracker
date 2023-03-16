@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tracker_habit/authentication/login.dart';
 import 'package:dio/dio.dart';
-import 'package:tracker_habit/city.dart';
-import 'package:tracker_habit/country.dart';
-import 'package:tracker_habit/region.dart';
+import 'package:tracker_habit/models/city.dart';
+import 'package:tracker_habit/models/country.dart';
+import 'package:tracker_habit/models/region.dart';
 
 class Location extends StatefulWidget {
   const Location({Key? key}) : super(key: key);
@@ -15,8 +15,6 @@ class Location extends StatefulWidget {
 }
 
 class LocationState extends State<Location> {
-  // String _selectedValue = 'Rwanda';
-  // final List<String> _options = ['Rwanda', 'Kenya', 'Tanzania', 'Uganda', 'Burundi',];
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();

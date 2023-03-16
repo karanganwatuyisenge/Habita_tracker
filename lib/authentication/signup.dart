@@ -3,11 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tracker_habit/authentication/login.dart';
 import 'package:dio/dio.dart';
-import 'package:tracker_habit/country.dart';
-
-import '../city.dart';
+import 'package:tracker_habit/models/country.dart';
+import 'package:tracker_habit/models/city.dart';
+import 'package:tracker_habit/models/region.dart';
 import '../geolocation.dart';
-import '../region.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -31,6 +30,7 @@ class _MySignupState extends State<SignUp> {
   Region? _selectedRegion;
   List<City> _city = [];
   City? _selectedCity;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -237,7 +237,11 @@ class _MySignupState extends State<SignUp> {
                   const SizedBox(
                     height: 20,
                   ),
-                  DropdownButtonFormField<Country>(
+                  _isLoading
+                      ? CircularProgressIndicator(
+                    strokeWidth: 0.2,
+                  ) // Display a loading indicator
+                      : DropdownButtonFormField<Country>(
 
                     decoration: InputDecoration(
                         labelText: 'Country',
@@ -253,6 +257,7 @@ class _MySignupState extends State<SignUp> {
                     onChanged: (newValue) {
                       setState(() {
                         _selectedCountry = newValue;
+                        _isLoading=true;
                       });
                       fetchRegions(newValue!.wikiDataId);
                     },
@@ -261,6 +266,7 @@ class _MySignupState extends State<SignUp> {
                   const SizedBox(
                     height: 20,
                   ),
+
                   DropdownButtonFormField<Region>(
 
                     decoration: InputDecoration(
