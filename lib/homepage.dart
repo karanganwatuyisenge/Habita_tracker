@@ -7,6 +7,7 @@ import 'settings/setting.dart';
 import 'progressess/yourHabit.dart';
 
 
+
 class HomePage extends StatefulWidget{
   HomePage({Key? key}) : super(key:key);
 
@@ -27,6 +28,24 @@ class _HomePageState extends State<HomePage>{
   ];
   String _selectedHabit='Everyday';
   bool showvalue = false;
+  String _userName = '';
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final auth = FirebaseAuth.instance;
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+
+  void getCurrentUser() async {
+    User user = auth.currentUser!;
+    String userId=user.uid;
+    DocumentSnapshot snapshot=await _firestore.collection('users').doc(userId).get();
+
+    setState(() {
+      _userName = snapshot.get('name');
+    });
+  }
 
   Future<void> SaveHabit(String goalName,String habitName,String period,String habitType) async{
     try{
@@ -74,7 +93,6 @@ class _HomePageState extends State<HomePage>{
     });
 
   }
-
 
 
   Future <void> _dialogBuilder(BuildContext context){
@@ -211,6 +229,7 @@ class _HomePageState extends State<HomePage>{
               ),
             ),
           ),
+          Text('Welcome, $_userName!'),
           Padding(
             padding: const EdgeInsets.only(top: 30.0,left:18.0,right: 18.0),
             child: Container(

@@ -18,7 +18,8 @@ Future<void> main() async {
     debugShowCheckedModeBanner: false,
     //initialRoute: 'geolocation',
     //initialRoute: 'signup',
-    initialRoute:'habit',
+    //initialRoute:'habit',
+    initialRoute: 'login',
     theme: ThemeData(
       primarySwatch: Colors.deepOrange,
     ),

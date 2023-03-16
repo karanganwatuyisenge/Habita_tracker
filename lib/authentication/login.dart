@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tracker_habit/authentication/signup.dart';
 import 'package:tracker_habit/authentication/forgotpassword.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import '../homepage.dart';
 
 class MyLogin extends StatefulWidget {
@@ -17,11 +19,10 @@ class _MyLoginState extends State<MyLogin> {
   TextEditingController _emailController =TextEditingController();
   TextEditingController _passwordController=TextEditingController();
   String _errorMessage='';
+  String _userName = '';
   bool showvalue=false;
-
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final auth = FirebaseAuth.instance;
-
-
 
   void Login() async{
     //print('hello');
