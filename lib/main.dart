@@ -1,5 +1,6 @@
 import 'package:tracker_habit/homepage.dart';
-
+import 'package:tracker_habit/screen/fetchingData.dart';
+import 'package:tracker_habit/screen/habitScreen.dart';
 import 'geolocation.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker_habit/authentication/login.dart';
@@ -17,9 +18,11 @@ Future<void> main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     //initialRoute: 'geolocation',
-    initialRoute: 'signup',
+    //initialRoute: 'signup',
     //initialRoute:'habit',
     //initialRoute: 'login',
+    //initialRoute:'habitScreen',
+    initialRoute: 'fetchData',
     theme: ThemeData(
       primarySwatch: Colors.deepOrange,
     ),
@@ -28,6 +31,8 @@ Future<void> main() async {
       'login':(context) => MyLogin(),
       'signup':(context) => SignUp(),
       'habit':(context) => HomePage(),
+      'habitScreen':(context) => HabitScreen(),
+      'fetchData':(context) => FetchData(),
 
       // background: linear-gradient(89.76deg, #37C871 4.24%, #5FE394 69.76%);
       // background: linear-gradient(48.62deg, #FFA450 11.85%, #FF5C00 66.77%);

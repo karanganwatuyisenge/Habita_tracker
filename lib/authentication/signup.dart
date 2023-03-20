@@ -237,11 +237,7 @@ class _MySignupState extends State<SignUp> {
                   const SizedBox(
                     height: 20,
                   ),
-                  _isLoading
-                      ? CircularProgressIndicator(
-                    strokeWidth: 0.2,
-                  ) // Display a loading indicator
-                      : DropdownButtonFormField<Country>(
+                   DropdownButtonFormField<Country>(
 
                     decoration: InputDecoration(
                         labelText: 'Country',
