@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tracker_habit/authentication/signup.dart';
 import 'package:tracker_habit/authentication/forgotpassword.dart';
+import 'package:tracker_habit/Help/fetchingData.dart';
 
 import '../homepage.dart';
+import '../screen/fetchData.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
@@ -30,10 +32,14 @@ class _MyLoginState extends State<MyLogin> {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => HomePage())
       );
+      // Navigator.push(
+      //
+      //   MaterialPageRoute(builder: (context) => FetchData()),
+      //   //MaterialPageRoute(builder: (context) => HomePage()),
+      // );
 
     }
     on FirebaseAuthException catch(e){
@@ -41,13 +47,23 @@ class _MyLoginState extends State<MyLogin> {
         print('No user found for that email');
       }
       else if(e.code == 'wrong-password'){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Wrong password')));
         print('Wrong password provided for that user.');
       }
       else{
         print('${e.message}');
       }
     }
-
+  }
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      var user=FirebaseAuth.instance.currentUser;
+      if(user!=null){
+        Navigator.of(context).pushReplacementNamed('home');
+      }
+    });
 
   }
 

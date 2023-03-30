@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../authentication/login.dart';
 import '../homepage.dart';
 import '../progressess/progressess.dart';
 import 'account.dart';
@@ -11,6 +13,16 @@ class Setting extends StatefulWidget{
 }
 
 class _MySettingState extends State<Setting>{
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _signOut(BuildContext context) async {
+    await _auth.signOut();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) =>MyLogin()),
+          (route) => false,
+    );
+  }
   @override
   Widget build(BuildContext context){
     return Container(
@@ -44,6 +56,14 @@ class _MySettingState extends State<Setting>{
               ListTile(
                 title: Text('About App'),
                 trailing: Icon(Icons.arrow_forward_ios),
+              ),
+              ListTile(
+                title: Text('Log Out'),
+                trailing: IconButton(
+                    onPressed: () async {
+                      await _signOut(context);
+                    },
+                  icon: Icon(Icons.logout),),
               ),
             ],
           ),

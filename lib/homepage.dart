@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tracker_habit/models/createNewHabit.dart';
-import 'package:tracker_habit/screen/createNewHabit.dart';
+import 'package:tracker_habit/screen/Goal/goalScreens.dart';
+import 'package:tracker_habit/screen/createAchievement.dart';
+import 'package:tracker_habit/screen/fetchData.dart';
 import 'package:tracker_habit/screen/goalScreen.dart';
 import 'progressess/progressess.dart';
 import 'settings/setting.dart';
-import 'progressess/yourHabit.dart';
-import 'screen/habitScreen.dart';
+import 'package:intl/intl.dart';
 
 
 
@@ -19,6 +19,8 @@ class HomePage extends StatefulWidget{
 }
 
 class _HomePageState extends State<HomePage> {
+  DateTime? currentDate;
+  String? formattedDate;
   String _userName = '';
   List<String> _data = [];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -53,22 +55,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future <void> _dialogBuilder(BuildContext context) {
+    // Navigator.of(context).pushNamed('fetchData');
+    //
+    // return Future.value();
+    FetchData();
     return showDialog <void>(
         context: context,
         builder: (BuildContext context) {
-          return NewGoalHabit();
+          return NewAchievement();
         });
   }
 
   @override
   Widget build(BuildContext context) {
+    currentDate = DateTime.now();
+    formattedDate = DateFormat('E, d MMMM yyyy').format(currentDate!);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         // toolbarOpacity: 1.0,
         // bottomOpacity: 1.0,
         elevation: 0,
-        title: const Text('Sun,1 March 2022',
+        title: Text('$formattedDate',
           style: TextStyle(color: Color(0xff4c505b),),
         ),
       ),
@@ -88,20 +96,19 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 18.0, left: 18.0),
                   child: RichText(
-                    text: const TextSpan(
+                    text:  TextSpan(
                       style: TextStyle(fontSize: 25,
                           fontWeight: FontWeight.w600,
                           color: Colors.black),
                       children: <TextSpan>[
                         TextSpan(text: 'Hello,'),
-                        TextSpan(text: 'Susy!',
+                        TextSpan(text: '$_userName !',
                             style: TextStyle(fontWeight: FontWeight.w600,
                                 color: Colors.deepOrangeAccent)),
                       ],
                     ),
                   ),
                 ),
-                Text('Welcome, $_userName!'),
 
                 Padding(
                   padding: const EdgeInsets.only(
@@ -174,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                   height: 5,
                 ),
                 Container(
-                  child: HabitScreen(),
+                  child: GoalScreens(),
                 ),
 
                 const SizedBox(
