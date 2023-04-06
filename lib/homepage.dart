@@ -5,6 +5,7 @@ import 'package:tracker_habit/screen/Goal/goalScreens.dart';
 import 'package:tracker_habit/screen/createAchievement.dart';
 import 'package:tracker_habit/screen/fetchData.dart';
 import 'package:tracker_habit/screen/goalScreen.dart';
+import 'package:tracker_habit/screen/habit/habitScreen.dart';
 import 'progressess/progressess.dart';
 import 'settings/setting.dart';
 import 'package:intl/intl.dart';
@@ -188,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                   height: 20,
                 ),
                 Container(
-                  child: GoalScreen(),
+                  child: HabitScreen(),
                 ),
               ],
             ),

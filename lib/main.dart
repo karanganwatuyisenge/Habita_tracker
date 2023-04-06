@@ -1,9 +1,6 @@
 import 'package:tracker_habit/homepage.dart';
 import 'package:tracker_habit/screen/fetchData.dart';
-import 'package:tracker_habit/Help/fetchingData.dart';
 import 'package:tracker_habit/screen/habit/habitScreen.dart';
-import 'Help/help1.dart';
-import 'Help/help2.dart';
 import 'Help/help3.dart';
 import 'geolocation.dart';
 import 'package:flutter/material.dart';

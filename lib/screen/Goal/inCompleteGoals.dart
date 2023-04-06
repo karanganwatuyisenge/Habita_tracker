@@ -46,10 +46,17 @@ class _IncompleteGoalsState extends State<IncompleteGoals> {
                                 style: TextStyle(color: Colors.green,fontSize: 20),
                               ),
                               trailing: Checkbox(
-                                value: false,
-                                onChanged: (bool? newValue) {
-                                  // your code here
-                                },
+                                value: goal["completed"],
+                                onChanged: (bool? newValue) async{
+                                final docRef=FirebaseFirestore.instance
+                                    .collection("users").doc(user.uid)
+                                    .collection("goals").doc(goal.id);
+                                try{
+                                  await docRef.update({"completed":newValue});
+                                  }catch(e){
+                                  print("Error updating document: $e");
+                                  }
+                                }
                               ),
 
 

@@ -1,16 +1,37 @@
-class CreateNewHabit{
-  String goalName;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class CreateNewHabit {
   String habitName;
-  String period;
+  Timestamp createdAt;
+  int habitFrequent;
+  int other;
   String habitType;
+  Complete completed;
 
+  CreateNewHabit({
+    required this.habitFrequent,
+    required this.createdAt,
+    required this.other,
+    required this.habitName,
+    required this.habitType,
+    required this.completed,
+  });
 
-  CreateNewHabit(
-      this.goalName,
-      this.habitName,
-      this.period,
-      this.habitType,
-      );
+  factory CreateNewHabit.fromJsonDocument(DocumentSnapshot json) =>
+      CreateNewHabit(
+          habitFrequent: json["habitFrequent"],
+          createdAt: json["createdAt"],
+          other: json["other"],
+          habitName: json["habitName"],
+          habitType: json["habitType"],
+          completed: (json["completed"]));
 }
 
+class Complete {
+  Map<String, dynamic> habitPeriod;
 
+  Complete({required this.habitPeriod});
+
+  factory Complete.fromMap(Map<String, dynamic> jsonMap) =>
+      Complete(habitPeriod: jsonMap[jsonMap]);
+}

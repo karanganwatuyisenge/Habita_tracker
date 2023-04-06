@@ -53,7 +53,7 @@ class _GoalScreens extends State<GoalScreens>{
                 else if(streamSnapshot.hasData){
                   var goals=streamSnapshot.data!.docs;
 
-                  return goals.isEmpty?const Center(child: Text("No goals yet")): Column(
+                  return goals.isEmpty?const Center(child: Text("No Goals are Completed ")): Column(
 
                       children:goals.map((goal) {
                         return Padding(
@@ -73,10 +73,17 @@ class _GoalScreens extends State<GoalScreens>{
                                       style: TextStyle(color: Colors.green,fontSize: 20),
                                     ),
                                     trailing: Checkbox(
-                                      value: goal["completed"],
-                                      onChanged: (bool? newValue) {
-                                        // your code here
-                                      },
+                                        value: goal["completed"],
+                                        onChanged: (bool? newValue) async{
+                                          final docRef=FirebaseFirestore.instance
+                                              .collection("users").doc(user.uid)
+                                              .collection("goals").doc(goal.id);
+                                          try{
+                                            await docRef.update({"completed":newValue});
+                                          }catch(e){
+                                            print("Error updating document: $e");
+                                          }
+                                        }
                                     ),
                                   ),
 

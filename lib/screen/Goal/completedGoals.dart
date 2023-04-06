@@ -48,10 +48,11 @@ class _CompletedGoalsState extends State<CompletedGoals> {
                               trailing: Checkbox(
                                 value: goal["completed"],
                                 onChanged: (bool? newValue) {
-                                  // your code here
+                                  FirebaseFirestore.instance.collection("users")
+                                  .doc().collection("habits").doc()
+                                      .update({"completed":newValue!});
                                 },
                               ),
-
 
                             ),
 
