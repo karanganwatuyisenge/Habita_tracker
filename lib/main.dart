@@ -1,5 +1,6 @@
 import 'package:tracker_habit/homepage.dart';
 import 'package:tracker_habit/screen/fetchData.dart';
+import 'package:tracker_habit/screen/habit/dailyHabit.dart';
 import 'package:tracker_habit/screen/habit/habitScreen.dart';
 import 'Help/help3.dart';
 import 'geolocation.dart';
@@ -31,6 +32,7 @@ Future<void> main() async {
       'habitScreen':(context) => HabitScreen(),
       'fetchData':(context) => FetchData(),
       'help':(context) => Display(),
+      'daily':(context) =>DailyHabit(),
 
       // background: linear-gradient(89.76deg, #37C871 4.24%, #5FE394 69.76%);
       // background: linear-gradient(48.62deg, #FFA450 11.85%, #FF5C00 66.77%);

@@ -81,129 +81,115 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(color: Color(0xff4c505b),),
         ),
       ),
-      body: Builder(
-        builder: (BuildContext context) {
-          return RefreshIndicator(
-            onRefresh: () {
-              if (mounted) {
-                return _refreshData();
-              }
-              else {
-                return Future.value();
-              }
-            },
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 18.0, left: 18.0),
-                  child: RichText(
-                    text:  TextSpan(
-                      style: TextStyle(fontSize: 25,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(text: 'Hello,'),
-                        TextSpan(text: '$_userName !',
-                            style: TextStyle(fontWeight: FontWeight.w600,
-                                color: Colors.deepOrangeAccent)),
-                      ],
-                    ),
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 30.0, left: 18.0, right: 18.0),
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 30),
-                    alignment: Alignment.center,
-                    height: 150.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      gradient: const LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                        colors: [
-                          Colors.deepOrange,
-                          Colors.orangeAccent,
-                        ],
-
+            body:NestedScrollView(headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return [
+                SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 18.0, right: 210.0),
+                      child: RichText(
+                        text:  TextSpan(
+                          style: TextStyle(fontSize: 25,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black),
+                          children: <TextSpan>[
+                            TextSpan(text: 'Hello,'),
+                            TextSpan(text: '$_userName !',
+                                style: TextStyle(fontWeight: FontWeight.w600,
+                                    color: Colors.deepOrangeAccent)),
+                          ],
+                        ),
                       ),
-                      // color: Colors.orange,
                     ),
-                    child: Stack(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 30.0, left: 18.0, right: 18.0),
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 30),
+                        alignment: Alignment.center,
+                        height: 150.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                              Colors.deepOrange,
+                              Colors.orangeAccent,
+                            ],
+
+                          ),
+                          // color: Colors.orange,
+                        ),
+                        child: Stack(
                           children: [
-                            Stack(
-                              alignment: Alignment.center,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                const SizedBox(
-                                  width: 70,
-                                  height: 70,
-                                  child: CircularProgressIndicator(
-                                    value: 0.5,
-                                    strokeWidth: 15,
-                                    backgroundColor: Colors.white60,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white70),
-                                  ),
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    const SizedBox(
+                                      width: 70,
+                                      height: 70,
+                                      child: CircularProgressIndicator(
+                                        value: 0.5,
+                                        strokeWidth: 15,
+                                        backgroundColor: Colors.white60,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                            Colors.white70),
+                                      ),
+                                    ),
+                                    const Text('70%',
+                                      style: TextStyle(color: Colors.white),),
+                                  ],
                                 ),
-                                const Text('70%',
-                                  style: TextStyle(color: Colors.white),),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text('3 of 5 habits', style: TextStyle(
+                                        fontSize: 20, color: Colors.white),),
+                                    const Text('completed today!', style: TextStyle(
+                                        fontSize: 20, color: Colors.white),),
+                                  ],
+                                ),
                               ],
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text('3 of 5 habits', style: TextStyle(
-                                    fontSize: 20, color: Colors.white),),
-                                const Text('completed today!', style: TextStyle(
-                                    fontSize: 20, color: Colors.white),),
-                              ],
+                            Positioned(
+                              bottom: -10,
+                              right: 0,
+                              child: Image.asset('assets/images/calendar.png',
+                                width: 120,
+                                alignment: Alignment.bottomRight,
+                              ),
                             ),
                           ],
                         ),
-                        Positioned(
-                          bottom: -10,
-                          right: 0,
-                          child: Image.asset('assets/images/calendar.png',
-                            width: 120,
-                            alignment: Alignment.bottomRight,
-                          ),
-                        ),
-                      ],
+
+                      ),
                     ),
-
-                  ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      child: GoalScreens(),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  child: GoalScreens(),
-                ),
-
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  child: HabitScreen(),
-                ),
-              ],
+              )];
+            },
+              body: HabitScreen(),
             ),
-
-
-          );
-        },
-      ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        onPressed:() => _dialogBuilder(context)
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          onPressed:() => _dialogBuilder(context)
       ),
       bottomNavigationBar: Container(
           child: Row(
@@ -232,6 +218,19 @@ class _HomePageState extends State<HomePage> {
               ]
           )
       ),
-    );
+          );
+
+
   }
 }
+// body: Builder(
+//   builder: (BuildContext context) {
+//     return RefreshIndicator(
+//       onRefresh: () {
+//         if (mounted) {
+//           return _refreshData();
+//         }
+//         else {
+//           return Future.value();
+//         }
+//       },

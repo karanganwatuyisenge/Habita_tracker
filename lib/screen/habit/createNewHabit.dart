@@ -37,7 +37,6 @@ class _NewHabit extends State<NewHabit>{
     }
 
   }
-
   void SaveHabit() async{
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
@@ -58,25 +57,59 @@ class _NewHabit extends State<NewHabit>{
         DateTime now = DateTime.now();
 
         if (_selectedHabitType == 'Monthly') {
-          habitPeriod = DateFormat('MMM-yyyy').format(DateTime.now());
+          habitPeriod = DateFormat('yyyy-MMM').format(DateTime.now());
         } else if (_selectedHabitType == 'Weekly') {
           int currentWeekDayOfMonth = now.weekday;
-          habitPeriod = '${DateFormat('MMM-yyyy').format(DateTime.now())}-$currentWeekDayOfMonth';
+          habitPeriod = '${DateFormat('yyyy-MMM').format(DateTime.now())}-$currentWeekDayOfMonth';
         } else {
-          habitPeriod = DateFormat('MMM').format(DateTime.now());
+          habitPeriod = DateFormat('yyyy-MMM-dd').format(DateTime.now());
+        }
+        int habitFrequency;
+        if (_selectedHabitType=='Daily') {
+          DateTime createdAt = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+          int daysSinceCreatedAt = now.difference(createdAt).inDays;
+          habitFrequency = daysSinceCreatedAt;
+        } else {
+          habitFrequency = 0;
         }
 
-        await userDocRef.collection('habits').add({
-          'habitName': _habitNameController.text,
-          'habitType': _selectedHabitType,
-          'habitFrequency': selectedFrequencyInt,
-          'other':otherSelectInt,
-          'createdAt': DateTime.now(),
-          'completed': {
-        if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
-          }
-        }});
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
+        if(_selectedHabitType=='Monthly'){
+          await userDocRef.collection('habits').add({
+            'habitName': _habitNameController.text,
+            'habitType': _selectedHabitType,
+            'habitFrequency': otherSelectInt,
+            'createdAt': DateTime.now(),
+            'completed': {
+              if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
+              }
+            }});
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
+        }
+       else if(_selectedHabitType=='Weekly'){
+          await userDocRef.collection('habits').add({
+            'habitName': _habitNameController.text,
+            'habitType': _selectedHabitType,
+            'habitFrequency': selectedFrequencyInt,
+            'createdAt': DateTime.now(),
+            'completed': {
+              if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
+              }
+            }});
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
+        }
+       else{
+
+          await userDocRef.collection('habits').add({
+            'habitName': _habitNameController.text,
+            'habitType': _selectedHabitType,
+            'habitFrequency': habitFrequency,
+            'createdAt': DateTime.now(),
+            'completed': {
+              if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
+              }
+            }});
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
+        }
         setState(() {
           _habitNameController.clear();
           _otherController.clear();
@@ -162,6 +195,21 @@ class _NewHabit extends State<NewHabit>{
                     }).toList(),
                   ),
                   SizedBox(height: 20,),
+                  _selectedHabitType=='Daily' ? TextFormField(
+                    decoration: InputDecoration(
+                      labelText: '$_selectedHabitType',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )
+                    ),
+                    initialValue: _selectedFrequency,
+                    onChanged: (value){
+                      setState(() {
+                        _selectedFrequency=value;
+                      });
+                    },
+                  ):SizedBox(),
+
                   _selectedHabitType!='Daily' ? DropdownButtonFormField(
                     hint: Text('Select $_selectedHabitType'),
                     decoration: InputDecoration(
