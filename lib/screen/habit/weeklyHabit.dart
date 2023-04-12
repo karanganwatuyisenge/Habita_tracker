@@ -12,10 +12,13 @@ class WeeklyHabit extends StatefulWidget {
 class _WeeklyHabitState extends State<WeeklyHabit> {
   User user=FirebaseAuth.instance.currentUser!;
   String? habitPeriod;
-  String dailyformat=DateFormat('yyyy-MM<-dd').format(DateTime.now());
+  String dailyformat=DateFormat('yyyy-MM-dd').format(DateTime.now());
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('yyyy-MMM').format(DateTime.now());
+    DateTime now=DateTime.now();
+    int currentWeekDayOfMonth = now.weekday;
+    String formattedDate = '${DateFormat('yyyy-MM').format(DateTime.now())}-$currentWeekDayOfMonth';
+    String formattedNow=DateFormat('yyyy-MM-dd').format(DateTime.now());
     return Scaffold(
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream:
@@ -24,7 +27,7 @@ class _WeeklyHabitState extends State<WeeklyHabit> {
             .doc(user.uid)
             .collection('habits')
             .where('habitType', isEqualTo: 'Weekly')
-            .where('completed.$formattedDate.dates', isEqualTo: null)
+            .where('completed.$formattedDate.dates', arrayContains: formattedNow)
             .snapshots(),
         builder: (context, streamSnapshot) {
           //print("This is the index: $index");
@@ -45,6 +48,10 @@ class _WeeklyHabitState extends State<WeeklyHabit> {
               child: Column(
                   children: habits.map((habit) {
                     // int indexes = habits.indexOf(habit);
+                    int frequency=habit['habitFrequency'];
+                    int count=habit['completed.$formattedDate.count'];
+                    int remaining=frequency-count;
+                    double percentage=count/frequency;
                     return Padding(
                       padding: const EdgeInsets.only(
                           top: 12, left: 15, right: 15),
@@ -69,21 +76,31 @@ class _WeeklyHabitState extends State<WeeklyHabit> {
                                       fontSize: 25),
                                 ),
                               ),
-                              const ListTile(
+                              ListTile(
                                 contentPadding:
                                 EdgeInsets.symmetric(vertical: 0),
                                 title: LinearProgressIndicator(
                                     minHeight: 15,
-                                    value: 0.5,
+                                    value: percentage,
                                     backgroundColor: Colors.grey,
                                     valueColor:
                                     AlwaysStoppedAnimation<Color>(
                                         Colors.deepOrangeAccent)),
                               ),
-                              const ListTile(
+                              ListTile(
                                 contentPadding:
                                 EdgeInsets.symmetric(vertical: 0),
-                                title: Text('5 from 7 days target',
+                                title: Text('$count from $frequency days target',
+                                  style: TextStyle(
+                                    color: Color(0xFF2F2F2F),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                              ListTile(
+                                contentPadding:
+                                EdgeInsets.symmetric(vertical: 0),
+                                title: Text('Remaining $remaining days',
                                     style: TextStyle(
                                         color: Color(0xFF2F2F2F),
                                         fontSize: 20)),
@@ -116,7 +133,7 @@ class _WeeklyHabitState extends State<WeeklyHabit> {
                                         int currentWeekDayOfMonth =
                                             now.weekday;
                                         habitPeriod =
-                                        '${DateFormat('yyyy-MMM').format(DateTime.now())}-$currentWeekDayOfMonth';
+                                        '${DateFormat('yyyy-MM').format(DateTime.now())}-$currentWeekDayOfMonth';
                                         try {
                                           await docRef.update({
                                             "completed.$habitPeriod.dates":

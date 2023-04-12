@@ -182,7 +182,10 @@ class _HomePageState extends State<HomePage> {
                 ),
               )];
             },
-              body: HabitScreen(),
+              body: Padding(
+                padding: const EdgeInsets.only(left:18.0,right: 18.0),
+                child: HabitScreen(),
+              ),
             ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),

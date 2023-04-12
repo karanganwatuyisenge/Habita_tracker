@@ -41,43 +41,45 @@ class _NewHabit extends State<NewHabit>{
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
       try{
-
         User user=auth.currentUser!;
         String? email= user.email;
         final userDocRef= await FirebaseFirestore.instance
             .collection('users').where('email',isEqualTo: email)
             .limit(1).get().then((value) => value.docs.first.reference);
         final RegExp regex = RegExp(r'\d+');
-        final match = regex.firstMatch(_selectedFrequency!);
+        final match = regex.firstMatch(_selectedFrequency ?? '');
         int selectedFrequencyInt = match?.group(0) != null ? int.parse(match!.group(0)!) : 0;
         final match1=regex.firstMatch(_otherController.text);
         int otherSelectInt=match1?.group(0)!=null? int.parse(match1!.group(0)!):0;
 
-        String? habitPeriod;
+        String habitPeriod;
         DateTime now = DateTime.now();
-
         if (_selectedHabitType == 'Monthly') {
-          habitPeriod = DateFormat('yyyy-MMM').format(DateTime.now());
+          habitPeriod = DateFormat('yyyy-MM').format(DateTime.now());
         } else if (_selectedHabitType == 'Weekly') {
           int currentWeekDayOfMonth = now.weekday;
-          habitPeriod = '${DateFormat('yyyy-MMM').format(DateTime.now())}-$currentWeekDayOfMonth';
+          habitPeriod = '${DateFormat('yyyy-MM').format(DateTime.now())}-$currentWeekDayOfMonth';
         } else {
-          habitPeriod = DateFormat('yyyy-MMM-dd').format(DateTime.now());
-        }
-        int habitFrequency;
-        if (_selectedHabitType=='Daily') {
-          DateTime createdAt = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
-          int daysSinceCreatedAt = now.difference(createdAt).inDays;
-          habitFrequency = daysSinceCreatedAt;
-        } else {
-          habitFrequency = 0;
+          habitPeriod = DateFormat('yyyy-MM-dd').format(DateTime.now());
         }
 
-        if(_selectedHabitType=='Monthly'){
+        if(_selectedHabitType=='Monthly' && _selectedFrequency=='Other'){
           await userDocRef.collection('habits').add({
             'habitName': _habitNameController.text,
             'habitType': _selectedHabitType,
             'habitFrequency': otherSelectInt,
+            'createdAt': DateTime.now(),
+            'completed': {
+              if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
+              }
+            }});
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
+        }
+        else if(_selectedHabitType=='Monthly' && _selectedFrequency!='Other'){
+          await userDocRef.collection('habits').add({
+            'habitName': _habitNameController.text,
+            'habitType': _selectedHabitType,
+            'habitFrequency':selectedFrequencyInt,
             'createdAt': DateTime.now(),
             'completed': {
               if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
@@ -97,12 +99,12 @@ class _NewHabit extends State<NewHabit>{
             }});
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
         }
-       else{
-
+        else if(_selectedHabitType=='Daily'){
+          int daysInMonth = DateTime(now.year, now.month + 1, 0).day;
           await userDocRef.collection('habits').add({
             'habitName': _habitNameController.text,
             'habitType': _selectedHabitType,
-            'habitFrequency': habitFrequency,
+            'habitFrequency': daysInMonth,
             'createdAt': DateTime.now(),
             'completed': {
               if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
@@ -110,6 +112,8 @@ class _NewHabit extends State<NewHabit>{
             }});
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
         }
+
+
         setState(() {
           _habitNameController.clear();
           _otherController.clear();
@@ -118,10 +122,12 @@ class _NewHabit extends State<NewHabit>{
             MaterialPageRoute(builder: (context) => HomePage())
         );
       }
-      catch(e){
-        print('Error Saving data: {$e}');
+      catch (e, stackTrace) {
+        print('Error Saving data: $e\n$stackTrace');
       }
-
+      // catch(e){
+      //   print('Error Saving data: {$e}');
+      // }
     }
   }
 
@@ -195,21 +201,6 @@ class _NewHabit extends State<NewHabit>{
                     }).toList(),
                   ),
                   SizedBox(height: 20,),
-                  _selectedHabitType=='Daily' ? TextFormField(
-                    decoration: InputDecoration(
-                      labelText: '$_selectedHabitType',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        )
-                    ),
-                    initialValue: _selectedFrequency,
-                    onChanged: (value){
-                      setState(() {
-                        _selectedFrequency=value;
-                      });
-                    },
-                  ):SizedBox(),
-
                   _selectedHabitType!='Daily' ? DropdownButtonFormField(
                     hint: Text('Select $_selectedHabitType'),
                     decoration: InputDecoration(
@@ -265,9 +256,20 @@ class _NewHabit extends State<NewHabit>{
           ),
         ]
     );
-
   }
-
   }
-
-
+// else if (_selectedHabitType == 'Daily') {
+// DateTime creating = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+// Duration difference = DateTime.now().difference(creating);
+// int daySinceCreating = difference.inDays;
+// await userDocRef.collection('habits').add({
+// 'habitName': _habitNameController.text,
+// 'habitType': _selectedHabitType,
+// 'habitFrequency': daySinceCreating,
+// 'createdAt': DateTime.now(),
+// 'completed': {
+// if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': []}
+// }
+// });
+// ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
+// }

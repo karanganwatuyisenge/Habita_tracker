@@ -26,7 +26,7 @@ class _NewGoal extends State<NewGoal>{
 
   void SaveGoal() async{
     var _selectStartingDate=DateTime.now();
-    var _selectStartDate=DateFormat('d MMMM yyyy').format(_selectStartingDate!);
+    var _selectStartDate=DateFormat('yyyy-MM-dd').format(DateTime.now());
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
       try{
@@ -63,7 +63,7 @@ class _NewGoal extends State<NewGoal>{
   @override
   Widget build(BuildContext context) {
     currentDate = DateTime.now();
-    formattedDate = DateFormat(' d MMMM yyyy').format(currentDate!);
+    formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     return AlertDialog(
       title: Row(
@@ -141,7 +141,6 @@ class _NewGoal extends State<NewGoal>{
 
                   ),
                   SizedBox(height: 20,),
-
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),

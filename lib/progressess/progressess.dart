@@ -22,7 +22,7 @@ class _MyProgressState extends State<Progress>{
   Widget build(BuildContext Context){
     return Container(
         child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFEDEDED),
           body:ListView(
             children: [
               SizedBox(
@@ -59,7 +59,7 @@ class _MyProgressState extends State<Progress>{
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: Colors.grey.shade200,
+                    color: Color(0xFFFFFFFF),
                   ),
                   child: Column(
                     children: [
@@ -86,7 +86,7 @@ class _MyProgressState extends State<Progress>{
                             child: CircularProgressIndicator(
                               value: 0.5,
                               strokeWidth: 15,
-                              backgroundColor: Colors.white60,
+                              backgroundColor: Color(0xFFF0F0F0),
                               valueColor: AlwaysStoppedAnimation<Color>(
                                   Colors.deepOrangeAccent),
                             ),
@@ -118,143 +118,116 @@ class _MyProgressState extends State<Progress>{
                         height: 20,
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(left:18.0,right: 18.0,),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: Colors.white60,
+                              color: Color(0xFFFBFBFB)
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left:8.0),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        CircularProgressIndicator(
-                                          value: 1,
-                                          valueColor: AlwaysStoppedAnimation<Color>(
-                                              Colors.green),
-                                        ),
-                                        Text('100%',style: TextStyle(
-                                          color: Colors.green,
-                                        ),),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left:8.0),
-                                    child: Text('Journaling everyday',style: TextStyle(fontWeight: FontWeight.bold),),
-                                  ),
-                                ],
-                              ),
-
-                              TextButton(
-                                  onPressed: (){
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) => Journaling()));
-                                  },
-                                  child: Container(
+                          child: ListTile(
+                            leading: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                CircularProgressIndicator(
+                                  value: 1,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.green),
+                                ),
+                                Text('100%',style: TextStyle(
+                                  color: Colors.green,
+                                ),),
+                              ],
+                            ),
+                            title: Text('Journaling everyday',style: TextStyle(fontWeight: FontWeight.bold),),
+                            trailing: TextButton(
+                                onPressed: (){
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) => Journaling()));
+                                },
+                                child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
                                       color: Colors.lightGreen.shade100,
                                     ),
-                                      child: Text('Achieved',style: TextStyle(color: Colors.green),)))
-
-                            ],
+                                    child: Text('Achieved',style: TextStyle(color: Colors.green),))),
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(left:18.0,right: 18.0),
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.white60,
+                              borderRadius: BorderRadius.circular(5),
+                              color: Color(0xFFFBFBFB)
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left:4.0),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        CircularProgressIndicator(
-                                          value: 1,
-                                          valueColor: AlwaysStoppedAnimation<Color>(
-                                              Colors.green),
-                                        ),
-                                        Text('100%',style: TextStyle(
-                                          color: Colors.green,
-                                        ),),
-                                      ],
+                          child: ListTile(
+                            leading: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                CircularProgressIndicator(
+                                  value: 1,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.green),
+                                ),
+                                Text('100%',style: TextStyle(
+                                  color: Colors.green,
+                                ),),
+                              ],
+                            ),
+                            title: Text('Cooking Practice',style: TextStyle(fontWeight: FontWeight.bold),),
+                            trailing: TextButton(
+                                onPressed: (){
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) => Journaling()));
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.lightGreen.shade100,
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left:8.0),
-                                    child: Text('Cooking Practice',style: TextStyle(fontWeight: FontWeight.bold),),
-                                  ),
-                                ],
-                              ),
-
-                              TextButton(
-                                  onPressed: (){},
-                                  child: Container(decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.lightGreen.shade100,
-                                  ),
-                                      child: Text('Achieved',style: TextStyle(color: Colors.green),)))
-
-                            ],
+                                    child: Text('Achieved',style: TextStyle(color: Colors.green),))),
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(left:18.0,right: 18.0),
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.white60,
+                              borderRadius: BorderRadius.circular(5),
+                              color: Color(0xFFFBFBFB)
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left:28.0),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        CircularProgressIndicator(
-                                          value: 0.7,
-                                          backgroundColor: Colors.blueGrey,
-                                          valueColor: AlwaysStoppedAnimation<Color>(
-                                              Colors.grey),
-                                        ),
-                                        Text('70%',style: TextStyle(
-                                          color: Colors.grey,
-                                        ),),
-                                      ],
+                          child: ListTile(
+                            leading: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                CircularProgressIndicator(
+                                  value: 1,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.grey),
+                                ),
+                                Text('70%',style: TextStyle(
+                                  color: Colors.grey,
+                                ),),
+                              ],
+                            ),
+                            title: Text('Vitamin',style: TextStyle(fontWeight: FontWeight.bold),),
+                            trailing: TextButton(
+                                onPressed: (){
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) => Journaling()));
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      //color: Colors.lightGreen.shade100,
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left:8.0),
-                                    child: Text('Vitamin',style: TextStyle(fontWeight: FontWeight.bold),),
-                                  ),
-                                ],
-                              ),
-                              TextButton(
-                                  onPressed: (){},
-                                  child: Text('Unachieved',style: TextStyle(color: Colors.grey),))
-
-                            ],
+                                    child: Text('Unachieved',style: TextStyle(color: Colors.grey),))),
                           ),
                         ),
                       ),
@@ -269,12 +242,17 @@ class _MyProgressState extends State<Progress>{
                               child: Text('See All',style: TextStyle(color: Colors.deepOrangeAccent),)),
                         ],
                       ),
+
                     ],
                   ),
                 ),
               ),
+              SizedBox(
+                height: 40,
+              ),
       ],
           ),
+
           bottomNavigationBar:Container(
               child:Row(
                   mainAxisAlignment:MainAxisAlignment.spaceBetween,
