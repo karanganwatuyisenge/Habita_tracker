@@ -25,7 +25,7 @@ class _MonthlyHabitState extends State<MonthlyHabit> {
             .doc(user.uid)
             .collection('habits')
             .where('habitType', isEqualTo: 'Monthly')
-            .where('completed.$formattedDate.dates', arrayContains: formattedNow)
+            //.where('completed.$formattedDate.dates', arrayContains: formattedNow)
             .snapshots(),
         builder: (context, streamSnapshot) {
           //print("This is the index: $index");

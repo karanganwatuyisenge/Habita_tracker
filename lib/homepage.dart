@@ -20,18 +20,98 @@ class HomePage extends StatefulWidget{
 }
 
 class _HomePageState extends State<HomePage> {
+  User user=FirebaseAuth.instance.currentUser!;
   DateTime? currentDate;
   String? formattedDate;
   String _userName = '';
   List<String> _data = [];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final auth = FirebaseAuth.instance;
-
+  int habitCount=0;
+  int totalCompletedHabit=0;
 
   @override
   void initState() {
     super.initState();
     getCurrentUser();
+    completedToday();
+    getHabitCount();
+
+  }
+  Future<void> getHabitCount() async {
+    CollectionReference habitsRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('habits');
+    QuerySnapshot querySnapshot = await habitsRef.get();
+    setState(() {
+      habitCount = querySnapshot.size;
+    });
+  }
+
+  Future<void> completedToday() async {
+    DateTime today = DateTime.now();
+    String formattedDateMonthly = DateFormat('yyyy-MM').format(today);
+    String formattedDateDaily = DateFormat('yyyy-MM-dd').format(today);
+    DateTime now = DateTime.now();
+    int currentWeekDayOfMonth = now.weekday;
+    String formattedDateWeekly =
+        '${DateFormat('yyyy-MM').format(DateTime.now())}-$currentWeekDayOfMonth';
+
+    num completedCountMonthly = 0;
+    num completedCountWeekly = 0;
+    num completedCountDaily = 0;
+
+    await Future.wait([
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('habits')
+          .where('completed.$formattedDateMonthly.dates', arrayContains: formattedDateDaily)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          Map<String, dynamic> completedMap = doc['completed'][formattedDateMonthly];
+          if (completedMap != null && completedMap['count'] != null) {
+            completedCountMonthly += completedMap['count'];
+          }
+        });
+      }),
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('habits')
+          .where('completed.$formattedDateWeekly.dates', arrayContains: formattedDateDaily)
+          .get()
+          .then((querySnapshotWeekly) {
+        querySnapshotWeekly.docs.forEach((doc) {
+          Map<String, dynamic> completeMap = doc['completed'][formattedDateWeekly];
+          if (completeMap != null && completeMap['count'] != null) {
+            completedCountWeekly += completeMap['count'];
+          }
+        });
+      }),
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('habits')
+          .where('completed.$formattedDateDaily.dates', arrayContains: formattedDateDaily)
+          .get()
+          .then((querySnapshot1) {
+        querySnapshot1.docs.forEach((doc) {
+          Map<String, dynamic> completedMap = doc['completed'][formattedDateDaily];
+          if (completedMap != null && completedMap['count'] != null) {
+            completedCountDaily += completedMap['count'];
+          }
+        });
+      })
+    ]);
+
+    setState(() {
+      totalCompletedHabit =
+          completedCountMonthly.toInt() + completedCountDaily.toInt() + completedCountWeekly.toInt();
+    });
+
   }
 
   void getCurrentUser() async {
@@ -45,8 +125,6 @@ class _HomePageState extends State<HomePage> {
       _userName = snapshot.get('name');
     });
   }
-
-
 
   Future<void> _refreshData() async {
     await Future.delayed(const Duration(seconds: 2));
@@ -69,8 +147,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //completedToday();
     currentDate = DateTime.now();
     formattedDate = DateFormat('E, d MMMM yyyy').format(currentDate!);
+    double value = totalCompletedHabit / habitCount;
+    double percentage = (totalCompletedHabit / habitCount) * 100;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -124,31 +205,32 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: Stack(
                           children: [
+                            //double value = totalCompletedHabit / habitCount;
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Stack(
                                   alignment: Alignment.center,
                                   children: [
-                                    const SizedBox(
+                                     SizedBox(
                                       width: 70,
                                       height: 70,
                                       child: CircularProgressIndicator(
-                                        value: 0.5,
+                                        value: value,
                                         strokeWidth: 15,
                                         backgroundColor: Colors.white60,
                                         valueColor: AlwaysStoppedAnimation<Color>(
                                             Colors.white70),
                                       ),
                                     ),
-                                    const Text('70%',
-                                      style: TextStyle(color: Colors.white),),
+                                    Text('${percentage.toStringAsFixed(0)}%',
+                                      style: TextStyle(color: Colors.white,fontSize: 20),),
                                   ],
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text('3 of 5 habits', style: TextStyle(
+                                    Text('$totalCompletedHabit of $habitCount habits', style: TextStyle(
                                         fontSize: 20, color: Colors.white),),
                                     const Text('completed today!', style: TextStyle(
                                         fontSize: 20, color: Colors.white),),

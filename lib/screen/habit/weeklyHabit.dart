@@ -27,7 +27,7 @@ class _WeeklyHabitState extends State<WeeklyHabit> {
             .doc(user.uid)
             .collection('habits')
             .where('habitType', isEqualTo: 'Weekly')
-            .where('completed.$formattedDate.dates', arrayContains: formattedNow)
+        //.where('completed.$formattedDate.dates', arrayContains: formattedNow)
             .snapshots(),
         builder: (context, streamSnapshot) {
           //print("This is the index: $index");
@@ -51,7 +51,7 @@ class _WeeklyHabitState extends State<WeeklyHabit> {
                     int frequency=habit['habitFrequency'];
                     int count=habit['completed.$formattedDate.count'];
                     int remaining=frequency-count;
-                    double percentage=count/frequency;
+                    double percentage = frequency == 0 || count == 0 ? 0.0 : count / frequency;
                     return Padding(
                       padding: const EdgeInsets.only(
                           top: 12, left: 15, right: 15),
@@ -79,7 +79,7 @@ class _WeeklyHabitState extends State<WeeklyHabit> {
                               ListTile(
                                 contentPadding:
                                 EdgeInsets.symmetric(vertical: 0),
-                                title: LinearProgressIndicator(
+                                title:LinearProgressIndicator(
                                     minHeight: 15,
                                     value: percentage,
                                     backgroundColor: Colors.grey,
@@ -152,11 +152,11 @@ class _WeeklyHabitState extends State<WeeklyHabit> {
                                           print(
                                               "Error updating document: $e");
                                         }
-                                      } else if (habit['habitType'] ==
+                                      }
+                                      else if (habit['habitType'] ==
                                           "Monthly") {
                                         final yearMonth =
-                                        DateFormat('yyyy-MMM')
-                                            .format(currentDate);
+                                        DateFormat('yyyy-MM').format(DateTime.now());
                                         //print("yearMonth: $yearMonth");
                                         try {
                                           await docRef.update({

@@ -45,6 +45,10 @@ class _DailyHabitState extends State<DailyHabit> {
                         child: Column(
                             children: habits.map((habit) {
                               // int indexes = habits.indexOf(habit);
+                              int frequency=habit['habitFrequency'];
+                              int count=habit['completed.$formattedDate.count'];
+                              int remaining=frequency-count;
+                              double percentage = frequency == 0 || count == 0 ? 0.0 : count / frequency;
                               return Padding(
                                 padding: const EdgeInsets.only(
                                     top: 12, left: 15, right: 15),
@@ -69,21 +73,31 @@ class _DailyHabitState extends State<DailyHabit> {
                                                 fontSize: 25),
                                           ),
                                         ),
-                                        const ListTile(
+                                        ListTile(
                                           contentPadding:
                                           EdgeInsets.symmetric(vertical: 0),
-                                          title: LinearProgressIndicator(
+                                          title:LinearProgressIndicator(
                                               minHeight: 15,
-                                              value: 0.5,
+                                              value: percentage,
                                               backgroundColor: Colors.grey,
                                               valueColor:
                                               AlwaysStoppedAnimation<Color>(
                                                   Colors.deepOrangeAccent)),
                                         ),
-                                        const ListTile(
+                                        ListTile(
                                           contentPadding:
                                           EdgeInsets.symmetric(vertical: 0),
-                                          title: Text('5 from 7 days target',
+                                          title: Text('$count from $frequency days target',
+                                            style: TextStyle(
+                                              color: Color(0xFF2F2F2F),
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ),
+                                        ListTile(
+                                          contentPadding:
+                                          EdgeInsets.symmetric(vertical: 0),
+                                          title: Text('Remaining $remaining days',
                                               style: TextStyle(
                                                   color: Color(0xFF2F2F2F),
                                                   fontSize: 20)),
@@ -116,7 +130,7 @@ class _DailyHabitState extends State<DailyHabit> {
                                                   int currentWeekDayOfMonth =
                                                       now.weekday;
                                                   habitPeriod =
-                                                  '${DateFormat('yyyy-MMM').format(DateTime.now())}-$currentWeekDayOfMonth';
+                                                  '${DateFormat('yyyy-MM').format(DateTime.now())}-$currentWeekDayOfMonth';
                                                   try {
                                                     await docRef.update({
                                                       "completed.$habitPeriod.dates":
@@ -135,11 +149,11 @@ class _DailyHabitState extends State<DailyHabit> {
                                                     print(
                                                         "Error updating document: $e");
                                                   }
-                                                } else if (habit['habitType'] ==
+                                                }
+                                                else if (habit['habitType'] ==
                                                     "Monthly") {
                                                   final yearMonth =
-                                                  DateFormat('yyyy-MMM')
-                                                      .format(currentDate);
+                                                  DateFormat('yyyy-MM').format(DateTime.now());
                                                   //print("yearMonth: $yearMonth");
                                                   try {
                                                     await docRef.update({
