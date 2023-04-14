@@ -18,14 +18,13 @@ class _DailyHabitState extends State<DailyHabit> {
     String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     return Scaffold(
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream:
-                  FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(user.uid)
-                      .collection('habits')
-                      .where('habitType', isEqualTo: 'Daily')
-                     .where('completed.$formattedDate.dates', isEqualTo: null)
-                      .snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .collection('habits')
+            .where('habitType', isEqualTo: 'Daily')
+            //.where('completed.$formattedDate.dates', isEqualTo: null)
+            .snapshots(),
                     builder: (context, streamSnapshot) {
                     //print("This is the index: $index");
                     if (streamSnapshot.connectionState == ConnectionState.waiting) {

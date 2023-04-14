@@ -9,8 +9,73 @@ import 'package:tracker_habit/screen/habit/habitScreen.dart';
 import 'progressess/progressess.dart';
 import 'settings/setting.dart';
 import 'package:intl/intl.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 
+void showNotification() async {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+  AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings =
+  InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+  );
+
+  AndroidNotificationChannel channel = const AndroidNotificationChannel(
+    'high channel',
+    'Very important notification!!',
+    description: 'the first notification',
+    importance: Importance.max,
+  );
+
+  // Get the list of incomplete habits of today
+  List<String> incompleteHabits = ["Habit 1", "Habit 2"];
+
+  if (incompleteHabits.isNotEmpty) {
+    // Construct the message for the notification
+    String message =
+        "You have ${incompleteHabits.length} incomplete habit(s) for today: ";
+    for (String habit in incompleteHabits) {
+      message += "$habit, ";
+    }
+    message = message.substring(0, message.length - 2);
+
+    // Show the notification
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Incomplete Habits',
+      message,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'incomplete habits channel id',
+          'Incomplete Habits',
+          importance: Importance.max,
+          priority: Priority.high,
+          showWhen: false,
+        ),
+      ),
+    );
+  }
+  print('showNotification called');
+
+  try {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    // Rest of the code
+
+  } catch (e) {
+    print('Error: $e');
+  }
+}
 
 class HomePage extends StatefulWidget{
   HomePage({Key? key}) : super(key:key);
@@ -36,7 +101,15 @@ class _HomePageState extends State<HomePage> {
     getCurrentUser();
     completedToday();
     getHabitCount();
+    tz.initializeTimeZones();
+    //showNotification();
+scheduleTimer();
+  }
 
+  scheduleTimer() async {
+   var s=await AndroidAlarmManager.periodic(
+        const Duration(minutes: 1), 0, showNotification,allowWhileIdle: true );
+print("Timer scheduled: $s");
   }
   Future<void> getHabitCount() async {
     CollectionReference habitsRef = FirebaseFirestore.instance
@@ -147,11 +220,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //showNotification();
     //completedToday();
     currentDate = DateTime.now();
     formattedDate = DateFormat('E, d MMMM yyyy').format(currentDate!);
-    double value = totalCompletedHabit / habitCount;
-    double percentage = (totalCompletedHabit / habitCount) * 100;
+    double value = 0;
+    double percentage = 0;
+
+    if (habitCount != 0) {
+      value = totalCompletedHabit / habitCount;
+      percentage = value * 100;
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

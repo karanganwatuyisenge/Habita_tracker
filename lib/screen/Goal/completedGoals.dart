@@ -45,13 +45,15 @@ class _CompletedGoalsState extends State<CompletedGoals> {
                               title: Text(goal['goalName'],
                                 style: TextStyle(color: Colors.green,fontSize: 20),
                               ),
-                              trailing: Checkbox(
+
+                              trailing:Checkbox(
                                 value: goal["completed"],
-                                onChanged: (bool? newValue) {
-                                  FirebaseFirestore.instance.collection("users")
-                                  .doc().collection("habits").doc()
-                                      .update({"completed":newValue!});
-                                },
+                                onChanged: (bool? newValue){
+                                  FirebaseFirestore.instance
+                                      .collection("users").doc(user.uid)
+                                      .collection("goals").doc(goal.id)
+                                      .update({"completed": newValue?? false});
+                                }
                               ),
 
                             ),

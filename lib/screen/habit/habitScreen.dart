@@ -52,42 +52,7 @@ class _HabitScreenState extends State<HabitScreen> {
 
         ),
       ));
-    // return DefaultTabController(
-    //     length: 2,
-    //     child: Scaffold(
-    //       backgroundColor: Colors.grey,
-    //       body: Padding(
-    //           padding: EdgeInsets.all(8.0),
-    //       child: Column(
-    //         children: [
-    //           Container(
-    //             decoration: BoxDecoration(
-    //               borderRadius: BorderRadius.circular(5),
-    //               color: Colors.red
-    //             ),
-    //             child: TabBar(
-    //               tabs: [
-    //                 Tab(
-    //                   child:Text('Daily')
-    //                 ),
-    //                 Tab(
-    //                   child:Text('Weekly')
-    //                 )
-    //               ],
-    //             )
-    //           ),
-    //           Expanded(
-    //               child: SizedBox(
-    //                 child: TabBarView(
-    //                     children: [
-    //                       DailyHabit(),
-    //                     ]),
-    //               )),
-    //         ],
-    //       ),
-    //       )
-    //     )
-    // );
+
   }
 
 

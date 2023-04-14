@@ -523,3 +523,143 @@
 //   }
 // }
 
+// import 'package:flutter/material.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:timezone/data/latest.dart' as tz;
+// import 'package:timezone/timezone.dart' as tz;
+//
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await tz.initializeTimeZones();
+//   runApp(MyApp());
+// }
+//
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Habit Reminder',
+//       home: Scaffold(
+//         appBar: AppBar(
+//           title: Text('Habit Reminder'),
+//         ),
+//         body: Center(
+//           child: ElevatedButton(
+//             child: Text('Set Reminder'),
+//             onPressed: () {
+//               _scheduleNotification();
+//             },
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Future<void> _scheduleNotification() async {
+//     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
+//     var initializationSettingsAndroid =
+//     AndroidInitializationSettings('app_icon');
+//     var initializationSettingsIOS = IOSInitializationSettings();
+//     var initializationSettings = InitializationSettings(
+//         android: initializationSettingsAndroid,
+//         iOS: initializationSettingsIOS);
+//     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+//
+//     var androidDetails = AndroidNotificationDetails(
+//         'channelId', 'channelName', 'channelDescription',
+//         priority: Priority.high,
+//         importance: Importance.high,
+//         ticker: 'ticker');
+//     var iOSDetails = IOSNotificationDetails();
+//     var notificationDetails =
+//     NotificationDetails(android: androidDetails, iOS: iOSDetails);
+//
+//     await flutterLocalNotificationsPlugin.zonedSchedule(
+//         0,
+//         'Complete Your Habit',
+//         'Don\'t forget to complete your habit today!',
+//         _nextInstanceOfTenAM(),
+//         notificationDetails,
+//         androidAllowWhileIdle: true,
+//         uiLocalNotificationDateInterpretation:
+//         UILocalNotificationDateInterpretation.absoluteTime);
+//   }
+//
+//   tz.TZDateTime _nextInstanceOfTenAM() {
+//     tz.TZDateTime scheduledDate = tz.TZDateTime.now(tz.local);
+//     if (scheduledDate.hour >= 10) {
+//       scheduledDate = scheduledDate.add(const Duration(days: 1));
+//     }
+//     return tz.TZDateTime(tz.local, scheduledDate.year, scheduledDate.month,
+//         scheduledDate.day, 10);
+//   }
+// }
+
+
+// ure, I'd be happy to help! Based on the code you provided, it looks like you're using the flutter_local_notifications package to show a notification. Here are a few things you can try to troubleshoot the issue:
+//
+// Check if the showNotification function is being called
+// One thing you can try is to add a print statement at the beginning of the showNotification function to check if it's being called:
+//
+// csharp
+// Copy code
+// Future<void> showNotification() async {
+//   print('showNotification called');
+//   // Rest of the code
+// }
+// If you see the message "showNotification called" in the console, then the function is being called properly.
+//
+// Check if the notification channel is set up correctly
+// Make sure that the notification channel is set up correctly by checking the AndroidNotificationChannel instance that you're using. You can add a print statement to see if the channel is being created successfully:
+//
+// arduino
+// Copy code
+// AndroidNotificationChannel channel = const AndroidNotificationChannel(
+// 'high channel',
+// 'Very important notification!!',
+// description: 'the first notification',
+// importance: Importance.max,
+// );
+// print('Channel created successfully: ${await flutterLocalNotificationsPlugin
+//     .resolvePlatformSpecificImplementation<
+// AndroidFlutterLocalNotificationsPlugin>()
+//     ?.getNotificationChannel(channel.id)}');
+// This will print out the details of the notification channel that you've created. Make sure that the channel ID that you're using in the AndroidNotificationDetails instance matches the ID of the notification channel.
+//
+// Check if the notification is being triggered
+// You can add a print statement at the end of the showNotification function to check if the notification is being triggered:
+//
+// php
+// Copy code
+// await flutterLocalNotificationsPlugin.show(
+// 0,
+// 'Incomplete Habits',
+// message,
+// const NotificationDetails(
+// android: AndroidNotificationDetails(
+// 'incomplete habits channel id',
+// 'Incomplete Habits',
+// importance: Importance.max,
+// priority: Priority.high,
+// showWhen: false,
+// ),
+// ),
+// );
+// print('Notification shown');
+// If you see the message "Notification shown" in the console, then the notification is being triggered properly.
+//
+// Check if the AndroidAlarmManager is set up correctly
+// Make sure that the AndroidAlarmManager is set up correctly by checking the showNotification method is called properly using Android AlarmManager service.
+//
+// To verify that the AndroidAlarmManager is set up correctly, you can add a print statement at the beginning of the showNotification method to see if it's being called:
+//
+// csharp
+// Copy code
+// Future<void> showNotification() async {
+// print('showNotification called');
+// // Rest of the code
+// }
+// If you see the message "showNotification called" in the console periodically (every minute, in this case), then the AndroidAlarmManager is set up correctly.
+//
+// I hope this helps you troubleshoot the issue! If you have any more questions or if these steps don't resolve the issue, feel free to ask.
