@@ -1,8 +1,8 @@
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:tracker_habit/homepage.dart';
 import 'package:tracker_habit/screen/fetchData.dart';
 import 'package:tracker_habit/screen/habit/dailyHabit.dart';
 import 'package:tracker_habit/screen/habit/habitScreen.dart';
-import 'package:tracker_habit/showNotification.dart';
 import 'Help/help3.dart';
 import 'geolocation.dart';
 import 'package:flutter/material.dart';
@@ -10,35 +10,66 @@ import 'package:tracker_habit/authentication/login.dart';
 import 'package:tracker_habit/authentication/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:easy_localization/easy_localization.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
-  await WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('fr', 'FR'),
+       // Locale('rw', 'RW'),
 
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    initialRoute: 'login',
-
-    theme: ThemeData(
-      primarySwatch: Colors.deepOrange,
+        //Locale('Kinyarwanda', 'rw', 'RW'),
+      ],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en', 'US'),
+      child:const MyApp(),
     ),
-    routes: {
-      'geolocation':(context) => Location(),
-      'login':(context) => MyLogin(),
-      'signup':(context) => SignUp(),
-      'home':(context) => HomePage(),
-      'habitScreen':(context) => HabitScreen(),
-      'fetchData':(context) => FetchData(),
-      'help':(context) => Display(),
-      'daily':(context) =>DailyHabit(),
-      'notification':(context) => ShowNotification(),
-
-      // background: linear-gradient(89.76deg, #37C871 4.24%, #5FE394 69.76%);
-      // background: linear-gradient(48.62deg, #FFA450 11.85%, #FF5C00 66.77%);
-    },
-  ));
+  );
 }
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        debugShowCheckedModeBanner: false,
+        initialRoute: 'login',
+        theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
+        ),
+        routes: {
+          'geolocation': (context) => const Location(),
+          'login': (context) => const MyLogin(),
+          'signup': (context) => const SignUp(),
+          'home': (context) => HomePage(),
+          'habitScreen': (context) => const HabitScreen(),
+          'fetchData': (context) => FetchData(),
+          'help': (context) => const Display(),
+          'daily': (context) => const DailyHabit(),
+        },
+        //home: MyHomePage()
+    );
+  }
+}
+
+
+
+
+
+
+
+

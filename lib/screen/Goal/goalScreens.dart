@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker_habit/screen/Goal/seeAllGoal.dart';
@@ -27,7 +28,7 @@ class _GoalScreens extends State<GoalScreens>{
         child: Column(
           children: [
             ListTile(
-              title: const Text('Your Goals',
+              title: Text('YourGoals'.tr(),
                 style: TextStyle(
                   color: Color(0xff4c505b), fontSize: 20,),),
               trailing: TextButton(

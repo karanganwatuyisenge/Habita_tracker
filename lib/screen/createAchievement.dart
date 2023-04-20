@@ -42,6 +42,7 @@ class _NewAchievement extends State<NewAchievement>{
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Color(0xFFFBFBFB),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -57,31 +58,34 @@ class _NewAchievement extends State<NewAchievement>{
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NewGoal(),
+          GestureDetector(
+          onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NewGoal(),
+                          ),
+                        );
+                      },
+            child: Container(
+              width: MediaQuery.of(context).size.height * 0.3,
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Goal',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 16.0),
+
+                    ],
                   ),
-                );
-              },
-              child: Container(
-                height: 100,
-                width: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFEDEDED),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Goal",
-                      style: TextStyle(fontSize: 40, color: Color(0xFF666666)),
-                    ),
-                  ],
                 ),
               ),
             ),
@@ -89,9 +93,8 @@ class _NewAchievement extends State<NewAchievement>{
           SizedBox(
             height: 30,
           ),
-          Container(
-                child:GestureDetector(
-                  onTap: () {
+          GestureDetector(
+              onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -99,26 +102,29 @@ class _NewAchievement extends State<NewAchievement>{
                       ),
                     );
                   },
-                  child: Container(
-                    height: 100,
-                    width: 200,
-
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Color(0xFFEDEDED),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Habit',
-                          style: TextStyle(fontSize: 40, color: Color(0xFF666666)),
+            child: Container(
+              width: MediaQuery.of(context).size.height * 0.3,
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Habit',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 16.0),
+
+                    ],
                   ),
                 ),
-    ),
+              ),
+            ),
+          ),
             ]),
           );
   }

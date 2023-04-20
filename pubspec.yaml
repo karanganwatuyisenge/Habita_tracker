@@ -12,6 +12,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  easy_localization: ^3.0.1
   flutter_otp_text_field: ^1.1.1
 #  percent_indicator: ^4.2.2
 
@@ -25,8 +27,9 @@ dependencies:
   dio: ^4.0.0
   flutter_local_notifications: ^13.0.0
   android_alarm_manager_plus: ^2.1.2
+  firebase_messaging: ^14.4.0
+  mockito: ^5.4.0
 #  http_headers: ^4.0.0
-
 
 
 dev_dependencies:
@@ -45,8 +48,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
   uses-material-design: true
   assets:
      - assets/images/
-
-
+     - assets/translations/

@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../homepage.dart';
+import 'package:tracker_habit/test/mock_firestore.dart';
+class NewGoal extends StatefulWidget {
 
-class NewGoal extends StatefulWidget{
   NewGoal({Key? key}) : super(key: key);
 
   @override
   State<NewGoal> createState() => _NewGoal();
 }
-
-class _NewGoal extends State<NewGoal>{
+class _NewGoal extends State<NewGoal> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _goalNameController = TextEditingController();
   bool showvalue = false;
@@ -22,41 +23,43 @@ class _NewGoal extends State<NewGoal>{
   DateTime? currentDate;
   String? formattedDate;
 
-  TextEditingController _selectEndDate=TextEditingController();
+  TextEditingController _selectEndDate = TextEditingController();
 
-  void SaveGoal() async{
-    var _selectStartingDate=DateTime.now();
-    var _selectStartDate=DateFormat('yyyy-MM-dd').format(DateTime.now());
-    if(_formKey.currentState!.validate()){
+  void SaveGoal() async {
+    var _selectStartingDate = DateTime.now();
+    var _selectStartDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      try{
-        User user=auth.currentUser!;
-        String? email= user.email;
+      try {
+        User user = auth.currentUser!;
+        String? email = user.email;
 
-        final userDocRef= await FirebaseFirestore.instance
-            .collection('users').where('email',isEqualTo: email)
-            .limit(1).get().then((value) => value.docs.first.reference);
+        final userDocRef = await FirebaseFirestore.instance
+            .collection('users')
+            .where('email', isEqualTo: email)
+            .limit(1)
+            .get()
+            .then((value) => value.docs.first.reference);
 
         await userDocRef.collection('goals').add({
           'goalName': _goalNameController.text,
-          'startDate':_selectStartDate,
-          'endDate':_selectEndDate.text,
-          'completed':false,
+          'startDate': _selectStartDate,
+          'endDate': _selectEndDate.text,
+          'completed': false,
+          'createdAt': DateTime.now(),
         });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Goal Saved Successfully')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('NewGoalSavedSuccessfully')));
 
         setState(() {
           _goalNameController.clear();
           _selectEndDate.clear();
         });
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => HomePage())
-        );
+            MaterialPageRoute(builder: (context) => HomePage()));
+      } catch (e) {
+        print('Error Saving Data: Se');
       }
-      catch(e){
-        print('Error Saving data: Se');
-      }
-
     }
   }
 
@@ -69,8 +72,8 @@ class _NewGoal extends State<NewGoal>{
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'Create New Goal', style: TextStyle(fontSize: 15),),
+          Text(
+            'CreateNewGoal'.tr(), style: TextStyle(fontSize: 15),),
           IconButton(
             icon: const Icon(Icons.cancel),
             onPressed: () {
@@ -90,14 +93,14 @@ class _NewGoal extends State<NewGoal>{
                   TextFormField(
                       controller: _goalNameController,
                       decoration: InputDecoration(
-                        labelText: 'Your Goal Name',
+                        labelText: 'YourGoalName'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
-                          return 'Please enter your goal';
+                          return 'PleaseEnterYourGoal'.tr();
                         }
                         return null;
                       }),
@@ -121,7 +124,7 @@ class _NewGoal extends State<NewGoal>{
                       border:OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      labelText: "Select End Date",
+                      labelText: "SelectEndDate".tr(),
                       suffixIcon: Icon(Icons.calendar_today_outlined),
                     ),
                     onTap: () async{
@@ -147,7 +150,7 @@ class _NewGoal extends State<NewGoal>{
                     ),
                     onPressed: () {
                       SaveGoal();},
-                    child: const Text('Create New'),
+                    child: const Text('CreateNew').tr(),
                   )
                 ],
               ),

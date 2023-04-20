@@ -663,3 +663,357 @@
 // If you see the message "showNotification called" in the console periodically (every minute, in this case), then the AndroidAlarmManager is set up correctly.
 //
 // I hope this helps you troubleshoot the issue! If you have any more questions or if these steps don't resolve the issue, feel free to ask.
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:tracker_habit/homepage.dart';
+// import 'package:tracker_habit/settings/setting.dart';
+//
+// import '../progressess/progressess.dart';
+//
+// class UpdateAccount extends StatefulWidget{
+//   UpdateAccount({Key? key}) : super(key:key);
+//
+//   @override
+//   State<UpdateAccount> createState() => _MyAccountState();
+//
+// }
+//
+// class _MyAccountState extends State<UpdateAccount>{
+//
+//   TextEditingController _nameController = TextEditingController();
+//   TextEditingController _emailController = TextEditingController();
+//
+//   void void_update() {
+//     String name = _nameController.text;
+//     String email = _emailController.text;
+//
+//     // Perform update logic here
+//     // For example, print the name and email to the console
+//     print('Name: $name');
+//     print('Email: $email');
+//   }
+//
+//   @override
+//   Widget build(BuildContext Context){
+//     return Container(
+//         child: Scaffold(
+//           backgroundColor: Colors.white,
+//           appBar: AppBar(
+//             backgroundColor: Colors.white,
+//             elevation: 0,
+//             title: Row(
+//               children: [
+//                 Text('Account',style:
+//                 TextStyle(
+//                   color:Color(0xff4c505b),
+//                   fontSize: 27,
+//                   fontWeight: FontWeight.w700,
+//                 ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           body:Stack(
+//             children: [
+//               Container(
+//                 padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05,
+//                   right: 35,
+//                   left: 35,
+//                 ),
+//                 child: Column(
+//                   children: [
+//                     TextField(
+//                       controller: _nameController,
+//                       decoration: InputDecoration(
+//                         fillColor: Colors.white,
+//                         filled: true,
+//                         hintText: 'Name',
+//                         suffixIcon: IconButton(
+//                           onPressed: () {  },
+//                           icon: Icon(Icons.input),
+//
+//                         ),
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(10),
+//                         ),
+//                       ),
+//                     ),
+//                     SizedBox(
+//                       height:30,
+//                     ),
+//                     TextField(
+//                       controller: _emailController,
+//                       decoration: InputDecoration(
+//                         fillColor: Colors.white,
+//                         filled: true,
+//                         hintText: 'Email',
+//                         suffixIcon: IconButton(
+//                           onPressed: () {  },
+//                           icon: Icon(Icons.input),
+//
+//                         ),
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(10),
+//                         ),
+//                       ),
+//                     ),
+//                     SizedBox(
+//                       height: 30,
+//                     ),
+//                     TextField(
+//                       obscureText: true,
+//                       decoration: InputDecoration(
+//                         fillColor: Colors.white,
+//                         filled: true,
+//                         hintText: 'Password',
+//                         suffixIcon: IconButton(
+//                           onPressed: () {  },
+//                           icon: Icon(Icons.remove_red_eye_outlined),
+//
+//                         ),
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(10),
+//                         ),
+//                       ),
+//                     ),
+//                     SizedBox(
+//                       height: 30,
+//                     ),
+//                     TextField(
+//                       obscureText: true,
+//                       decoration: InputDecoration(
+//                         fillColor: Colors.white,
+//                         filled: true,
+//                         hintText: 'Password Confirmation',
+//                         suffixIcon: IconButton(
+//                           onPressed: () {  },
+//                           icon: Icon(Icons.remove_red_eye_outlined),
+//
+//                         ),
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(10),
+//                         ),
+//                       ),
+//                     ),
+//                     SizedBox(
+//                       height: 40,
+//                     ),
+//                     Row(
+//                         children: [
+//                           Container(
+//                             width:280,
+//                             child: ElevatedButton(
+//                               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent)),
+//                               child:Text('Update'),
+//                               onPressed: (){
+//                                 void_update();
+//                               },
+//                             ),
+//
+//                           ),
+//                         ]
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//
+//         )
+//     );
+//   }
+// }
+//
+
+// import 'package:flutter/material.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//
+// class HabitTaskNotifier {
+//   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+//
+//   Future<void> initialize() async {
+//     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+//     const AndroidInitializationSettings initializationSettingsAndroid =
+//     AndroidInitializationSettings('app_icon');
+//     final InitializationSettings initializationSettings =
+//     InitializationSettings(android: initializationSettingsAndroid);
+//     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+//   }
+//
+//   Future<void> showNotification(String title, String body) async {
+//     const AndroidNotificationDetails androidPlatformChannelSpecifics =
+//     AndroidNotificationDetails(
+//         'your channel id', 'your channel name', 'your channel description',
+//         importance: Importance.max,
+//         priority: Priority.high,
+//         ticker: 'ticker');
+//     const NotificationDetails platformChannelSpecifics =
+//     NotificationDetails(android: androidPlatformChannelSpecifics);
+//     await flutterLocalNotificationsPlugin.show(
+//         0, title, body, platformChannelSpecifics,
+//         payload: 'habit_task');
+//   }
+// }
+//
+// class HabitTaskPage extends StatefulWidget {
+//   const HabitTaskPage({Key? key}) : super(key: key);
+//
+//   @override
+//   _HabitTaskPageState createState() => _HabitTaskPageState();
+// }
+//
+// class _HabitTaskPageState extends State<HabitTaskPage> {
+//   final HabitTaskNotifier habitTaskNotifier = HabitTaskNotifier();
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     habitTaskNotifier.initialize();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Habit Task'),
+//       ),
+//       body: Center(
+//         child: ElevatedButton(
+//           onPressed: () async {
+//             await habitTaskNotifier.showNotification(
+//                 'Habit Task', 'Complete your habit task for today!');
+//           },
+//           child: const Text('Notify Me'),
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
+
+
+
+//////Notifications/////////////////////////
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:intl/intl.dart';
+//
+// class HabitNotification extends StatefulWidget {
+//   @override
+//   _HabitNotificationState createState() => _HabitNotificationState();
+// }
+//
+// class _HabitNotificationState extends State<HabitNotification> {
+//   User user=FirebaseAuth.instance.currentUser!;
+//   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//   FlutterLocalNotificationsPlugin();
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//
+//     // Initialize the notification plugin
+//     var initializationSettingsAndroid =
+//     AndroidInitializationSettings('@mipmap/ic_launcher');
+//     var initializationSettings = InitializationSettings(
+//         android: initializationSettingsAndroid);
+//     flutterLocalNotificationsPlugin.initialize(initializationSettings);
+//   }
+//
+//   Future onSelectNotification(String? payload) async {
+//     // Handle notification click event
+//     showDialog(
+//       context: context,
+//       builder: (_) {
+//         return AlertDialog(
+//           title: Text('Notification Clicked'),
+//           content: Text('You have clicked the notification'),
+//         );
+//       },
+//     );
+//     await showNotification();
+//   }
+//
+//   Future showNotification() async{
+//     DateTime now=DateTime.now();
+//     int currentWeekDayOfMonth = now.weekday;
+//     String formattedDate = '${DateFormat('yyyy-MM').format(DateTime.now())}-$currentWeekDayOfMonth';
+//     QuerySnapshot snapshot = await FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(user.uid)
+//         .collection('habits')
+//         .where('habitType', isEqualTo: 'Weekly')
+//         .get();
+//     List<DocumentSnapshot> habits = [];
+//     snapshot.docs.forEach((doc) {
+//       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+//       if (data.containsKey('completed')) {
+//         Map<String, dynamic> completed = data['completed'];
+//         if (completed.containsKey(formattedDate)) {
+//           List<dynamic> dates = completed[formattedDate]['dates'];
+//           if (dates != null && !dates.contains(now.toString().substring(0,10))) {
+//             habits.add(doc);
+//           }
+//         } else {
+//           habits.add(doc);
+//         }
+//       }
+//     });
+//
+//     String notificationBody = '';
+//     if (habits.isNotEmpty) {
+//       notificationBody = 'You have ${habits.length} habits to complete today:\n';
+//       habits.forEach((habit) {
+//         notificationBody += '- ${habit['habitName']}\n';
+//       });
+//     } else {
+//       notificationBody = 'You have completed all your habits for today!';
+//     }
+//     print('Notification body: $notificationBody');
+//
+//     var androidDetails=AndroidNotificationDetails('channelId', 'channelName');
+//     var notificationDetails=NotificationDetails(android: androidDetails);
+//     await flutterLocalNotificationsPlugin.show(
+//         0, 'Habit Tracker', notificationBody, notificationDetails);
+//   }
+//
+//
+//   Future showNotifications() async {
+//     var notificationDetails = await flutterLocalNotificationsPlugin
+//         .resolvePlatformSpecificImplementation<
+//         AndroidFlutterLocalNotificationsPlugin>()
+//         ?.getActiveNotifications();
+//     await showNotification();
+//   }
+//
+//   // Future showNotification() async {
+//   //   var androidDetails = AndroidNotificationDetails(
+//   //       'channel_id', 'channel_name');
+//   //   var notificationDetails =
+//   //   NotificationDetails(android: androidDetails);
+//   //   await flutterLocalNotificationsPlugin.show(
+//   //       0, 'Notification Title', 'Notification Body', notificationDetails);
+//   // }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Notification Example'),
+//       ),
+//       body: Center(
+//         child: ElevatedButton(
+//           onPressed: showNotifications,
+//           child: Text('Show Notifications'),
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
+// scheduling a habit notification  reminder comes every 2 minutes in
+// flutter app either user open app or not open app
