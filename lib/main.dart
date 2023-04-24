@@ -1,4 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:tracker_habit/Help/nameList.dart';
+import 'package:tracker_habit/Help/testWidget.dart';
 import 'package:tracker_habit/homepage.dart';
 import 'package:tracker_habit/screen/fetchData.dart';
 import 'package:tracker_habit/screen/habit/dailyHabit.dart';
@@ -27,8 +29,7 @@ Future<void> main() async {
         Locale('en', 'US'),
         Locale('fr', 'FR'),
        // Locale('rw', 'RW'),
-
-        //Locale('Kinyarwanda', 'rw', 'RW'),
+        //Locale('Kinyarwanda','rw', 'RW'),
       ],
       path: 'assets/translations',
       fallbackLocale: const Locale('en', 'US'),
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         debugShowCheckedModeBanner: false,
-        initialRoute: 'login',
+        initialRoute: 'testWidget',
         theme: ThemeData(
           primarySwatch: Colors.deepOrange,
         ),
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
           'fetchData': (context) => FetchData(),
           'help': (context) => const Display(),
           'daily': (context) => const DailyHabit(),
+          'testWidget':(context) => NameList(names: [],),
         },
         //home: MyHomePage()
     );
