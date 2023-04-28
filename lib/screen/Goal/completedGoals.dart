@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 class CompletedGoals extends StatefulWidget {
@@ -21,12 +22,12 @@ class _CompletedGoalsState extends State<CompletedGoals> {
             return const Center(child: CircularProgressIndicator());
           }if(streamSnapshot.hasError){
             print(streamSnapshot.error);
-            return Center(child: Text("There is an error: ${streamSnapshot.error}"));
+            return Center(child: Text("ThereIsAnError: ${streamSnapshot.error}".tr()));
           }
           else if(streamSnapshot.hasData){
             var goals=streamSnapshot.data!.docs;
 
-            return goals.isEmpty?const Center(child: Text("No goals yet")): Column(
+            return goals.isEmpty?Center(child: Text("NoGoalsYet".tr())): Column(
 
                 children:goals.map((goal) {
                   return Padding(

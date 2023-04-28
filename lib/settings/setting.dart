@@ -1,11 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tracker_habit/provider/myThemes.dart';
 import '../authentication/login.dart';
 import '../homepage.dart';
 import '../models/language.dart';
 import '../progressess/progressess.dart';
 import 'account.dart';
+import 'package:provider/provider.dart';
+import 'package:tracker_habit/provider/themeProvider.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -61,17 +64,17 @@ class _MySettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: const Text('Setting',
+          title: Text('Setting'.tr(),
               style: TextStyle(fontSize: 27, color: Color(0xff4c505b))),
           elevation: 0,
         ),
         body: ListView(children: [
           ListTile(
-            title: Text('Account'),
+            title: Text('Account'.tr()),
             trailing: IconButton(
               onPressed: () {
                 context.setLocale(Locale('fr', 'FR'));
@@ -81,18 +84,17 @@ class _MySettingState extends State<Setting> {
               icon: const Icon(Icons.arrow_forward_ios),
             ),
           ),
-          const ListTile(
-            title: Text('About App'),
+          ListTile(
+            title: Text('AboutApp'.tr()),
             trailing: Icon(Icons.arrow_forward_ios),
           ),
-
           GestureDetector(
             onTap: () {
               showDialog(
                 context: context,
                 builder: (_) =>
                     AlertDialog(
-                      title: Text('Select Language'),
+                      title: Text('SelectLanguage'.tr()),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: language.map((lang) {
@@ -121,76 +123,24 @@ class _MySettingState extends State<Setting> {
               );
             },
             child: ListTile(
-              title: Text('Language'),
+              title: Text('Language'.tr()),
               trailing: Icon(Icons.language),
             ),
           ),
-
-
-          // ListTile(
-          //   title: Text('Language'),
-          //   trailing: DropdownButton<Language>(
-          //     value: _selectedLanguage,
-          //     onChanged: _onLanguageSelected,
-          //     items: _languages
-          //         .map<DropdownMenuItem<Language>>(
-          //           (lang) => DropdownMenuItem<Language>(
-          //         key: ValueKey(lang.countryCode), // add a unique key
-          //         value: lang,
-          //         child: Text(lang.name),
-          //       ),
-          //     )
-          //         .toList(),
-          //   )
-          // ),
-          // ListTile(
-          //   title: Text('Language'),
-          //   trailing: IconButton(
-          //     onPressed: () {  },
-          //     icon: Icon(Icons.language),),
-          // ),
-
-          // ListTile(
-          //   onTap: () {
-          //     showDialog(
-          //         context: context,
-          //         builder: (ctx) => AlertDialog(
-          //               elevation: 0.0,
-          //               title: Center(child: const Text("Choose a Language")),
-          //               // content: ListTile(
-          //               //   leading: Icon(Icons.language),
-          //               //   title: lang.map((e) => ListTile(e)).toList(),
-          //               // ),
-          //               content: Column(
-          //                 mainAxisSize: MainAxisSize.min,
-          //                 mainAxisAlignment: MainAxisAlignment.start,
-          //                 children: [
-          //                   ListTile(
-          //                     title: Column(
-          //                       children: lang.map((e) => Text(e)).toList(),
-          //                     ),
-          //                   ),
-          //                 ],
-          //               ),
-          //         ));
-          //   },
-          //   title: const Text('Language'),
-          //   // trailing: DropdownButton<Language>(
-          //   //   value:_selectedLanguage,
-          //   //   items:_languages
-          //   //       .map((e) => DropdownMenuItem(value: e,
-          //   //       child: Text(e.name))).toList(),
-          //   //   onChanged:(newValue){
-          //   //     setState(() {
-          //   //       _selectedLanguage=newValue;
-          //   //     });
-          //   //   }
-          //   // ),
-          //   trailing: const Icon(Icons.language),
-          // ),
+          ListTile(
+            title: Text('LightDarkTheme'.tr()),
+            trailing: Consumer<ThemeProvider>(
+              builder: (context, themeProvider, _) => Switch(
+                value: themeProvider.isDarkMode,
+                onChanged: (value) {
+                  themeProvider.setTheme(value);
+                },
+              ),
+            ),
+          ),
 
           ListTile(
-            title: const Text('Log Out'),
+            title: Text('Logout'.tr()),
             trailing: IconButton(
               onPressed: () async {
                 await _signOut(context);
@@ -210,13 +160,13 @@ class _MySettingState extends State<Setting> {
               },
               icon: const Icon(Icons.home),
             ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Progress()));
-              },
-              icon: const Icon(Icons.show_chart),
-            ),
+            // IconButton(
+            //   onPressed: () {
+            //     Navigator.push(context,
+            //         MaterialPageRoute(builder: (context) => Progress()));
+            //   },
+            //   icon: const Icon(Icons.show_chart),
+            // ),
             IconButton(
               onPressed: () {
                 Navigator.push(context,

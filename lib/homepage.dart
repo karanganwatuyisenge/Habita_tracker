@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                         text:  TextSpan(
                           style: TextStyle(fontSize: 25,
                               fontWeight: FontWeight.w600,
-                              color: Colors.black),
+                              color: Colors.grey),
                           children: <TextSpan>[
                             TextSpan(text: 'hello'.tr()),
                             TextSpan(text: '$_userName !',
@@ -298,20 +298,20 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {},
                   icon: const Icon(Icons.home, color: Colors.orangeAccent,),
                 ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Progress()));
-                  },
-                  icon: const Icon(Icons.show_chart),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) =>HabitNotification()));
-                  },
-                  icon: const Icon(Icons.notifications_outlined),
-                ),
+                // IconButton(
+                //   onPressed: () {
+                //     Navigator.push(context,
+                //         MaterialPageRoute(builder: (context) => Progress()));
+                //   },
+                //   icon: const Icon(Icons.show_chart),
+                // ),
+                // IconButton(
+                //   onPressed: () {
+                //     Navigator.push(context,
+                //         MaterialPageRoute(builder: (context) =>HabitNotification()));
+                //   },
+                //   icon: const Icon(Icons.notifications_outlined),
+                // ),
                 IconButton(
                   onPressed: () {
                     Navigator.push(context,
@@ -320,7 +320,6 @@ class _HomePageState extends State<HomePage> {
                   },
                   icon: const Icon(Icons.settings),
                 ),
-
               ]
           )
       ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -73,7 +74,7 @@ class _NewHabit extends State<NewHabit>{
               if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
               }
             }});
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('NewHabitSavedSuccessfully'.tr())));
         }
         else if(_selectedHabitType=='Monthly' && _selectedFrequency!='Other'){
           await userDocRef.collection('habits').add({
@@ -85,7 +86,7 @@ class _NewHabit extends State<NewHabit>{
               if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
               }
             }});
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('NewHabitSavedSuccessfully'.tr())));
         }
        else if(_selectedHabitType=='Weekly'){
           await userDocRef.collection('habits').add({
@@ -97,7 +98,7 @@ class _NewHabit extends State<NewHabit>{
               if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
               }
             }});
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('NewHabitSavedSuccessfully'.tr())));
         }
         else if(_selectedHabitType=='Daily'){
           int daysInMonth = DateTime(now.year, now.month + 1, 0).day;
@@ -110,7 +111,7 @@ class _NewHabit extends State<NewHabit>{
               if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
               }
             }});
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('NewHabitSavedSuccessfully'.tr())));
         }
 
 
@@ -138,8 +139,8 @@ class _NewHabit extends State<NewHabit>{
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Create New Habit',
+            Text(
+              'CreateNewHabit'.tr(),
               style: TextStyle(fontSize: 15),
             ),
             IconButton(
@@ -166,14 +167,14 @@ class _NewHabit extends State<NewHabit>{
                   TextFormField(
                       controller: _habitNameController,
                       decoration: InputDecoration(
-                        labelText: 'Habit Name',
+                        labelText: 'HabitName'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
-                          return 'Please enter your Habit Name';
+                          return 'PleaseEnterYourHabitName'.tr();
                         }
                         return null;
                       }),
@@ -181,7 +182,7 @@ class _NewHabit extends State<NewHabit>{
                     height: 20,
                   ),
                   DropdownButtonFormField(
-                    hint: Text('Select Habit Type'),
+                    hint: Text('SelectHabitType'.tr()),
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -202,7 +203,7 @@ class _NewHabit extends State<NewHabit>{
                   ),
                   SizedBox(height: 20,),
                   _selectedHabitType!='Daily' ? DropdownButtonFormField(
-                    hint: Text('Select $_selectedHabitType'),
+                    hint: Text('Select $_selectedHabitType'.tr()),
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -227,7 +228,7 @@ class _NewHabit extends State<NewHabit>{
                   _selectedHabitType=='Monthly' && _selectedFrequency=='Other' ? TextFormField(
                     controller: _otherController,
                     decoration: InputDecoration(
-                        labelText: 'Enter times',
+                        labelText: 'EnterTimes'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         )
@@ -248,7 +249,7 @@ class _NewHabit extends State<NewHabit>{
                     ),
                     onPressed: () {
                       SaveHabit();},
-                    child: const Text('Create New'),
+                    child: Text('CreateNew'.tr()),
                   )
                 ],
               ),
@@ -258,18 +259,3 @@ class _NewHabit extends State<NewHabit>{
     );
   }
   }
-// else if (_selectedHabitType == 'Daily') {
-// DateTime creating = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
-// Duration difference = DateTime.now().difference(creating);
-// int daySinceCreating = difference.inDays;
-// await userDocRef.collection('habits').add({
-// 'habitName': _habitNameController.text,
-// 'habitType': _selectedHabitType,
-// 'habitFrequency': daySinceCreating,
-// 'createdAt': DateTime.now(),
-// 'completed': {
-// if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': []}
-// }
-// });
-// ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New Habit Saved Successfully')));
-// }

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -162,8 +163,8 @@ class _MySignupState extends State<SignUp> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Sign Up',
+                      Text(
+                        'SignUp'.tr(),
                         style: TextStyle(
                           color: Color(0xff4c505b),
                           fontSize: 27,
@@ -173,8 +174,8 @@ class _MySignupState extends State<SignUp> {
                       Row(
                         children: [
                           TextButton(
-                            child: const Text(
-                              'Log In',
+                            child: Text(
+                              'LogIn'.tr(),
                               style: TextStyle(color: Colors.deepOrangeAccent),
                             ),
                             onPressed: () {
@@ -204,14 +205,14 @@ class _MySignupState extends State<SignUp> {
                   TextFormField(
                       controller: _nameController,
                       decoration: InputDecoration(
-                        labelText: 'Name',
+                        labelText: 'Name'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
-                          return 'Please enter your name';
+                          return 'pleaseEnterYourName'.tr();
                         }
                         return null;
                       }),
@@ -222,14 +223,14 @@ class _MySignupState extends State<SignUp> {
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelText: 'Email',
+                      labelText: 'Email'.tr(),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
-                        return 'Please enter your email';
+                        return 'pleaseEnterYourEmail'.tr();
                       }
                       return null;
                     },
@@ -240,12 +241,12 @@ class _MySignupState extends State<SignUp> {
                    DropdownButtonFormField<Country>(
 
                     decoration: InputDecoration(
-                        labelText: 'Country',
+                        labelText: 'Country'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         )),
                     value: _selectedCountry,
-                    hint: const Text('Country'),
+                    hint:  Text('Country'.tr()),
                     items: _country
                         .map((e) =>
                         DropdownMenuItem(value: e, child: Text(e.name)))
@@ -257,7 +258,7 @@ class _MySignupState extends State<SignUp> {
                       });
                       fetchRegions(newValue!.wikiDataId);
                     },
-                    validator: (value) => value == null ? 'Please select country' : null,
+                    validator: (value) => value == null ? 'PleaseSelectCountry' .tr(): null,
                   ),
                   const SizedBox(
                     height: 20,
@@ -266,12 +267,12 @@ class _MySignupState extends State<SignUp> {
                   DropdownButtonFormField<Region>(
 
                     decoration: InputDecoration(
-                        labelText: 'Region',
+                        labelText: 'Region'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         )),
                     value: _selectedRegion,
-                    hint: const Text('Region'),
+                    hint: Text('Region'.tr()),
                     items: _region.isNotEmpty
                         ? _region
                         .map((e) =>
@@ -288,19 +289,19 @@ class _MySignupState extends State<SignUp> {
                         _city = cities;
                       });
                     },
-                    validator: (value) => value == null ? 'Please select region' : null,
+                    validator: (value) => value == null ? 'PleaseSelectRegion'.tr() : null,
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   DropdownButtonFormField<City>(
                     decoration: InputDecoration(
-                        labelText: 'City',
+                        labelText: 'City'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         )),
                     value: _selectedCity,
-                    hint: const Text('City'),
+                    hint: Text('City'.tr()),
                     items: _city.isNotEmpty
                         ? _city
                         .map((e) =>
@@ -312,7 +313,7 @@ class _MySignupState extends State<SignUp> {
                         _selectedCity=newValue;
                       });
                     },
-                    validator: (value) => value == null ? 'Please select a city' : null,
+                    validator: (value) => value == null ? 'PleaseSelectCity'.tr() : null,
 
                   ),
                   const SizedBox(
@@ -322,13 +323,13 @@ class _MySignupState extends State<SignUp> {
                     controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
-                        labelText: 'Password',
+                        labelText: 'Password'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         )),
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
-                        return 'Please enter your password';
+                        return 'PleaseEnterYourPassword'.tr();
                       }
                       return null;
                     },
@@ -340,16 +341,16 @@ class _MySignupState extends State<SignUp> {
                     controller: _confirmPasswordController,
                     obscureText: true,
                     decoration: InputDecoration(
-                        labelText: 'Confirm Password',
+                        labelText: 'ConfirmPassword'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         )),
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
-                        return 'Please enter yur confirm password';
+                        return 'PleaseEnterYourConfirmPassword'.tr();
                       }
                       if (value != _passwordController.text) {
-                        return 'Passwords do not match';
+                        return 'PasswordDoNotMatch'.tr();
                       }
                       return null;
                     },
@@ -366,7 +367,7 @@ class _MySignupState extends State<SignUp> {
                         _Register();
                       }
                     },
-                    child: const Text('Sign Up'),
+                    child: Text('SignUp'.tr()),
                   )
                 ],
               ),

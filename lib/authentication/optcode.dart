@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
@@ -22,7 +23,7 @@ class OtpCode extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Text('Enter OTP code we\'ve sent to your email'),
+                    Text('EnterOTPCodeWeveSentToYourEmail'.tr()),
                     SizedBox(
                       height: 30,
                     ),
@@ -38,8 +39,8 @@ class OtpCode extends StatelessWidget {
                                   builder: (context)
                               {
                                 return AlertDialog(
-                                  title: Text('Verification Code'),
-                                  content: Text('Code entered is $verificationCode '),
+                                  title: Text('VerificationCode'.tr()),
+                                  content: Text('CodeEnteredIs $verificationCode'.tr()),
                                 );
                               });
                     }
@@ -54,7 +55,7 @@ class OtpCode extends StatelessWidget {
                           width:280,
                           child: ElevatedButton(
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent)),
-                            child:Text('Submit'),
+                            child:Text('Submit'.tr()),
                             onPressed: (){
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) => NewPassword())

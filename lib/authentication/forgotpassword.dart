@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker_habit/authentication/optcode.dart';
 
@@ -22,7 +23,7 @@ class ForgotPassword extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Text('Enter your email below, we will send instructions to reset your password.'),
+                    Text('EnterYourEmailBelowWeWillSendInstructionsToResetYourPassword'.tr()),
                     SizedBox(
                       height: 30,
                     ),

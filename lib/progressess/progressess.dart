@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tracker_habit/progressess/seeAllGoals.dart';
-
 import '../homepage.dart';
 import '../settings/setting.dart';
 import 'journalingGoal.dart';
-
 
 class Progress extends StatefulWidget{
   Progress({Key? key}) : super(key:key);

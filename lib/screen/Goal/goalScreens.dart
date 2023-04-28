@@ -36,8 +36,8 @@ class _GoalScreens extends State<GoalScreens>{
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => SeeAllGoal()));
                 },
-                child: const Text(
-                  'See all', style: TextStyle(
+                child: Text(
+                  'SeeAll'.tr(), style: TextStyle(
                     color: Colors.deepOrangeAccent),),
               ),
             ),
@@ -49,12 +49,12 @@ class _GoalScreens extends State<GoalScreens>{
                   return const Center(child: CircularProgressIndicator());
                 }if(streamSnapshot.hasError){
                   print(streamSnapshot.error);
-                  return Center(child: Text("There is an error: ${streamSnapshot.error}"));
+                  return Center(child: Text("ThereIsAnError: ${streamSnapshot.error}".tr()));
                 }
                 else if(streamSnapshot.hasData){
                   var goals=streamSnapshot.data!.docs;
 
-                  return goals.isEmpty?const Center(child: Text("No Goals are Completed ")): Column(
+                  return goals.isEmpty?Center(child: Text("NoGoalsAreCompleted".tr())): Column(
 
                       children:goals.map((goal) {
                         return Padding(

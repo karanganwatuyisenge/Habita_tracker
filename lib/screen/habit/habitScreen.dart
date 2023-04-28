@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker_habit/screen/habit/dailyHabit.dart';
 import 'package:tracker_habit/screen/habit/monthlyHabit.dart';
@@ -27,15 +28,15 @@ class _HabitScreenState extends State<HabitScreen> {
             isScrollable: false,
             tabs: [
               Tab(
-                  child:Text('Daily',
+                  child:Text('Daily'.tr(),
                       style:TextStyle(fontSize: 18))),
               Tab(
-                  child:Text('Weekly',
+                  child:Text('Weekly'.tr(),
                     style: TextStyle(fontSize: 18),
                   )
               ),
               Tab(
-                  child:Text('Monthly',
+                  child:Text('Monthly'.tr(),
                     style: TextStyle(fontSize: 18),
                   )
               ),

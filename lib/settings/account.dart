@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,13 +45,13 @@ class _MyAccountState extends State<Account> {
         await user!.updatePassword(password);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Passwords do not match')));
+            SnackBar(content: Text('PasswordsDoNotMatch'.tr())));
         return;
       }
     }
 
     ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Account updated')));
+        .showSnackBar(SnackBar(content: Text('AccountUpdated'.tr())));
     Navigator.pop(context);
   }
 
@@ -79,8 +80,6 @@ class _MyAccountState extends State<Account> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
-
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +90,7 @@ class _MyAccountState extends State<Account> {
         title: Row(
           children: [
             Text(
-              'Account',
+              'Account'.tr(),
               style: TextStyle(
                 color: Color(0xff4c505b),
                 fontSize: 27,
@@ -122,7 +121,7 @@ class _MyAccountState extends State<Account> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            labelText: 'Name',
+                            labelText: 'Name'.tr(),
                           ),
                         ),
                         SizedBox(
@@ -134,7 +133,7 @@ class _MyAccountState extends State<Account> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            labelText: 'Email',
+                            labelText: 'Email'.tr(),
                           ),
                         ),
                         SizedBox(
@@ -147,7 +146,7 @@ class _MyAccountState extends State<Account> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            labelText: 'Password',
+                            labelText: 'Password'.tr(),
                           ),
                         ),
                         SizedBox(
@@ -160,7 +159,7 @@ class _MyAccountState extends State<Account> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            labelText: 'Confirm Password',
+                            labelText: 'ConfirmPassword'.tr(),
                           ),
                         ),
                         SizedBox(
@@ -168,7 +167,7 @@ class _MyAccountState extends State<Account> {
                         ),
                         ElevatedButton(
                           onPressed: _updateAccount,
-                          child: Text('Update'),
+                          child: Text('Update'.tr()),
                         ),
                       ],
                     ),

@@ -48,7 +48,7 @@ class _NewGoal extends State<NewGoal> {
           'createdAt': DateTime.now(),
         });
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('NewGoalSavedSuccessfully')));
+            .showSnackBar(SnackBar(content: Text('NewGoalSavedSuccessfully'.tr())));
 
         setState(() {
           _goalNameController.clear();

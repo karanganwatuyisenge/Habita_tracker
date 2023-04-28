@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class GoalScreen extends StatefulWidget{
@@ -19,15 +20,14 @@ class _GoalScreen extends State<GoalScreen>{
         ),
         child: Column(
           children: [
-
             ListTile(
-              title: const Text('Your Goals',
+              title: Text('YourGoals'.tr(),
                 style: TextStyle(
                   color: Color(0xff4c505b), fontSize: 20,),),
               trailing: TextButton(
                 onPressed: () {},
-                child: const Text(
-                  'See all', style: TextStyle(
+                child: Text(
+                  'SeeAll'.tr(), style: TextStyle(
                     color: Colors.deepOrangeAccent),),
               ),
             ),

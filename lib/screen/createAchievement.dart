@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -43,12 +44,13 @@ class _NewAchievement extends State<NewAchievement>{
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Color(0xFFFBFBFB),
-      title: Row(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+      title: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Create New Habit or Habit', style: TextStyle(fontSize: 15)),
+          Text('CreateNewHabitorGoal'.tr(), style: TextStyle(fontSize: 20,color: Colors.grey)),
           IconButton(
-            icon: const Icon(Icons.cancel),
+            icon: const Icon(Icons.cancel,color: Colors.grey,),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
             },
@@ -56,8 +58,8 @@ class _NewAchievement extends State<NewAchievement>{
         ],
       ),
       content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
+          mainAxisSize: MainAxisSize.min,
+          children: [
           GestureDetector(
           onTap: () {
                         Navigator.push(
@@ -76,7 +78,7 @@ class _NewAchievement extends State<NewAchievement>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Goal',
+                        'Goals'.tr(),
                         style: TextStyle(
                           fontSize: 24.0,
                           fontWeight: FontWeight.bold,
@@ -111,7 +113,7 @@ class _NewAchievement extends State<NewAchievement>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Habit',
+                        'habits'.tr(),
                         style: TextStyle(
                           fontSize: 24.0,
                           fontWeight: FontWeight.bold,
@@ -128,9 +130,6 @@ class _NewAchievement extends State<NewAchievement>{
             ]),
           );
   }
-
-
-
 
 }
 

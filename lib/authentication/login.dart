@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,7 +48,7 @@ class _MyLoginState extends State<MyLogin> {
         print('No user found for that email');
       }
       else if(e.code == 'wrong-password'){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Wrong password')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('WrongPassword'.tr())));
         print('Wrong password provided for that user.');
       }
       else{
@@ -79,7 +80,7 @@ class _MyLoginState extends State<MyLogin> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Log In',style:
+              Text('LogIn'.tr(),style:
               TextStyle(
                 color:Color(0xff4c505b),
                 fontSize: 27,
@@ -89,7 +90,7 @@ class _MyLoginState extends State<MyLogin> {
               Row(
                 children: [
                   TextButton(
-                    child:Text('Sign Up',style: TextStyle(color: Colors.deepOrangeAccent),),
+                    child:Text('SignUp'.tr(),style: TextStyle(color: Colors.deepOrangeAccent),),
                     onPressed: (){
                       // print('Login');
                       Navigator.of(context).pushNamed('signup');
@@ -127,7 +128,7 @@ class _MyLoginState extends State<MyLogin> {
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
-                        hintText: 'Email',
+                        hintText: 'Email'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -142,7 +143,7 @@ class _MyLoginState extends State<MyLogin> {
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
-                        hintText: 'Password',
+                        hintText: 'Password'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -160,7 +161,7 @@ class _MyLoginState extends State<MyLogin> {
                                 showvalue=value!;
                               });
                             }),
-                        Text('Remember me',style: TextStyle(color: Colors.grey),),
+                        Text('RememberMe'.tr(),style: TextStyle(color: Colors.grey),),
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
                           child: TextButton(
@@ -169,7 +170,7 @@ class _MyLoginState extends State<MyLogin> {
                                     MaterialPageRoute(builder: (context) => ForgotPassword())
                                 );
                               },
-                              child:Text('Forgot Password?',style: TextStyle(color: Colors.deepOrangeAccent),)),
+                              child:Text('ForgotPassword'.tr(),style: TextStyle(color: Colors.deepOrangeAccent),)),
                         ),
                       ],
                     ),
@@ -179,7 +180,7 @@ class _MyLoginState extends State<MyLogin> {
                           width:280,
                           child: ElevatedButton(
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent)),
-                            child:Text('Log In'),
+                            child:Text('LogIn'.tr()),
                             onPressed: (){
                               Login();
                             }),

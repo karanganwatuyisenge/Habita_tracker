@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -36,12 +37,12 @@ class _MonthlyHabitState extends State<MonthlyHabit> {
             print(streamSnapshot.error);
             return Center(
                 child:
-                Text("There is an error: ${streamSnapshot.error}"));
+                Text("ThereIsAnError: ${streamSnapshot.error}".tr()));
           } else if (streamSnapshot.hasData) {
             var habits = streamSnapshot.data!.docs;
 
             return habits.isEmpty
-                ? const Center(child: Text("No habits yet"))
+                ?Center(child: Text("NoHabitsYet".tr()))
                 : SingleChildScrollView(
               child: Column(
                   children: habits.map((habit) {
@@ -88,7 +89,7 @@ class _MonthlyHabitState extends State<MonthlyHabit> {
                               ListTile(
                                 contentPadding:
                                 EdgeInsets.symmetric(vertical: 0),
-                                title: Text('$count from $frequency days target',
+                                title: Text('$count From $frequency DaysTarget'.tr(),
                                   style: TextStyle(
                                     color: Color(0xFF2F2F2F),
                                     fontSize: 20,
@@ -107,8 +108,8 @@ class _MonthlyHabitState extends State<MonthlyHabit> {
                                   contentPadding:
                                   const EdgeInsets.symmetric(
                                       vertical: 0),
-                                  title: const Text(
-                                    'Everyday',
+                                  title: Text(
+                                    'Everyday'.tr(),
                                     style: TextStyle(
                                         color: Color(0xFFFF5C00),
                                         fontSize: 20),
