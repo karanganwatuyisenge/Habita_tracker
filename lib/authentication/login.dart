@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tracker_habit/authentication/signup.dart';
 import 'package:tracker_habit/authentication/forgotpassword.dart';
-import 'package:tracker_habit/Help/fetchingData.dart';
-
 import '../homepage.dart';
-import '../screen/fetchData.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
@@ -36,12 +33,6 @@ class _MyLoginState extends State<MyLogin> {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => HomePage())
       );
-      // Navigator.push(
-      //
-      //   MaterialPageRoute(builder: (context) => FetchData()),
-      //   //MaterialPageRoute(builder: (context) => HomePage()),
-      // );
-
     }
     on FirebaseAuthException catch(e){
       if(e.code == 'user-not-found'){
@@ -161,7 +152,7 @@ class _MyLoginState extends State<MyLogin> {
                                 showvalue=value!;
                               });
                             }),
-                        Text('RememberMe'.tr(),style: TextStyle(color: Colors.grey),),
+                        //Text('RememberMe'.tr(),style: TextStyle(color: Colors.grey),),
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
                           child: TextButton(

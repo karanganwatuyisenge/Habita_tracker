@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tracker_habit/provider/themeProvider.dart';
 import 'package:tracker_habit/screen/Goal/goalScreens.dart';
 import 'package:tracker_habit/screen/createAchievement.dart';
 import 'package:tracker_habit/screen/fetchData.dart';
 import 'package:tracker_habit/screen/habit/habitScreen.dart';
-import 'progressess/progressess.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'authentication/notification.dart';
 import 'settings/setting.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -157,173 +157,201 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     //showNotification();
     //completedToday();
-    currentDate = DateTime.now();
-    formattedDate = DateFormat('E, d MMMM yyyy').format(currentDate!);
-    double value = 0;
-    double percentage = 0;
+    return Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          final themeProvider = Provider.of<ThemeProvider>(context);
+          currentDate = DateTime.now();
+          formattedDate = DateFormat('E, d MMMM yyyy').format(currentDate!);
+          double value = 0;
+          double percentage = 0;
 
-    if (habitCount != 0) {
-      value = totalCompletedHabit / habitCount;
-      percentage = value * 100;
-    }
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        // toolbarOpacity: 1.0,
-        // bottomOpacity: 1.0,
-        elevation: 0,
-        title: Text('$formattedDate',
-          style: TextStyle(color: Color(0xff4c505b),),
-        ),
-      ),
-            body:NestedScrollView(headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          if (habitCount != 0) {
+            value = totalCompletedHabit / habitCount;
+            percentage = value * 100;
+          }
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: themeProvider.isDarkMode ? Colors.black : Colors
+                  .white,
+              // toolbarOpacity: 1.0,
+              // bottomOpacity: 1.0,
+              elevation: 0,
+              title: Text('$formattedDate',
+                style: TextStyle(color: themeProvider.isDarkMode?Colors.white:Color(0xff4c505b),),
+              ),
+            ),
+            body: NestedScrollView(headerSliverBuilder: (BuildContext context,
+                bool innerBoxIsScrolled) {
               return [
                 SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 18.0, right: 210.0),
-                      child: RichText(
-                        text:  TextSpan(
-                          style: TextStyle(fontSize: 25,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey),
-                          children: <TextSpan>[
-                            TextSpan(text: 'hello'.tr()),
-                            TextSpan(text: '$_userName !',
-                                style: TextStyle(fontWeight: FontWeight.w600,
-                                    color: Colors.deepOrangeAccent)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 30.0, left: 18.0, right: 18.0),
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 30),
-                        alignment: Alignment.center,
-                        height: 150.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          gradient: const LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [
-                              Colors.deepOrange,
-                              Colors.orangeAccent,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 18.0, right: 210.0),
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(fontSize: 25,
+                                fontWeight: FontWeight.w600,
+                                color: themeProvider.isDarkMode?Colors.white:Colors.grey),
+                            children: <TextSpan>[
+                              TextSpan(text: 'hello'.tr()),
+                              TextSpan(text: '$_userName !',
+                                  style: TextStyle(fontWeight: FontWeight.w600,
+                                      color: themeProvider.isDarkMode?Colors.blue:Colors.deepOrangeAccent)),
                             ],
-
                           ),
-                          // color: Colors.orange,
                         ),
-                        child: Stack(
-                          children: [
-                            //double value = totalCompletedHabit / habitCount;
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                     SizedBox(
-                                      width: 70,
-                                      height: 70,
-                                      child: CircularProgressIndicator(
-                                        value: value,
-                                        strokeWidth: 15,
-                                        backgroundColor: Colors.white60,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                            Colors.white70),
-                                      ),
-                                    ),
-                                    Text('${percentage.toStringAsFixed(0)}%',
-                                      style: TextStyle(color: Colors.white,fontSize: 20),),
-                                  ],
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('$totalCompletedHabit of $habitCount habits', style: TextStyle(
-                                        fontSize: 20, color: Colors.white),),
-                                    const Text('completed today!', style: TextStyle(
-                                        fontSize: 20, color: Colors.white),),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Positioned(
-                              bottom: -10,
-                              right: 0,
-                              child: Image.asset('assets/images/calendar.png',
-                                width: 120,
-                                alignment: Alignment.bottomRight,
-                              ),
-                            ),
-                          ],
-                        ),
-
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      child: GoalScreens(),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              )];
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 30.0, left: 18.0, right: 18.0),
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 30),
+                          alignment: Alignment.center,
+                          height: 150.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: themeProvider.isDarkMode?[
+                                Colors.grey,
+                                Colors.black
+                              ]:[
+                                Colors.deepOrange,
+                                Colors.orangeAccent,
+                              ],
+
+                            ),
+                            // color: Colors.orange,
+                          ),
+                          child: Stack(
+                            children: [
+                              //double value = totalCompletedHabit / habitCount;
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceEvenly,
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: 70,
+                                        height: 70,
+                                        child: CircularProgressIndicator(
+                                          value: value,
+                                          strokeWidth: 15,
+                                          backgroundColor: Colors.white60,
+                                          valueColor: AlwaysStoppedAnimation<
+                                              Color>(
+                                              Colors.white70),
+                                        ),
+                                      ),
+                                      Text('${percentage.toStringAsFixed(0)}%',
+                                        style: TextStyle(color: Colors.white,
+                                            fontSize: 20),),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text('$totalCompletedHabit',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),),
+                                          Text('of', style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white),).tr(),
+                                          Text('$habitCount ', style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white),),
+                                          Text('habits', style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white),).tr()
+                                        ],
+                                      ),
+
+                                      const Text(
+                                        'completedToday', style: TextStyle(
+                                          fontSize: 20, color: Colors.white),)
+                                          .tr(),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Positioned(
+                                bottom: -10,
+                                right: 0,
+                                child: Image.asset('assets/images/calendar.png',
+                                  width: 120,
+                                  alignment: Alignment.bottomRight,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        child: GoalScreens(),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                )
+              ];
             },
               body: Padding(
-                padding: const EdgeInsets.only(left:18.0,right: 18.0),
+                padding: const EdgeInsets.only(left: 18.0, right: 18.0),
                 child: HabitScreen(),
               ),
             ),
-      floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          backgroundColor: Colors.green,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          onPressed:() => _dialogBuilder(context)
-      ),
-      bottomNavigationBar: Container(
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.home, color: Colors.orangeAccent,),
-                ),
-                // IconButton(
-                //   onPressed: () {
-                //     Navigator.push(context,
-                //         MaterialPageRoute(builder: (context) => Progress()));
-                //   },
-                //   icon: const Icon(Icons.show_chart),
-                // ),
-                // IconButton(
-                //   onPressed: () {
-                //     Navigator.push(context,
-                //         MaterialPageRoute(builder: (context) =>HabitNotification()));
-                //   },
-                //   icon: const Icon(Icons.notifications_outlined),
-                // ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(
-                            builder: (context) => const Setting()));
-                  },
-                  icon: const Icon(Icons.settings),
-                ),
-              ]
-          )
-      ),
+            floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.add),
+                backgroundColor: themeProvider.isDarkMode?Colors.black:Colors.green,
+                foregroundColor: themeProvider.isDarkMode?Colors.blue:Colors.white,
+                //backgroundColor: Colors.green,
+                //foregroundColor: Colors.white,
+                elevation: 0,
+                onPressed: () => _dialogBuilder(context)
+            ),
+            bottomNavigationBar: Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.home, color: themeProvider.isDarkMode?Colors.blue:Colors.orangeAccent,),
+                      ),
+                      // IconButton(
+                      //   onPressed: () {
+                      //     Navigator.push(context,
+                      //         MaterialPageRoute(builder: (context) => SeeAllHabit()));
+                      //   },
+                      //   icon: const Icon(Icons.show_chart),
+                      // ),
+
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Setting()));
+                        },
+                        icon: const Icon(Icons.settings),
+                      ),
+                    ]
+                )
+            ),
           );
+        });
   }
 }
 // body: Builder(

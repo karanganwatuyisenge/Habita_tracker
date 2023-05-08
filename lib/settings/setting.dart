@@ -1,11 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tracker_habit/provider/myThemes.dart';
 import '../authentication/login.dart';
 import '../homepage.dart';
 import '../models/language.dart';
-import '../progressess/progressess.dart';
 import 'account.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_habit/provider/themeProvider.dart';
@@ -64,12 +62,14 @@ class _MySettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<ThemeProvider>(
+        builder: (context,themeProvider,child){
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor:themeProvider.isDarkMode ? Colors.black :Color(0xFFFFFFFF) ,
           title: Text('Setting'.tr(),
-              style: TextStyle(fontSize: 27, color: Color(0xff4c505b))),
+              style: TextStyle(fontSize: 27,color: themeProvider.isDarkMode ? Color(0xFFFFFFFF):Colors.black)),
           elevation: 0,
         ),
         body: ListView(children: [
@@ -150,34 +150,32 @@ class _MySettingState extends State<Setting> {
           ),
         ]),
 
-        bottomNavigationBar: Container(
-          child:
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
-              },
-              icon: const Icon(Icons.home),
-            ),
-            // IconButton(
-            //   onPressed: () {
-            //     Navigator.push(context,
-            //         MaterialPageRoute(builder: (context) => Progress()));
-            //   },
-            //   icon: const Icon(Icons.show_chart),
-            // ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Setting()));
-              },
-              icon: const Icon(
-                Icons.settings,
-                color: Colors.orangeAccent,
-              ),
-            ),
-          ]),
-        ));
-  }
+      bottomNavigationBar: Container(
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
+                  },
+                  icon: const Icon(Icons.home),
+                ),
+                // IconButton(
+                //   onPressed: () {
+                //     Navigator.push(context,
+                //         MaterialPageRoute(builder: (context) => SeeAllHabit()));
+                //   },
+                //   icon: const Icon(Icons.show_chart),
+                // ),
+                IconButton(
+                  onPressed: () {
+                  },
+                  icon: Icon(Icons.settings,color: themeProvider.isDarkMode?Colors.blue:Colors.orangeAccent,),
+                ),
+              ] ),
+      ),
+          );
+  });
+}
 }

@@ -27,7 +27,7 @@ class _WeeklyHabitState extends State<WeeklyHabit> {
             .collection('users')
             .doc(user.uid)
             .collection('habits')
-            .where('habitType', isEqualTo: 'Weekly')
+            .where('habitType', isEqualTo: 'Monthly')
         //.where('completed.$formattedDate.dates', arrayContains: formattedNow)
             .snapshots(),
         builder: (context, streamSnapshot) {

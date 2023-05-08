@@ -29,7 +29,7 @@ dependencies:
   firebase_auth_mocks: ^0.11.0
   fake_cloud_firestore: ^2.4.1+1
   android_alarm_manager_plus: ^2.1.2
-  firebase_messaging: ^14.4.0
+#  firebase_messaging: ^14.4.0
   mockito: ^5.4.0
   provider: ^6.0.5
 #  http_headers: ^4.0.0

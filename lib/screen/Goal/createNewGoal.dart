@@ -4,6 +4,38 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../homepage.dart';
+
+class GoalProvider extends ChangeNotifier{
+  String _goalName= '';
+  String _selectStartDate= '';
+  String _selectEndDate = '';
+
+  String get goalName => _goalName;
+  String get selectStartDate => _selectStartDate;
+  String get selectEndDate => _selectEndDate;
+
+  setGoalName(String value){
+    _goalName = value;
+    notifyListeners();
+  }
+
+  setSelectStartDate(String value){
+    _selectStartDate=value;
+    notifyListeners();
+  }
+
+  setSelectEndDate(String value){
+    _selectEndDate=value;
+    notifyListeners();
+  }
+
+  clearFields(){
+    _goalName = '';
+    _selectEndDate='';
+    notifyListeners();
+  }
+}
+
 class NewGoal extends StatefulWidget {
 
   NewGoal({Key? key}) : super(key: key);
@@ -23,6 +55,7 @@ class _NewGoal extends State<NewGoal> {
   String? formattedDate;
 
   TextEditingController _selectEndDate = TextEditingController();
+
 
   void SaveGoal() async {
     var _selectStartingDate = DateTime.now();

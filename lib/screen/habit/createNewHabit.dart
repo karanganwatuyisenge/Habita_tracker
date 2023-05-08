@@ -3,7 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../homepage.dart';
+import '../../provider/themeProvider.dart';
 
 class NewHabit extends StatefulWidget{
   NewHabit({Key? key}) : super(key: key);
@@ -134,128 +136,134 @@ class _NewHabit extends State<NewHabit>{
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'CreateNewHabit'.tr(),
-              style: TextStyle(fontSize: 15),
-            ),
-            IconButton(
-              icon: const Icon(Icons.cancel),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-              },
-            ),
-            // ...
-          ],
-        ),
-      ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  SizedBox(height: 20,),
-                  TextFormField(
-                      controller: _habitNameController,
-                      decoration: InputDecoration(
-                        labelText: 'HabitName'.tr(),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return 'PleaseEnterYourHabitName'.tr();
-                        }
-                        return null;
-                      }),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  DropdownButtonFormField(
-                    hint: Text('SelectHabitType'.tr()),
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        )
+    return Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          final themeProvider = Provider.of<ThemeProvider>(context);
+          return AlertDialog(
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'CreateNewHabit'.tr(),
+                      style: TextStyle(fontSize: 15),
                     ),
-                    value: _selectedHabitType,
-                    onChanged: (value){
-                      setState(() {
-                        _selectedHabitType=value;
-                      });
-                    },
-                    items: _habitTypes.map((habit){
-                      return DropdownMenuItem(
-                        value: habit,
-                        child: Text(habit),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: 20,),
-                  _selectedHabitType!='Daily' ? DropdownButtonFormField(
-                    hint: Text('Select $_selectedHabitType'.tr()),
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        )
+                    IconButton(
+                      icon: const Icon(Icons.cancel),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                        );
+                      },
                     ),
-                    value: _selectedFrequency,
-                    onChanged: (value){
-                      setState(() {
-                        _selectedFrequency=value;
-                      });
-                    },
-                    items: _getFrequencyValues().map((frequency){
-                      return DropdownMenuItem(
-                        value: frequency,
-                        child: Text(frequency),
-                      );
-                    }).toList(),
-                  ):SizedBox(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _selectedHabitType=='Monthly' && _selectedFrequency=='Other' ? TextFormField(
-                    controller: _otherController,
-                    decoration: InputDecoration(
-                        labelText: 'EnterTimes'.tr(),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        )
-                    ),
-                    validator: (value){
-                      if(value?.isEmpty ?? true){
-                        return 'Please fill this field';
-                      }
-                      return null;
-                    },
-                  ):SizedBox(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
-                    ),
-                    onPressed: () {
-                      SaveHabit();},
-                    child: Text('CreateNew'.tr()),
-                  )
-                ],
+                    // ...
+                  ],
+                ),
               ),
-            ),
-          ),
-        ]
-    );
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20,),
+                        TextFormField(
+                            controller: _habitNameController,
+                            decoration: InputDecoration(
+                              labelText: 'HabitName'.tr(),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'PleaseEnterYourHabitName'.tr();
+                              }
+                              return null;
+                            }),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        DropdownButtonFormField(
+                          hint: Text('SelectHabitType'.tr()),
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                          value: _selectedHabitType,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedHabitType = value;
+                            });
+                          },
+                          items: _habitTypes.map((habit) {
+                            return DropdownMenuItem(
+                              value: habit,
+                              child: Text(habit),
+                            );
+                          }).toList(),
+                        ),
+                        SizedBox(height: 20,),
+                        _selectedHabitType != 'Daily' ? DropdownButtonFormField(
+                          hint: Text('Select $_selectedHabitType'.tr()),
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                          value: _selectedFrequency,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedFrequency = value;
+                            });
+                          },
+                          items: _getFrequencyValues().map((frequency) {
+                            return DropdownMenuItem(
+                              value: frequency,
+                              child: Text(frequency),
+                            );
+                          }).toList(),
+                        ) : SizedBox(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _selectedHabitType == 'Monthly' &&
+                            _selectedFrequency == 'Other' ? TextFormField(
+                          controller: _otherController,
+                          decoration: InputDecoration(
+                              labelText: 'EnterTimes'.tr(),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Please fill this field';
+                            }
+                            return null;
+                          },
+                        ) : SizedBox(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(50),
+                          ),
+                          onPressed: () {
+                            SaveHabit();
+                          },
+                          child: Text('CreateNew'.tr()),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ]
+          );
+        });
   }
   }

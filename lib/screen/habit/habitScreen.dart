@@ -4,10 +4,6 @@ import 'package:tracker_habit/screen/habit/dailyHabit.dart';
 import 'package:tracker_habit/screen/habit/monthlyHabit.dart';
 import 'package:tracker_habit/screen/habit/weeklyHabit.dart';
 
-import '../../homepage.dart';
-import '../Goal/completedGoals.dart';
-import '../Goal/inCompleteGoals.dart';
-
 class HabitScreen extends StatefulWidget {
   const HabitScreen({Key? key}) : super(key: key);
 

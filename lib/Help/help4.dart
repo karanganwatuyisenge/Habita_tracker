@@ -1,1019 +1,1341 @@
+// // // // import 'package:flutter/material.dart';
+// // // //
+// // // // class Help4 extends StatefulWidget {
+// // // //   const Help4({Key? key}) : super(key: key);
+// // // //
+// // // //   @override
+// // // //   State<Help4> createState() => _Help4State();
+// // // // }
+// // // //
+// // // // class _Help4State extends State<Help4> {
+// // // //   Map<String, Map<String, dynamic>> myMap = {
+// // // //     'January2023': {
+// // // //       'count': 5,
+// // // //       'dates': ['2023-01-02', '2023-01-04', '2023-01-07', '2023-01-09', '2023-01-11']
+// // // //     },
+// // // //     'February2023': {
+// // // //       'count': 3,
+// // // //       'dates': ['2023-02-02', '2023-02-04', '2023-02-07','2023-04-05']
+// // // //     },
+// // // //     'March2023': {
+// // // //       'count': 7,
+// // // //       'dates': ['2023-03-01', '2023-03-05', '2023-03-07', '2023-03-10', '2023-03-14', '2023-03-17', '2023-03-20']
+// // // //     }
+// // // //   };
+// // // //   Hashmap have another map insidewhich have the name of month,year we are in(which has one field called count that has a datatype of number and other field called dates have a datatype of an array and that array holds a string ) in flutter help me to implement it and how can i access dates field where dates is not equal to current dates
+// // // //   void printValidDates() {
+// // // //     String currentDate = DateTime.now().toString().substring(0, 10);
+// // // //     myMap.forEach((monthYear, monthData) {
+// // // //       List<String> validDates = [];
+// // // //       monthData['dates'].forEach((date) {
+// // // //         if (date != currentDate) {
+// // // //           validDates.add(date);
+// // // //         }
+// // // //       });
+// // // //       print('Month-Year: $monthYear');
+// // // //     });
+// // // //   }
+// // // //
+// // // //   @override
+// // // //   Widget build(BuildContext context) {
+// // // //     printValidDates();
+// // // //     return const Placeholder();
+// // // //   }
+// // // // }
+// // //
+// // //
+// // // // DateTime startDate = habit['startDate']; // Assuming habit['startDate'] is a DateTime object
+// // // // int habitFrequency = habit['habitFrequency']; // Assuming habit['habitFrequency'] is an int representing the number of days between habit repetitions
+// // // //
+// // // // // Calculate the target completion date based on the start date and habit frequency
+// // // // DateTime targetCompletionDate = startDate.add(Duration(days: habitFrequency * 7)); // Assuming habit is repeated weekly
+// // // //
+// // // // // Calculate the number of remaining days until the target completion date
+// // // // int remainingDays = targetCompletionDate.difference(DateTime.now()).inDays;
+// // // //
+// // // // // Display the remaining days in the UI
+// // // // const TextStyle textStyle = TextStyle(
+// // // //   color: Color(0xFF2F2F2F),
+// // // //   fontSize: 20,
+// // // // );
+// // // // const EdgeInsets contentPadding = EdgeInsets.symmetric(vertical: 0);
+// // // // return Padding(
+// // // // padding: const EdgeInsets.only(top: 12, left: 15, right: 15),
+// // // // child: Container(
+// // // // decoration: BoxDecoration(
+// // // // borderRadius: BorderRadius.circular(5),
+// // // // color: const Color(0xFFFBFBFB),
+// // // // ),
+// // // // child: Padding(
+// // // // padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+// // // // child: Column(
+// // // // children: [
+// // // // ListTile(
+// // // // contentPadding: const EdgeInsets.symmetric(vertical: 0),
+// // // // title: Text(
+// // // // "${habit['habitName']}",
+// // // // style: const TextStyle(color: Color(0xFF2F2F2F), fontSize: 25),
+// // // // ),
+// // // // trailing: IconButton(
+// // // // onPressed: () {
+// // // // Navigator.push(
+// // // // context,
+// // // // MaterialPageRoute(builder: (context) => HabitReport(habitName: habit['habitName'])),
+// // // // );
+// // // // },
+// // // // icon: const Icon(Icons.info_outline_rounded),
+// // // // ),
+// // // // ),
+// // // // const ListTile(
+// // // // contentPadding: contentPadding,
+// // // // title: LinearProgressIndicator(
+// // // // minHeight: 15,
+// // // // value: 0.5,
+// // // // backgroundColor: Colors.grey,
+// // // // valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrangeAccent),
+// // // // ),
+// // // // ),
+// // // // ListTile(
+// // // // contentPadding: contentPadding,
+// // // // title: Text(
+// // // // '${remainingDays.toString()} from ${((DateTime.now().difference(startDate).inDays / habitFrequency) * 7).toStringAsFixed(0)} days target',
+// // // // style: textStyle,
+// // // // ),
+// // // // ),
+// // // // ],
+// // // // ),
+// // // // ),
+// // // // ),
+// // // // );
+// // //
+// // // // Import the necessary packages
+// // // import 'package:cloud_firestore/cloud_firestore.dart';
+// // //
+// // // // Get the current date
+// // // DateTime currentDate = DateTime.now();
+// // //
+// // // // Create a reference to the Firestore collection
+// // // CollectionReference habitsCollection =
+// // // FirebaseFirestore.instance.collection('habits');
+// // //
+// // // // Create a query to filter the documents based on the completed dates
+// // // Query query = habitsCollection.where('completed.habitPeriod.${currentDate.toString().substring(0, 10)}', isNull: true);
+// // //
+// // // // Retrieve the documents that match the query
+// // // QuerySnapshot querySnapshot = await query.get();
+// // //
+// // // // Loop through the documents and print the habit names
+// // // querySnapshot.docs.forEach((doc) {
+// // // print(doc.data()['habitName']);
+// // // });
+// // // import 'package:cloud_firestore/cloud_firestore.dart';
+// // // import 'package:firebase_auth/firebase_auth.dart';
 // // // import 'package:flutter/material.dart';
+// // // import 'package:tracker_habit/screen/Goal/seeAllGoal.dart';
+// // // import 'package:tracker_habit/screen/habit/dailyHabit.dart';
+// // // import 'package:tracker_habit/screen/habit/habitReport.dart';
+// // // import 'package:intl/intl.dart';
+// // // import 'package:tracker_habit/screen/habit/monthlyHabit.dart';
+// // // import 'package:tracker_habit/screen/habit/weeklyHabit.dart';
 // // //
-// // // class Help4 extends StatefulWidget {
-// // //   const Help4({Key? key}) : super(key: key);
+// // // import '../../homepage.dart';
 // // //
-// // //   @override
-// // //   State<Help4> createState() => _Help4State();
-// // // }
-// // //
-// // // class _Help4State extends State<Help4> {
-// // //   Map<String, Map<String, dynamic>> myMap = {
-// // //     'January2023': {
-// // //       'count': 5,
-// // //       'dates': ['2023-01-02', '2023-01-04', '2023-01-07', '2023-01-09', '2023-01-11']
-// // //     },
-// // //     'February2023': {
-// // //       'count': 3,
-// // //       'dates': ['2023-02-02', '2023-02-04', '2023-02-07','2023-04-05']
-// // //     },
-// // //     'March2023': {
-// // //       'count': 7,
-// // //       'dates': ['2023-03-01', '2023-03-05', '2023-03-07', '2023-03-10', '2023-03-14', '2023-03-17', '2023-03-20']
-// // //     }
-// // //   };
-// // //   Hashmap have another map insidewhich have the name of month,year we are in(which has one field called count that has a datatype of number and other field called dates have a datatype of an array and that array holds a string ) in flutter help me to implement it and how can i access dates field where dates is not equal to current dates
-// // //   void printValidDates() {
-// // //     String currentDate = DateTime.now().toString().substring(0, 10);
-// // //     myMap.forEach((monthYear, monthData) {
-// // //       List<String> validDates = [];
-// // //       monthData['dates'].forEach((date) {
-// // //         if (date != currentDate) {
-// // //           validDates.add(date);
-// // //         }
-// // //       });
-// // //       print('Month-Year: $monthYear');
-// // //     });
-// // //   }
+// // // class HabitScreen extends StatefulWidget {
+// // //   HabitScreen({Key? key}) : super(key: key);
 // // //
 // // //   @override
-// // //   Widget build(BuildContext context) {
-// // //     printValidDates();
-// // //     return const Placeholder();
-// // //   }
+// // //   State<HabitScreen> createState() => _HabitScreen();
 // // // }
+// // //
+// // // class _HabitScreen extends State<HabitScreen> {
+// // //
+// // //   @override
+// // //   Widget build(BuildContext context){
+// // //     return Scaffold();
+// // //   }
 // //
 // //
-// // // DateTime startDate = habit['startDate']; // Assuming habit['startDate'] is a DateTime object
-// // // int habitFrequency = habit['habitFrequency']; // Assuming habit['habitFrequency'] is an int representing the number of days between habit repetitions
+// //
+// //
+// // // bool showvalue = false;
+// // // User user = FirebaseAuth.instance.currentUser!;
+// // // String? habitPeriod;
+// // // DateTime currentDate = DateTime.now();
+// // // var todays = DateTime.now().toString().substring(0, 10);
 // // //
-// // // // Calculate the target completion date based on the start date and habit frequency
-// // // DateTime targetCompletionDate = startDate.add(Duration(days: habitFrequency * 7)); // Assuming habit is repeated weekly
-// // //
-// // // // Calculate the number of remaining days until the target completion date
-// // // int remainingDays = targetCompletionDate.difference(DateTime.now()).inDays;
-// // //
-// // // // Display the remaining days in the UI
-// // // const TextStyle textStyle = TextStyle(
-// // //   color: Color(0xFF2F2F2F),
-// // //   fontSize: 20,
-// // // );
-// // // const EdgeInsets contentPadding = EdgeInsets.symmetric(vertical: 0);
-// // // return Padding(
-// // // padding: const EdgeInsets.only(top: 12, left: 15, right: 15),
-// // // child: Container(
-// // // decoration: BoxDecoration(
-// // // borderRadius: BorderRadius.circular(5),
-// // // color: const Color(0xFFFBFBFB),
-// // // ),
-// // // child: Padding(
-// // // padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-// // // child: Column(
+// // // @override
+// // // Widget build(BuildContext context) {
+// // // return DefaultTabController(
+// // // length: 3, // The number of tabs
+// // // child: Scaffold(
+// // // body: TabBarView(
 // // // children: [
-// // // ListTile(
-// // // contentPadding: const EdgeInsets.symmetric(vertical: 0),
-// // // title: Text(
-// // // "${habit['habitName']}",
-// // // style: const TextStyle(color: Color(0xFF2F2F2F), fontSize: 25),
-// // // ),
-// // // trailing: IconButton(
-// // // onPressed: () {
-// // // Navigator.push(
-// // // context,
-// // // MaterialPageRoute(builder: (context) => HabitReport(habitName: habit['habitName'])),
-// // // );
-// // // },
-// // // icon: const Icon(Icons.info_outline_rounded),
+// // // Container(
+// // // child: Center(
+// // // child: Text('Daily'),
 // // // ),
 // // // ),
-// // // const ListTile(
-// // // contentPadding: contentPadding,
-// // // title: LinearProgressIndicator(
-// // // minHeight: 15,
-// // // value: 0.5,
-// // // backgroundColor: Colors.grey,
-// // // valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrangeAccent),
+// // // Container(
+// // // child: Center(
+// // // child: Text('Weekly'),
 // // // ),
 // // // ),
-// // // ListTile(
-// // // contentPadding: contentPadding,
-// // // title: Text(
-// // // '${remainingDays.toString()} from ${((DateTime.now().difference(startDate).inDays / habitFrequency) * 7).toStringAsFixed(0)} days target',
-// // // style: textStyle,
+// // // Container(
+// // // child: Center(
+// // // child: Text('Monthly'),
 // // // ),
 // // // ),
 // // // ],
 // // // ),
 // // // ),
-// // // ),
 // // // );
+// // // }}
 // //
-// // // Import the necessary packages
-// // import 'package:cloud_firestore/cloud_firestore.dart';
 // //
-// // // Get the current date
-// // DateTime currentDate = DateTime.now();
 // //
-// // // Create a reference to the Firestore collection
-// // CollectionReference habitsCollection =
-// // FirebaseFirestore.instance.collection('habits');
+// // //
+// // // callCompleted() async {
+// // //   var complete=await FirebaseFirestore.instance
+// // //       .collection('users').doc(user.uid)
+// // //       .collection('habits').where('completed.habitPeriod.$currentDate.toString()').get();
+// // //   // var complete = await FirebaseFirestore.instance
+// // //   //     .collection('users')
+// // //   //     .doc(user.uid)
+// // //   //     .collection('habits')
+// // //   //     .get();
+// // //   // print("Here's the type: ${complete.docs[0]["completed"].runtimeType}");
+// // //   // for(var comp in complete.docs){
+// // //   //   print("${comp.runtimeType}");
+// // //   // }
+// // //   // print("${complete.toList().then((value) => Text("${value.length}"))}");
+// // // }
 // //
-// // // Create a query to filter the documents based on the completed dates
-// // Query query = habitsCollection.where('completed.habitPeriod.${currentDate.toString().substring(0, 10)}', isNull: true);
+// // // @override
+// // // Widget build(BuildContext context) {
+// // //   String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
+// // //   //callCompleted();
+// // //   return Padding(
+// // //     padding: const EdgeInsets.only(left: 18, right: 18),
+// // //     child: Container(
+// // //       decoration: BoxDecoration(
+// // //         borderRadius: BorderRadius.circular(5),
+// // //         color: const Color(0xFFFFFFFF),
+// // //       ),
+// // //       child: Column(
+// // //         children: [
+// // //           // callCompleted(),
+// // //           ListTile(
+// // //             title: const Text(
+// // //               'Your Habits',
+// // //               style: TextStyle(
+// // //                 color: Color(0xff4c505b),
+// // //                 fontSize: 20,
+// // //               ),
+// // //             ),
+// // //             trailing: TextButton(
+// // //               onPressed: () {
+// // //                 Navigator.push(
+// // //                     context,
+// // //                     MaterialPageRoute(
+// // //                         builder: (context) => const SeeAllGoal()));
+// // //               },
+// // //               child: const Text(
+// // //                 'See all',
+// // //                 style: TextStyle(color: Colors.deepOrangeAccent),
+// // //               ),
+// // //             ),
+// // //           ),
+// // //           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+// // //             stream: FirebaseFirestore.instance
+// // //                 .collection('users')
+// // //                 .doc(user.uid)
+// // //                 .collection('habits')
+// // //                 .snapshots(),
+// // //             builder: (context, streamSnapshot) {
+// // //               //print("This is the index: $index");
+// // //               if (streamSnapshot.connectionState == ConnectionState.waiting) {
+// // //                 return const Center(child: CircularProgressIndicator());
+// // //               }
+// // //               if (streamSnapshot.hasError) {
+// // //                 print(streamSnapshot.error);
+// // //                 return Center(
+// // //                     child:
+// // //                         Text("There is an error: ${streamSnapshot.error}"));
+// // //               } else if (streamSnapshot.hasData) {
+// // //                 var habits = streamSnapshot.data!.docs;
+// // //                 // for (var habit in habits) {
+// // //                 //   // print("Completed here: ${habits[habits.indexOf(habit)]["completed"]["Apr-2023-4"]["dates"]}");
+// // //                 //   var completed = habits[habits.indexOf(habit)]["completed"];
+// // //                 //   for (var habitPeriod in completed.entries) {
+// // //                 //     var dates = habitPeriod.value["dates"];
+// // //                 //     for (var date in dates) {
+// // //                 //       print(
+// // //                 //           "Here is single date subString: ${date.substring(0, 10)}");
+// // //                 //     }
+// // //                 //   }
+// // //                 //   // print("Habit ${habits.indexOf(habit)}: ${habit["habitType"]}");
+// // //                 // }
+// // //
+// // //                 return habits.isEmpty
+// // //                     ? const Center(child: Text("No habits yet"))
+// // //                     : Column(
+// // //                         children: habits.map((habit) {
+// // //                         // int indexes = habits.indexOf(habit);
+// // //                         return Padding(
+// // //                           padding: const EdgeInsets.only(
+// // //                               top: 12, left: 15, right: 15),
+// // //                           child: Container(
+// // //                             decoration: BoxDecoration(
+// // //                               borderRadius: BorderRadius.circular(5),
+// // //                               color: const Color(0xFFFBFBFB),
+// // //                             ),
+// // //                             child: Padding(
+// // //                               padding: const EdgeInsets.only(
+// // //                                   left: 8.0, right: 8.0),
+// // //                               child: Column(
+// // //                                 children: [
+// // //                                   ListTile(
+// // //                                     contentPadding:
+// // //                                         const EdgeInsets.symmetric(
+// // //                                             vertical: 0),
+// // //                                     title: Text(
+// // //                                       "${habit['habitName']}",
+// // //                                       style: const TextStyle(
+// // //                                           color: Color(0xFF2F2F2F),
+// // //                                           fontSize: 25),
+// // //                                     ),
+// // //                                     trailing: IconButton(
+// // //                                       onPressed: () {
+// // //                                         Navigator.push(
+// // //                                             context,
+// // //                                             MaterialPageRoute(
+// // //                                                 builder: (context) =>
+// // //                                                     HabitReport(
+// // //                                                         habitName: habit[
+// // //                                                             'habitName'])));
+// // //                                       },
+// // //                                       icon: const Icon(
+// // //                                           Icons.info_outline_rounded),
+// // //                                     ),
+// // //                                   ),
+// // //                                   const ListTile(
+// // //                                     contentPadding:
+// // //                                         EdgeInsets.symmetric(vertical: 0),
+// // //                                     title: LinearProgressIndicator(
+// // //                                         minHeight: 15,
+// // //                                         value: 0.5,
+// // //                                         backgroundColor: Colors.grey,
+// // //                                         valueColor:
+// // //                                             AlwaysStoppedAnimation<Color>(
+// // //                                                 Colors.deepOrangeAccent)),
+// // //                                   ),
+// // //                                   const ListTile(
+// // //                                     contentPadding:
+// // //                                         EdgeInsets.symmetric(vertical: 0),
+// // //                                     title: Text('5 from 7 days target',
+// // //                                         style: TextStyle(
+// // //                                             color: Color(0xFF2F2F2F),
+// // //                                             fontSize: 20)),
+// // //                                   ),
+// // //                                   ListTile(
+// // //                                       contentPadding:
+// // //                                           const EdgeInsets.symmetric(
+// // //                                               vertical: 0),
+// // //                                       title: const Text(
+// // //                                         'Everyday',
+// // //                                         style: TextStyle(
+// // //                                             color: Color(0xFFFF5C00),
+// // //                                             fontSize: 20),
+// // //                                       ),
+// // //                                       trailing: Checkbox(
+// // //                                         value: false,
+// // //                                         onChanged: (bool? newValue) async {
+// // //                                           final docRef = FirebaseFirestore
+// // //                                               .instance
+// // //                                               .collection("users")
+// // //                                               .doc(user.uid)
+// // //                                               .collection("habits")
+// // //                                               .doc(habit.id);
+// // //                                           final currentDate = DateTime.now();
+// // //                                           DateTime dateTime = DateTime.now();
+// // //                                           String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+// // //                                           if (habit['habitType'] ==
+// // //                                               "Weekly") {
+// // //                                             DateTime now = DateTime.now();
+// // //                                             int currentWeekDayOfMonth =
+// // //                                                 now.weekday;
+// // //                                             habitPeriod =
+// // //                                                 '${DateFormat('MMM-yyyy').format(DateTime.now())}-$currentWeekDayOfMonth';
+// // //                                             try {
+// // //                                               await docRef.update({
+// // //                                                 "completed.$habitPeriod.dates":
+// // //                                                     FieldValue.arrayUnion([
+// // //                                                   formattedDate.toString()
+// // //                                                 ]),
+// // //                                                 "completed.$habitPeriod.count":
+// // //                                                     newValue == true
+// // //                                                         ? FieldValue
+// // //                                                             .increment(1)
+// // //                                                         : FieldValue
+// // //                                                             .increment(-1),
+// // //                                               });
+// // //                                               //print("Update successful");
+// // //                                             } catch (e) {
+// // //                                               print(
+// // //                                                   "Error updating document: $e");
+// // //                                             }
+// // //                                           } else if (habit['habitType'] ==
+// // //                                               "Monthly") {
+// // //                                             final yearMonth =
+// // //                                                 DateFormat('MMM-yyyy')
+// // //                                                     .format(currentDate);
+// // //                                             //print("yearMonth: $yearMonth");
+// // //                                             try {
+// // //                                               await docRef.update({
+// // //                                                 "completed.$yearMonth.dates":
+// // //                                                     FieldValue.arrayUnion([
+// // //                                                   formattedDate.toString()
+// // //                                                 ]),
+// // //                                                 "completed.$yearMonth.count":
+// // //                                                     newValue == true
+// // //                                                         ? FieldValue
+// // //                                                             .increment(1)
+// // //                                                         : FieldValue
+// // //                                                             .increment(-1),
+// // //                                               });
+// // //                                               //print("Update successful");
+// // //                                             } catch (e) {
+// // //                                               print(
+// // //                                                   "Error updating document: $e");
+// // //                                             }
+// // //                                           }
+// // //                                         },
+// // //                                       )),
+// // //                                 ],
+// // //                               ),
+// // //                             ),
+// // //                           ),
+// // //                         );
+// // //                       }).toList());
+// // //               } else {
+// // //                 return const CircularProgressIndicator();
+// // //               }
+// // //             },
+// // //           ),
+// // //         ],
+// // //       ),
+// // //     ),
+// // //   );
+// // // }
+// // //}
 // //
-// // // Retrieve the documents that match the query
-// // QuerySnapshot querySnapshot = await query.get();
-// //
-// // // Loop through the documents and print the habit names
-// // querySnapshot.docs.forEach((doc) {
-// // print(doc.data()['habitName']);
-// // });
-// // import 'package:cloud_firestore/cloud_firestore.dart';
-// // import 'package:firebase_auth/firebase_auth.dart';
 // // import 'package:flutter/material.dart';
-// // import 'package:tracker_habit/screen/Goal/seeAllGoal.dart';
 // // import 'package:tracker_habit/screen/habit/dailyHabit.dart';
-// // import 'package:tracker_habit/screen/habit/habitReport.dart';
-// // import 'package:intl/intl.dart';
 // // import 'package:tracker_habit/screen/habit/monthlyHabit.dart';
 // // import 'package:tracker_habit/screen/habit/weeklyHabit.dart';
 // //
 // // import '../../homepage.dart';
+// // import '../Goal/completedGoals.dart';
+// // import '../Goal/inCompleteGoals.dart';
 // //
 // // class HabitScreen extends StatefulWidget {
-// //   HabitScreen({Key? key}) : super(key: key);
+// //   const HabitScreen({Key? key}) : super(key: key);
 // //
 // //   @override
-// //   State<HabitScreen> createState() => _HabitScreen();
+// //   State<HabitScreen> createState() => _HabitScreenState();
 // // }
 // //
-// // class _HabitScreen extends State<HabitScreen> {
+// // class _HabitScreenState extends State<HabitScreen> {
+// //   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+// //   final ScrollController _scrollController = ScrollController();
 // //
 // //   @override
-// //   Widget build(BuildContext context){
-// //     return Scaffold();
-// //   }
-//
-//
-//
-//
-// // bool showvalue = false;
-// // User user = FirebaseAuth.instance.currentUser!;
-// // String? habitPeriod;
-// // DateTime currentDate = DateTime.now();
-// // var todays = DateTime.now().toString().substring(0, 10);
-// //
-// // @override
-// // Widget build(BuildContext context) {
-// // return DefaultTabController(
-// // length: 3, // The number of tabs
-// // child: Scaffold(
-// // body: TabBarView(
-// // children: [
-// // Container(
-// // child: Center(
-// // child: Text('Daily'),
-// // ),
-// // ),
-// // Container(
-// // child: Center(
-// // child: Text('Weekly'),
-// // ),
-// // ),
-// // Container(
-// // child: Center(
-// // child: Text('Monthly'),
-// // ),
-// // ),
-// // ],
-// // ),
-// // ),
-// // );
-// // }}
-//
-//
-//
-// //
-// // callCompleted() async {
-// //   var complete=await FirebaseFirestore.instance
-// //       .collection('users').doc(user.uid)
-// //       .collection('habits').where('completed.habitPeriod.$currentDate.toString()').get();
-// //   // var complete = await FirebaseFirestore.instance
-// //   //     .collection('users')
-// //   //     .doc(user.uid)
-// //   //     .collection('habits')
-// //   //     .get();
-// //   // print("Here's the type: ${complete.docs[0]["completed"].runtimeType}");
-// //   // for(var comp in complete.docs){
-// //   //   print("${comp.runtimeType}");
-// //   // }
-// //   // print("${complete.toList().then((value) => Text("${value.length}"))}");
-// // }
-//
-// // @override
-// // Widget build(BuildContext context) {
-// //   String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
-// //   //callCompleted();
-// //   return Padding(
-// //     padding: const EdgeInsets.only(left: 18, right: 18),
-// //     child: Container(
-// //       decoration: BoxDecoration(
-// //         borderRadius: BorderRadius.circular(5),
-// //         color: const Color(0xFFFFFFFF),
+// //   Widget build(BuildContext context) {
+// //     return Scaffold(
+// //       key: _scaffoldKey,
+// //       body: NestedScrollView(
+// //         controller: _scrollController,
+// //         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+// //           return [
+// //             SliverPersistentHeader(
+// //               delegate: _SliverAppBarDelegate(
+// //                 TabBar(
+// //                   tabs: [
+// //                     Tab(
+// //                         child: Text('Daily',
+// //                             style: TextStyle(fontSize: 18))),
+// //                     Tab(
+// //                         child: Text('Weekly',
+// //                             style: TextStyle(fontSize: 18))),
+// //                     Tab(
+// //                         child: Text('Monthly',
+// //                             style: TextStyle(fontSize: 18))),
+// //                   ],
+// //                 ),
+// //               ),
+// //               pinned: true,
+// //             ),
+// //           ];
+// //         },
+// //         body: TabBarView(
+// //           children: [
+// //             DailyHabit(),
+// //             WeeklyHabit(),
+// //             MonthlyHabit(),
+// //           ],
+// //         ),
 // //       ),
-// //       child: Column(
-// //         children: [
-// //           // callCompleted(),
-// //           ListTile(
-// //             title: const Text(
-// //               'Your Habits',
-// //               style: TextStyle(
-// //                 color: Color(0xff4c505b),
-// //                 fontSize: 20,
-// //               ),
-// //             ),
-// //             trailing: TextButton(
-// //               onPressed: () {
-// //                 Navigator.push(
-// //                     context,
-// //                     MaterialPageRoute(
-// //                         builder: (context) => const SeeAllGoal()));
-// //               },
-// //               child: const Text(
-// //                 'See all',
-// //                 style: TextStyle(color: Colors.deepOrangeAccent),
-// //               ),
-// //             ),
-// //           ),
-// //           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-// //             stream: FirebaseFirestore.instance
-// //                 .collection('users')
-// //                 .doc(user.uid)
-// //                 .collection('habits')
-// //                 .snapshots(),
-// //             builder: (context, streamSnapshot) {
-// //               //print("This is the index: $index");
-// //               if (streamSnapshot.connectionState == ConnectionState.waiting) {
-// //                 return const Center(child: CircularProgressIndicator());
-// //               }
-// //               if (streamSnapshot.hasError) {
-// //                 print(streamSnapshot.error);
-// //                 return Center(
-// //                     child:
-// //                         Text("There is an error: ${streamSnapshot.error}"));
-// //               } else if (streamSnapshot.hasData) {
-// //                 var habits = streamSnapshot.data!.docs;
-// //                 // for (var habit in habits) {
-// //                 //   // print("Completed here: ${habits[habits.indexOf(habit)]["completed"]["Apr-2023-4"]["dates"]}");
-// //                 //   var completed = habits[habits.indexOf(habit)]["completed"];
-// //                 //   for (var habitPeriod in completed.entries) {
-// //                 //     var dates = habitPeriod.value["dates"];
-// //                 //     for (var date in dates) {
-// //                 //       print(
-// //                 //           "Here is single date subString: ${date.substring(0, 10)}");
-// //                 //     }
-// //                 //   }
-// //                 //   // print("Habit ${habits.indexOf(habit)}: ${habit["habitType"]}");
-// //                 // }
+// //     );
+// //   }
+// // }
 // //
-// //                 return habits.isEmpty
-// //                     ? const Center(child: Text("No habits yet"))
-// //                     : Column(
-// //                         children: habits.map((habit) {
-// //                         // int indexes = habits.indexOf(habit);
-// //                         return Padding(
-// //                           padding: const EdgeInsets.only(
-// //                               top: 12, left: 15, right: 15),
-// //                           child: Container(
-// //                             decoration: BoxDecoration(
-// //                               borderRadius: BorderRadius.circular(5),
-// //                               color: const Color(0xFFFBFBFB),
-// //                             ),
-// //                             child: Padding(
-// //                               padding: const EdgeInsets.only(
-// //                                   left: 8.0, right: 8.0),
-// //                               child: Column(
-// //                                 children: [
-// //                                   ListTile(
-// //                                     contentPadding:
-// //                                         const EdgeInsets.symmetric(
-// //                                             vertical: 0),
-// //                                     title: Text(
-// //                                       "${habit['habitName']}",
-// //                                       style: const TextStyle(
-// //                                           color: Color(0xFF2F2F2F),
-// //                                           fontSize: 25),
-// //                                     ),
-// //                                     trailing: IconButton(
-// //                                       onPressed: () {
-// //                                         Navigator.push(
-// //                                             context,
-// //                                             MaterialPageRoute(
-// //                                                 builder: (context) =>
-// //                                                     HabitReport(
-// //                                                         habitName: habit[
-// //                                                             'habitName'])));
-// //                                       },
-// //                                       icon: const Icon(
-// //                                           Icons.info_outline_rounded),
-// //                                     ),
-// //                                   ),
-// //                                   const ListTile(
-// //                                     contentPadding:
-// //                                         EdgeInsets.symmetric(vertical: 0),
-// //                                     title: LinearProgressIndicator(
-// //                                         minHeight: 15,
-// //                                         value: 0.5,
-// //                                         backgroundColor: Colors.grey,
-// //                                         valueColor:
-// //                                             AlwaysStoppedAnimation<Color>(
-// //                                                 Colors.deepOrangeAccent)),
-// //                                   ),
-// //                                   const ListTile(
-// //                                     contentPadding:
-// //                                         EdgeInsets.symmetric(vertical: 0),
-// //                                     title: Text('5 from 7 days target',
-// //                                         style: TextStyle(
-// //                                             color: Color(0xFF2F2F2F),
-// //                                             fontSize: 20)),
-// //                                   ),
-// //                                   ListTile(
-// //                                       contentPadding:
-// //                                           const EdgeInsets.symmetric(
-// //                                               vertical: 0),
-// //                                       title: const Text(
-// //                                         'Everyday',
-// //                                         style: TextStyle(
-// //                                             color: Color(0xFFFF5C00),
-// //                                             fontSize: 20),
-// //                                       ),
-// //                                       trailing: Checkbox(
-// //                                         value: false,
-// //                                         onChanged: (bool? newValue) async {
-// //                                           final docRef = FirebaseFirestore
-// //                                               .instance
-// //                                               .collection("users")
-// //                                               .doc(user.uid)
-// //                                               .collection("habits")
-// //                                               .doc(habit.id);
-// //                                           final currentDate = DateTime.now();
-// //                                           DateTime dateTime = DateTime.now();
-// //                                           String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
-// //                                           if (habit['habitType'] ==
-// //                                               "Weekly") {
-// //                                             DateTime now = DateTime.now();
-// //                                             int currentWeekDayOfMonth =
-// //                                                 now.weekday;
-// //                                             habitPeriod =
-// //                                                 '${DateFormat('MMM-yyyy').format(DateTime.now())}-$currentWeekDayOfMonth';
-// //                                             try {
-// //                                               await docRef.update({
-// //                                                 "completed.$habitPeriod.dates":
-// //                                                     FieldValue.arrayUnion([
-// //                                                   formattedDate.toString()
-// //                                                 ]),
-// //                                                 "completed.$habitPeriod.count":
-// //                                                     newValue == true
-// //                                                         ? FieldValue
-// //                                                             .increment(1)
-// //                                                         : FieldValue
-// //                                                             .increment(-1),
-// //                                               });
-// //                                               //print("Update successful");
-// //                                             } catch (e) {
-// //                                               print(
-// //                                                   "Error updating document: $e");
-// //                                             }
-// //                                           } else if (habit['habitType'] ==
-// //                                               "Monthly") {
-// //                                             final yearMonth =
-// //                                                 DateFormat('MMM-yyyy')
-// //                                                     .format(currentDate);
-// //                                             //print("yearMonth: $yearMonth");
-// //                                             try {
-// //                                               await docRef.update({
-// //                                                 "completed.$yearMonth.dates":
-// //                                                     FieldValue.arrayUnion([
-// //                                                   formattedDate.toString()
-// //                                                 ]),
-// //                                                 "completed.$yearMonth.count":
-// //                                                     newValue == true
-// //                                                         ? FieldValue
-// //                                                             .increment(1)
-// //                                                         : FieldValue
-// //                                                             .increment(-1),
-// //                                               });
-// //                                               //print("Update successful");
-// //                                             } catch (e) {
-// //                                               print(
-// //                                                   "Error updating document: $e");
-// //                                             }
-// //                                           }
-// //                                         },
-// //                                       )),
-// //                                 ],
-// //                               ),
-// //                             ),
-// //                           ),
-// //                         );
-// //                       }).toList());
-// //               } else {
-// //                 return const CircularProgressIndicator();
-// //               }
-// //             },
+// // class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+// //   final TabBar _tabBar;
+// //
+// //   _SliverAppBarDelegate(this._tabBar);
+// //
+// //   @override
+// //   double get minExtent => _tabBar.preferredSize.height;
+// //
+// //   @override
+// //   double get maxExtent => _tabBar.preferredSize.height;
+// //
+// //   @override
+// //   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+// //     return Container(
+// //       decoration: BoxDecoration(
+// //         color: Theme.of(context).scaffoldBackgroundColor,
+// //         boxShadow: [
+// //           BoxShadow(
+// //             color: Colors.black12,
+// //             blurRadius: 4,
+// //             offset: Offset(0, 2),
 // //           ),
 // //         ],
 // //       ),
-// //     ),
-// //   );
+// //       child: _tabBar,
+// //     );
+// //   }
+// //
+// //   @override
+// //   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+// //     return false;
+// //   }
 // // }
-// //}
 //
-// import 'package:flutter/material.dart';
-// import 'package:tracker_habit/screen/habit/dailyHabit.dart';
-// import 'package:tracker_habit/screen/habit/monthlyHabit.dart';
-// import 'package:tracker_habit/screen/habit/weeklyHabit.dart';
+// // import 'package:flutter/material.dart';
+// // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// // import 'package:timezone/data/latest.dart' as tz;
+// // import 'package:timezone/timezone.dart' as tz;
+// //
+// // void main() async {
+// //   WidgetsFlutterBinding.ensureInitialized();
+// //   await tz.initializeTimeZones();
+// //   runApp(MyApp());
+// // }
+// //
+// // class MyApp extends StatelessWidget {
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return MaterialApp(
+// //       title: 'Habit Reminder',
+// //       home: Scaffold(
+// //         appBar: AppBar(
+// //           title: Text('Habit Reminder'),
+// //         ),
+// //         body: Center(
+// //           child: ElevatedButton(
+// //             child: Text('Set Reminder'),
+// //             onPressed: () {
+// //               _scheduleNotification();
+// //             },
+// //           ),
+// //         ),
+// //       ),
+// //     );
+// //   }
+// //
+// //   Future<void> _scheduleNotification() async {
+// //     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+// //     FlutterLocalNotificationsPlugin();
+// //     var initializationSettingsAndroid =
+// //     AndroidInitializationSettings('app_icon');
+// //     var initializationSettingsIOS = IOSInitializationSettings();
+// //     var initializationSettings = InitializationSettings(
+// //         android: initializationSettingsAndroid,
+// //         iOS: initializationSettingsIOS);
+// //     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+// //
+// //     var androidDetails = AndroidNotificationDetails(
+// //         'channelId', 'channelName', 'channelDescription',
+// //         priority: Priority.high,
+// //         importance: Importance.high,
+// //         ticker: 'ticker');
+// //     var iOSDetails = IOSNotificationDetails();
+// //     var notificationDetails =
+// //     NotificationDetails(android: androidDetails, iOS: iOSDetails);
+// //
+// //     await flutterLocalNotificationsPlugin.zonedSchedule(
+// //         0,
+// //         'Complete Your Habit',
+// //         'Don\'t forget to complete your habit today!',
+// //         _nextInstanceOfTenAM(),
+// //         notificationDetails,
+// //         androidAllowWhileIdle: true,
+// //         uiLocalNotificationDateInterpretation:
+// //         UILocalNotificationDateInterpretation.absoluteTime);
+// //   }
+// //
+// //   tz.TZDateTime _nextInstanceOfTenAM() {
+// //     tz.TZDateTime scheduledDate = tz.TZDateTime.now(tz.local);
+// //     if (scheduledDate.hour >= 10) {
+// //       scheduledDate = scheduledDate.add(const Duration(days: 1));
+// //     }
+// //     return tz.TZDateTime(tz.local, scheduledDate.year, scheduledDate.month,
+// //         scheduledDate.day, 10);
+// //   }
+// // }
 //
-// import '../../homepage.dart';
-// import '../Goal/completedGoals.dart';
-// import '../Goal/inCompleteGoals.dart';
 //
-// class HabitScreen extends StatefulWidget {
-//   const HabitScreen({Key? key}) : super(key: key);
+// // ure, I'd be happy to help! Based on the code you provided, it looks like you're using the flutter_local_notifications package to show a notification. Here are a few things you can try to troubleshoot the issue:
+// //
+// // Check if the showNotification function is being called
+// // One thing you can try is to add a print statement at the beginning of the showNotification function to check if it's being called:
+// //
+// // csharp
+// // Copy code
+// // Future<void> showNotification() async {
+// //   print('showNotification called');
+// //   // Rest of the code
+// // }
+// // If you see the message "showNotification called" in the console, then the function is being called properly.
+// //
+// // Check if the notification channel is set up correctly
+// // Make sure that the notification channel is set up correctly by checking the AndroidNotificationChannel instance that you're using. You can add a print statement to see if the channel is being created successfully:
+// //
+// // arduino
+// // Copy code
+// // AndroidNotificationChannel channel = const AndroidNotificationChannel(
+// // 'high channel',
+// // 'Very important notification!!',
+// // description: 'the first notification',
+// // importance: Importance.max,
+// // );
+// // print('Channel created successfully: ${await flutterLocalNotificationsPlugin
+// //     .resolvePlatformSpecificImplementation<
+// // AndroidFlutterLocalNotificationsPlugin>()
+// //     ?.getNotificationChannel(channel.id)}');
+// // This will print out the details of the notification channel that you've created. Make sure that the channel ID that you're using in the AndroidNotificationDetails instance matches the ID of the notification channel.
+// //
+// // Check if the notification is being triggered
+// // You can add a print statement at the end of the showNotification function to check if the notification is being triggered:
+// //
+// // php
+// // Copy code
+// // await flutterLocalNotificationsPlugin.show(
+// // 0,
+// // 'Incomplete Habits',
+// // message,
+// // const NotificationDetails(
+// // android: AndroidNotificationDetails(
+// // 'incomplete habits channel id',
+// // 'Incomplete Habits',
+// // importance: Importance.max,
+// // priority: Priority.high,
+// // showWhen: false,
+// // ),
+// // ),
+// // );
+// // print('Notification shown');
+// // If you see the message "Notification shown" in the console, then the notification is being triggered properly.
+// //
+// // Check if the AndroidAlarmManager is set up correctly
+// // Make sure that the AndroidAlarmManager is set up correctly by checking the showNotification method is called properly using Android AlarmManager service.
+// //
+// // To verify that the AndroidAlarmManager is set up correctly, you can add a print statement at the beginning of the showNotification method to see if it's being called:
+// //
+// // csharp
+// // Copy code
+// // Future<void> showNotification() async {
+// // print('showNotification called');
+// // // Rest of the code
+// // }
+// // If you see the message "showNotification called" in the console periodically (every minute, in this case), then the AndroidAlarmManager is set up correctly.
+// //
+// // I hope this helps you troubleshoot the issue! If you have any more questions or if these steps don't resolve the issue, feel free to ask.
 //
-//   @override
-//   State<HabitScreen> createState() => _HabitScreenState();
-// }
 //
-// class _HabitScreenState extends State<HabitScreen> {
-//   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-//   final ScrollController _scrollController = ScrollController();
 //
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       key: _scaffoldKey,
-//       body: NestedScrollView(
-//         controller: _scrollController,
-//         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-//           return [
-//             SliverPersistentHeader(
-//               delegate: _SliverAppBarDelegate(
-//                 TabBar(
-//                   tabs: [
-//                     Tab(
-//                         child: Text('Daily',
-//                             style: TextStyle(fontSize: 18))),
-//                     Tab(
-//                         child: Text('Weekly',
-//                             style: TextStyle(fontSize: 18))),
-//                     Tab(
-//                         child: Text('Monthly',
-//                             style: TextStyle(fontSize: 18))),
-//                   ],
-//                 ),
-//               ),
-//               pinned: true,
-//             ),
-//           ];
-//         },
-//         body: TabBarView(
-//           children: [
-//             DailyHabit(),
-//             WeeklyHabit(),
-//             MonthlyHabit(),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+// // import 'package:flutter/material.dart';
+// // import 'package:tracker_habit/homepage.dart';
+// // import 'package:tracker_habit/settings/setting.dart';
+// //
+// // import '../progressess/progressess.dart';
+// //
+// // class UpdateAccount extends StatefulWidget{
+// //   UpdateAccount({Key? key}) : super(key:key);
+// //
+// //   @override
+// //   State<UpdateAccount> createState() => _MyAccountState();
+// //
+// // }
+// //
+// // class _MyAccountState extends State<UpdateAccount>{
+// //
+// //   TextEditingController _nameController = TextEditingController();
+// //   TextEditingController _emailController = TextEditingController();
+// //
+// //   void void_update() {
+// //     String name = _nameController.text;
+// //     String email = _emailController.text;
+// //
+// //     // Perform update logic here
+// //     // For example, print the name and email to the console
+// //     print('Name: $name');
+// //     print('Email: $email');
+// //   }
+// //
+// //   @override
+// //   Widget build(BuildContext Context){
+// //     return Container(
+// //         child: Scaffold(
+// //           backgroundColor: Colors.white,
+// //           appBar: AppBar(
+// //             backgroundColor: Colors.white,
+// //             elevation: 0,
+// //             title: Row(
+// //               children: [
+// //                 Text('Account',style:
+// //                 TextStyle(
+// //                   color:Color(0xff4c505b),
+// //                   fontSize: 27,
+// //                   fontWeight: FontWeight.w700,
+// //                 ),
+// //                 ),
+// //               ],
+// //             ),
+// //           ),
+// //           body:Stack(
+// //             children: [
+// //               Container(
+// //                 padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05,
+// //                   right: 35,
+// //                   left: 35,
+// //                 ),
+// //                 child: Column(
+// //                   children: [
+// //                     TextField(
+// //                       controller: _nameController,
+// //                       decoration: InputDecoration(
+// //                         fillColor: Colors.white,
+// //                         filled: true,
+// //                         hintText: 'Name',
+// //                         suffixIcon: IconButton(
+// //                           onPressed: () {  },
+// //                           icon: Icon(Icons.input),
+// //
+// //                         ),
+// //                         border: OutlineInputBorder(
+// //                           borderRadius: BorderRadius.circular(10),
+// //                         ),
+// //                       ),
+// //                     ),
+// //                     SizedBox(
+// //                       height:30,
+// //                     ),
+// //                     TextField(
+// //                       controller: _emailController,
+// //                       decoration: InputDecoration(
+// //                         fillColor: Colors.white,
+// //                         filled: true,
+// //                         hintText: 'Email',
+// //                         suffixIcon: IconButton(
+// //                           onPressed: () {  },
+// //                           icon: Icon(Icons.input),
+// //
+// //                         ),
+// //                         border: OutlineInputBorder(
+// //                           borderRadius: BorderRadius.circular(10),
+// //                         ),
+// //                       ),
+// //                     ),
+// //                     SizedBox(
+// //                       height: 30,
+// //                     ),
+// //                     TextField(
+// //                       obscureText: true,
+// //                       decoration: InputDecoration(
+// //                         fillColor: Colors.white,
+// //                         filled: true,
+// //                         hintText: 'Password',
+// //                         suffixIcon: IconButton(
+// //                           onPressed: () {  },
+// //                           icon: Icon(Icons.remove_red_eye_outlined),
+// //
+// //                         ),
+// //                         border: OutlineInputBorder(
+// //                           borderRadius: BorderRadius.circular(10),
+// //                         ),
+// //                       ),
+// //                     ),
+// //                     SizedBox(
+// //                       height: 30,
+// //                     ),
+// //                     TextField(
+// //                       obscureText: true,
+// //                       decoration: InputDecoration(
+// //                         fillColor: Colors.white,
+// //                         filled: true,
+// //                         hintText: 'Password Confirmation',
+// //                         suffixIcon: IconButton(
+// //                           onPressed: () {  },
+// //                           icon: Icon(Icons.remove_red_eye_outlined),
+// //
+// //                         ),
+// //                         border: OutlineInputBorder(
+// //                           borderRadius: BorderRadius.circular(10),
+// //                         ),
+// //                       ),
+// //                     ),
+// //                     SizedBox(
+// //                       height: 40,
+// //                     ),
+// //                     Row(
+// //                         children: [
+// //                           Container(
+// //                             width:280,
+// //                             child: ElevatedButton(
+// //                               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent)),
+// //                               child:Text('Update'),
+// //                               onPressed: (){
+// //                                 void_update();
+// //                               },
+// //                             ),
+// //
+// //                           ),
+// //                         ]
+// //                     ),
+// //                   ],
+// //                 ),
+// //               ),
+// //             ],
+// //           ),
+// //
+// //         )
+// //     );
+// //   }
+// // }
+// //
 //
-// class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-//   final TabBar _tabBar;
+// // import 'package:flutter/material.dart';
+// // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// //
+// // class HabitTaskNotifier {
+// //   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+// //
+// //   Future<void> initialize() async {
+// //     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+// //     const AndroidInitializationSettings initializationSettingsAndroid =
+// //     AndroidInitializationSettings('app_icon');
+// //     final InitializationSettings initializationSettings =
+// //     InitializationSettings(android: initializationSettingsAndroid);
+// //     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+// //   }
+// //
+// //   Future<void> showNotification(String title, String body) async {
+// //     const AndroidNotificationDetails androidPlatformChannelSpecifics =
+// //     AndroidNotificationDetails(
+// //         'your channel id', 'your channel name', 'your channel description',
+// //         importance: Importance.max,
+// //         priority: Priority.high,
+// //         ticker: 'ticker');
+// //     const NotificationDetails platformChannelSpecifics =
+// //     NotificationDetails(android: androidPlatformChannelSpecifics);
+// //     await flutterLocalNotificationsPlugin.show(
+// //         0, title, body, platformChannelSpecifics,
+// //         payload: 'habit_task');
+// //   }
+// // }
+// //
+// // class HabitTaskPage extends StatefulWidget {
+// //   const HabitTaskPage({Key? key}) : super(key: key);
+// //
+// //   @override
+// //   _HabitTaskPageState createState() => _HabitTaskPageState();
+// // }
+// //
+// // class _HabitTaskPageState extends State<HabitTaskPage> {
+// //   final HabitTaskNotifier habitTaskNotifier = HabitTaskNotifier();
+// //
+// //   @override
+// //   void initState() {
+// //     super.initState();
+// //     habitTaskNotifier.initialize();
+// //   }
+// //
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Scaffold(
+// //       appBar: AppBar(
+// //         title: const Text('Habit Task'),
+// //       ),
+// //       body: Center(
+// //         child: ElevatedButton(
+// //           onPressed: () async {
+// //             await habitTaskNotifier.showNotification(
+// //                 'Habit Task', 'Complete your habit task for today!');
+// //           },
+// //           child: const Text('Notify Me'),
+// //         ),
+// //       ),
+// //     );
+// //   }
+// // }
+// //
 //
-//   _SliverAppBarDelegate(this._tabBar);
 //
-//   @override
-//   double get minExtent => _tabBar.preferredSize.height;
 //
-//   @override
-//   double get maxExtent => _tabBar.preferredSize.height;
+// //////Notifications/////////////////////////
+// // import 'package:cloud_firestore/cloud_firestore.dart';
+// // import 'package:firebase_auth/firebase_auth.dart';
+// // import 'package:flutter/material.dart';
+// // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// // import 'package:intl/intl.dart';
+// //
+// // class HabitNotification extends StatefulWidget {
+// //   @override
+// //   _HabitNotificationState createState() => _HabitNotificationState();
+// // }
+// //
+// // class _HabitNotificationState extends State<HabitNotification> {
+// //   User user=FirebaseAuth.instance.currentUser!;
+// //   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+// //   FlutterLocalNotificationsPlugin();
+// //
+// //   @override
+// //   void initState() {
+// //     super.initState();
+// //
+// //     // Initialize the notification plugin
+// //     var initializationSettingsAndroid =
+// //     AndroidInitializationSettings('@mipmap/ic_launcher');
+// //     var initializationSettings = InitializationSettings(
+// //         android: initializationSettingsAndroid);
+// //     flutterLocalNotificationsPlugin.initialize(initializationSettings);
+// //   }
+// //
+// //   Future onSelectNotification(String? payload) async {
+// //     // Handle notification click event
+// //     showDialog(
+// //       context: context,
+// //       builder: (_) {
+// //         return AlertDialog(
+// //           title: Text('Notification Clicked'),
+// //           content: Text('You have clicked the notification'),
+// //         );
+// //       },
+// //     );
+// //     await showNotification();
+// //   }
+// //
+// //   Future showNotification() async{
+// //     DateTime now=DateTime.now();
+// //     int currentWeekDayOfMonth = now.weekday;
+// //     String formattedDate = '${DateFormat('yyyy-MM').format(DateTime.now())}-$currentWeekDayOfMonth';
+// //     QuerySnapshot snapshot = await FirebaseFirestore.instance
+// //         .collection('users')
+// //         .doc(user.uid)
+// //         .collection('habits')
+// //         .where('habitType', isEqualTo: 'Weekly')
+// //         .get();
+// //     List<DocumentSnapshot> habits = [];
+// //     snapshot.docs.forEach((doc) {
+// //       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+// //       if (data.containsKey('completed')) {
+// //         Map<String, dynamic> completed = data['completed'];
+// //         if (completed.containsKey(formattedDate)) {
+// //           List<dynamic> dates = completed[formattedDate]['dates'];
+// //           if (dates != null && !dates.contains(now.toString().substring(0,10))) {
+// //             habits.add(doc);
+// //           }
+// //         } else {
+// //           habits.add(doc);
+// //         }
+// //       }
+// //     });
+// //
+// //     String notificationBody = '';
+// //     if (habits.isNotEmpty) {
+// //       notificationBody = 'You have ${habits.length} habits to complete today:\n';
+// //       habits.forEach((habit) {
+// //         notificationBody += '- ${habit['habitName']}\n';
+// //       });
+// //     } else {
+// //       notificationBody = 'You have completed all your habits for today!';
+// //     }
+// //     print('Notification body: $notificationBody');
+// //
+// //     var androidDetails=AndroidNotificationDetails('channelId', 'channelName');
+// //     var notificationDetails=NotificationDetails(android: androidDetails);
+// //     await flutterLocalNotificationsPlugin.show(
+// //         0, 'Habit Tracker', notificationBody, notificationDetails);
+// //   }
+// //
+// //
+// //   Future showNotifications() async {
+// //     var notificationDetails = await flutterLocalNotificationsPlugin
+// //         .resolvePlatformSpecificImplementation<
+// //         AndroidFlutterLocalNotificationsPlugin>()
+// //         ?.getActiveNotifications();
+// //     await showNotification();
+// //   }
+// //
+// //   // Future showNotification() async {
+// //   //   var androidDetails = AndroidNotificationDetails(
+// //   //       'channel_id', 'channel_name');
+// //   //   var notificationDetails =
+// //   //   NotificationDetails(android: androidDetails);
+// //   //   await flutterLocalNotificationsPlugin.show(
+// //   //       0, 'Notification Title', 'Notification Body', notificationDetails);
+// //   // }
+// //
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Scaffold(
+// //       appBar: AppBar(
+// //         title: Text('Notification Example'),
+// //       ),
+// //       body: Center(
+// //         child: ElevatedButton(
+// //           onPressed: showNotifications,
+// //           child: Text('Show Notifications'),
+// //         ),
+// //       ),
+// //     );
+// //   }
+// // }
+// //
+// // scheduling a habit notification  reminder comes every 2 minutes in
+// // flutter app either user open app or not open app
 //
-//   @override
-//   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-//     return Container(
-//       decoration: BoxDecoration(
-//         color: Theme.of(context).scaffoldBackgroundColor,
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black12,
-//             blurRadius: 4,
-//             offset: Offset(0, 2),
-//           ),
-//         ],
-//       ),
-//       child: _tabBar,
-//     );
-//   }
 //
-//   @override
-//   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-//     return false;
-//   }
-// }
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:timezone/data/latest.dart' as tz;
-// import 'package:timezone/timezone.dart' as tz;
 //
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await tz.initializeTimeZones();
-//   runApp(MyApp());
-// }
 //
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Habit Reminder',
-//       home: Scaffold(
-//         appBar: AppBar(
-//           title: Text('Habit Reminder'),
-//         ),
-//         body: Center(
-//           child: ElevatedButton(
-//             child: Text('Set Reminder'),
-//             onPressed: () {
-//               _scheduleNotification();
-//             },
-//           ),
-//         ),
-//       ),
-//     );
-//   }
 //
-//   Future<void> _scheduleNotification() async {
-//     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//     FlutterLocalNotificationsPlugin();
-//     var initializationSettingsAndroid =
-//     AndroidInitializationSettings('app_icon');
-//     var initializationSettingsIOS = IOSInitializationSettings();
-//     var initializationSettings = InitializationSettings(
-//         android: initializationSettingsAndroid,
-//         iOS: initializationSettingsIOS);
-//     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+// To use provider instead of setState, you need to create a provider class that contains the state data and the methods to update it.
 //
-//     var androidDetails = AndroidNotificationDetails(
-//         'channelId', 'channelName', 'channelDescription',
-//         priority: Priority.high,
-//         importance: Importance.high,
-//         ticker: 'ticker');
-//     var iOSDetails = IOSNotificationDetails();
-//     var notificationDetails =
-//     NotificationDetails(android: androidDetails, iOS: iOSDetails);
+// Here is an example of how to implement the provider for your code:
 //
-//     await flutterLocalNotificationsPlugin.zonedSchedule(
-//         0,
-//         'Complete Your Habit',
-//         'Don\'t forget to complete your habit today!',
-//         _nextInstanceOfTenAM(),
-//         notificationDetails,
-//         androidAllowWhileIdle: true,
-//         uiLocalNotificationDateInterpretation:
-//         UILocalNotificationDateInterpretation.absoluteTime);
-//   }
-//
-//   tz.TZDateTime _nextInstanceOfTenAM() {
-//     tz.TZDateTime scheduledDate = tz.TZDateTime.now(tz.local);
-//     if (scheduledDate.hour >= 10) {
-//       scheduledDate = scheduledDate.add(const Duration(days: 1));
-//     }
-//     return tz.TZDateTime(tz.local, scheduledDate.year, scheduledDate.month,
-//         scheduledDate.day, 10);
-//   }
-// }
-
-
-// ure, I'd be happy to help! Based on the code you provided, it looks like you're using the flutter_local_notifications package to show a notification. Here are a few things you can try to troubleshoot the issue:
-//
-// Check if the showNotification function is being called
-// One thing you can try is to add a print statement at the beginning of the showNotification function to check if it's being called:
-//
-// csharp
+// Create a class for the provider:
+// javascript
 // Copy code
-// Future<void> showNotification() async {
-//   print('showNotification called');
-//   // Rest of the code
+// import 'package:flutter/material.dart';
+//
+// class GoalProvider extends ChangeNotifier {
+// String _goalName = '';
+// String _selectStartDate = '';
+// String _selectEndDate = '';
+//
+// String get goalName => _goalName;
+// String get selectStartDate => _selectStartDate;
+// String get selectEndDate => _selectEndDate;
+//
+// setGoalName(String value) {
+// _goalName = value;
+// notifyListeners();
 // }
-// If you see the message "showNotification called" in the console, then the function is being called properly.
 //
-// Check if the notification channel is set up correctly
-// Make sure that the notification channel is set up correctly by checking the AndroidNotificationChannel instance that you're using. You can add a print statement to see if the channel is being created successfully:
+// setSelectStartDate(String value) {
+// _selectStartDate = value;
+// notifyListeners();
+// }
 //
-// arduino
+// setSelectEndDate(String value) {
+// _selectEndDate = value;
+// notifyListeners();
+// }
+//
+// clearFields() {
+// _goalName = '';
+// _selectEndDate = '';
+// notifyListeners();
+// }
+// }
+// Wrap your widget tree with the provider:
+// less
 // Copy code
-// AndroidNotificationChannel channel = const AndroidNotificationChannel(
-// 'high channel',
-// 'Very important notification!!',
-// description: 'the first notification',
-// importance: Importance.max,
+// void main() {
+// runApp(
+// ChangeNotifierProvider(
+// create: (context) => GoalProvider(),
+// child: MyApp(),
+// ),
 // );
-// print('Channel created successfully: ${await flutterLocalNotificationsPlugin
-//     .resolvePlatformSpecificImplementation<
-// AndroidFlutterLocalNotificationsPlugin>()
-//     ?.getNotificationChannel(channel.id)}');
-// This will print out the details of the notification channel that you've created. Make sure that the channel ID that you're using in the AndroidNotificationDetails instance matches the ID of the notification channel.
-//
-// Check if the notification is being triggered
-// You can add a print statement at the end of the showNotification function to check if the notification is being triggered:
-//
-// php
+// }
+// In your widget, use the provider instead of setState:
+// less
 // Copy code
-// await flutterLocalNotificationsPlugin.show(
-// 0,
-// 'Incomplete Habits',
-// message,
-// const NotificationDetails(
-// android: AndroidNotificationDetails(
-// 'incomplete habits channel id',
-// 'Incomplete Habits',
-// importance: Importance.max,
-// priority: Priority.high,
-// showWhen: false,
+// class MyWidget extends StatelessWidget {
+// final _formKey = GlobalKey<FormState>();
+// final _goalNameController = TextEditingController();
+// final _selectEndDate = TextEditingController();
+//
+// @override
+// Widget build(BuildContext context) {
+// final provider = Provider.of<GoalProvider>(context);
+//
+// return AlertDialog(
+// title: Row(
+// mainAxisAlignment: MainAxisAlignment.spaceBetween,
+// children: [
+// Text(
+// 'CreateNewGoal'.tr(), style: TextStyle(fontSize: 15),),
+// IconButton(
+// icon: const Icon(Icons.cancel),
+// onPressed: () {
+// Navigator.push(context,
+// MaterialPageRoute(builder: (context) => HomePage()));
+// },
+// ),
+// ],
+// ),
+// actions: [
+// Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Form(
+// key: _formKey,
+// child: Column(
+// children: [
+// TextFormField(
+// controller: _goalNameController,
+// decoration: InputDecoration(
+// labelText: 'YourGoalName'.tr(),
+// border: OutlineInputBorder(
+// borderRadius: BorderRadius.circular(10),
 // ),
 // ),
+// validator: (value) {
+// if (value?.isEmpty ?? true) {
+// return 'PleaseEnterYourGoal'.tr();
+// }
+// return null;
+// },
+// onSaved: (value) {
+// provider.setGoalName(value!);
+// }
+// ),
+// const SizedBox(
+// height: 20,
+// ),
+// TextFormField(
+// readOnly: true,
+// decoration: InputDecoration(
+// border:OutlineInputBorder(
+// borderRadius: BorderRadius.circular(10),
+// ),
+// labelText: provider.selectStartDate,
+// ),
+//
+// ),
+// SizedBox(height: 20,),
+// TextFormField(
+// controller: _selectEndDate,
+// decoration: InputDecoration(
+// border:OutlineInputBorder(
+// borderRadius: BorderRadius.circular(10),
+// ),
+// labelText: "SelectEndDate".tr(),
+// suffixIcon: Icon(Icons.calendar_today_outlined),
+// ),
+// onTap: () async{
+// DateTime? pickedDate= await showDatePicker(
+// context: context,
+// initialDate: DateTime.now(),
+// firstDate: DateTime(2022),
+// lastDate: DateTime(2025),
 // );
-// print('Notification shown');
-// If you see the message "Notification shown" in the console, then the notification is being triggered properly.
+// if(pickedDate !=null){
+// provider.setSelectEndDate(DateFormat("yyyy-MM-dd").format(pickedDate));
+// }
+// },
 //
-// Check if the AndroidAlarmManager is set up correctly
-// Make sure that the AndroidAlarmManager is set up correctly by checking the showNotification method is called properly using Android AlarmManager service.
+// ),
+// ElevatedButton(
+// onPressed: () async {
+// if (_formKey.currentState!.validate()) {
+// _formKey.currentState!.save();
+// try {
+// User user =
 //
-// To verify that the AndroidAlarmManager is set up correctly, you can add a print statement at the beginning of the showNotification method to see if it's being called:
 //
-// csharp
+//
+//
+// User
+// start here:),
+// ElevatedButton(
+// onPressed: () async {
+// if (_formKey.currentState!.validate()) {
+// _formKey.currentState!.save();
+// try {
+// User user =
+// ChatGPT
+// You can start by creating a new provider class that will hold the state of the goal creation process. Here is an example:
+//
+// dart
 // Copy code
-// Future<void> showNotification() async {
-// print('showNotification called');
-// // Rest of the code
-// }
-// If you see the message "showNotification called" in the console periodically (every minute, in this case), then the AndroidAlarmManager is set up correctly.
+// class GoalCreationProvider extends ChangeNotifier {
+// final _formKey = GlobalKey<FormState>();
+// String _goalName = '';
+// String _selectEndDate = '';
 //
-// I hope this helps you troubleshoot the issue! If you have any more questions or if these steps don't resolve the issue, feel free to ask.
-
-
-
-// import 'package:flutter/material.dart';
-// import 'package:tracker_habit/homepage.dart';
-// import 'package:tracker_habit/settings/setting.dart';
+// GlobalKey<FormState> get formKey => _formKey;
 //
-// import '../progressess/progressess.dart';
-//
-// class UpdateAccount extends StatefulWidget{
-//   UpdateAccount({Key? key}) : super(key:key);
-//
-//   @override
-//   State<UpdateAccount> createState() => _MyAccountState();
-//
+// set goalName(String value) {
+// _goalName = value;
+// notifyListeners();
 // }
 //
-// class _MyAccountState extends State<UpdateAccount>{
-//
-//   TextEditingController _nameController = TextEditingController();
-//   TextEditingController _emailController = TextEditingController();
-//
-//   void void_update() {
-//     String name = _nameController.text;
-//     String email = _emailController.text;
-//
-//     // Perform update logic here
-//     // For example, print the name and email to the console
-//     print('Name: $name');
-//     print('Email: $email');
-//   }
-//
-//   @override
-//   Widget build(BuildContext Context){
-//     return Container(
-//         child: Scaffold(
-//           backgroundColor: Colors.white,
-//           appBar: AppBar(
-//             backgroundColor: Colors.white,
-//             elevation: 0,
-//             title: Row(
-//               children: [
-//                 Text('Account',style:
-//                 TextStyle(
-//                   color:Color(0xff4c505b),
-//                   fontSize: 27,
-//                   fontWeight: FontWeight.w700,
-//                 ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           body:Stack(
-//             children: [
-//               Container(
-//                 padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05,
-//                   right: 35,
-//                   left: 35,
-//                 ),
-//                 child: Column(
-//                   children: [
-//                     TextField(
-//                       controller: _nameController,
-//                       decoration: InputDecoration(
-//                         fillColor: Colors.white,
-//                         filled: true,
-//                         hintText: 'Name',
-//                         suffixIcon: IconButton(
-//                           onPressed: () {  },
-//                           icon: Icon(Icons.input),
-//
-//                         ),
-//                         border: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(10),
-//                         ),
-//                       ),
-//                     ),
-//                     SizedBox(
-//                       height:30,
-//                     ),
-//                     TextField(
-//                       controller: _emailController,
-//                       decoration: InputDecoration(
-//                         fillColor: Colors.white,
-//                         filled: true,
-//                         hintText: 'Email',
-//                         suffixIcon: IconButton(
-//                           onPressed: () {  },
-//                           icon: Icon(Icons.input),
-//
-//                         ),
-//                         border: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(10),
-//                         ),
-//                       ),
-//                     ),
-//                     SizedBox(
-//                       height: 30,
-//                     ),
-//                     TextField(
-//                       obscureText: true,
-//                       decoration: InputDecoration(
-//                         fillColor: Colors.white,
-//                         filled: true,
-//                         hintText: 'Password',
-//                         suffixIcon: IconButton(
-//                           onPressed: () {  },
-//                           icon: Icon(Icons.remove_red_eye_outlined),
-//
-//                         ),
-//                         border: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(10),
-//                         ),
-//                       ),
-//                     ),
-//                     SizedBox(
-//                       height: 30,
-//                     ),
-//                     TextField(
-//                       obscureText: true,
-//                       decoration: InputDecoration(
-//                         fillColor: Colors.white,
-//                         filled: true,
-//                         hintText: 'Password Confirmation',
-//                         suffixIcon: IconButton(
-//                           onPressed: () {  },
-//                           icon: Icon(Icons.remove_red_eye_outlined),
-//
-//                         ),
-//                         border: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(10),
-//                         ),
-//                       ),
-//                     ),
-//                     SizedBox(
-//                       height: 40,
-//                     ),
-//                     Row(
-//                         children: [
-//                           Container(
-//                             width:280,
-//                             child: ElevatedButton(
-//                               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent)),
-//                               child:Text('Update'),
-//                               onPressed: (){
-//                                 void_update();
-//                               },
-//                             ),
-//
-//                           ),
-//                         ]
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//
-//         )
-//     );
-//   }
+// set selectEndDate(String value) {
+// _selectEndDate = value;
+// notifyListeners();
 // }
 //
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// void saveGoal(BuildContext context) async {
+// var selectStartDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+// if (_formKey.currentState!.validate()) {
+// _formKey.currentState!.save();
+// try {
+// User user = auth.currentUser!;
+// String? email = user.email;
 //
-// class HabitTaskNotifier {
-//   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+// final userDocRef = await FirebaseFirestore.instance
+//     .collection('users')
+//     .where('email', isEqualTo: email)
+//     .limit(1)
+//     .get()
+//     .then((value) => value.docs.first.reference);
 //
-//   Future<void> initialize() async {
-//     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-//     const AndroidInitializationSettings initializationSettingsAndroid =
-//     AndroidInitializationSettings('app_icon');
-//     final InitializationSettings initializationSettings =
-//     InitializationSettings(android: initializationSettingsAndroid);
-//     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-//   }
+// await userDocRef.collection('goals').add({
+// 'goalName': _goalName,
+// 'startDate': selectStartDate,
+// 'endDate': _selectEndDate,
+// 'completed': false,
+// 'createdAt': DateTime.now(),
+// });
+// ScaffoldMessenger.of(context).showSnackBar(
+// SnackBar(content: Text('NewGoalSavedSuccessfully'.tr())));
 //
-//   Future<void> showNotification(String title, String body) async {
-//     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-//     AndroidNotificationDetails(
-//         'your channel id', 'your channel name', 'your channel description',
-//         importance: Importance.max,
-//         priority: Priority.high,
-//         ticker: 'ticker');
-//     const NotificationDetails platformChannelSpecifics =
-//     NotificationDetails(android: androidPlatformChannelSpecifics);
-//     await flutterLocalNotificationsPlugin.show(
-//         0, title, body, platformChannelSpecifics,
-//         payload: 'habit_task');
-//   }
+// _goalName = '';
+// _selectEndDate = '';
+// notifyListeners();
+//
+// Navigator.push(context,
+// MaterialPageRoute(builder: (context) => HomePage()));
+// } catch (e) {
+// print('Error Saving Data: $e');
 // }
-//
-// class HabitTaskPage extends StatefulWidget {
-//   const HabitTaskPage({Key? key}) : super(key: key);
-//
-//   @override
-//   _HabitTaskPageState createState() => _HabitTaskPageState();
 // }
-//
-// class _HabitTaskPageState extends State<HabitTaskPage> {
-//   final HabitTaskNotifier habitTaskNotifier = HabitTaskNotifier();
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     habitTaskNotifier.initialize();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Habit Task'),
-//       ),
-//       body: Center(
-//         child: ElevatedButton(
-//           onPressed: () async {
-//             await habitTaskNotifier.showNotification(
-//                 'Habit Task', 'Complete your habit task for today!');
-//           },
-//           child: const Text('Notify Me'),
-//         ),
-//       ),
-//     );
-//   }
 // }
-//
-
-
-
-//////Notifications/////////////////////////
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:intl/intl.dart';
-//
-// class HabitNotification extends StatefulWidget {
-//   @override
-//   _HabitNotificationState createState() => _HabitNotificationState();
 // }
+// In this provider class, we define two private variables _goalName and _selectEndDate to hold the data entered in the form. We also define a GlobalKey<FormState> to be used with the form.
 //
-// class _HabitNotificationState extends State<HabitNotification> {
-//   User user=FirebaseAuth.instance.currentUser!;
-//   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//   FlutterLocalNotificationsPlugin();
+// We create getters and setters for the private variables and use notifyListeners() to notify any listening widgets of changes.
 //
-//   @override
-//   void initState() {
-//     super.initState();
+// In the saveGoal function, we replace the setState calls with updates to the provider state. We pass the BuildContext as a parameter so we can use it to show a snackbar.
 //
-//     // Initialize the notification plugin
-//     var initializationSettingsAndroid =
-//     AndroidInitializationSettings('@mipmap/ic_launcher');
-//     var initializationSettings = InitializationSettings(
-//         android: initializationSettingsAndroid);
-//     flutterLocalNotificationsPlugin.initialize(initializationSettings);
-//   }
+// Now you can wrap the AlertDialog in a ChangeNotifierProvider and pass an instance of the GoalCreationProvider class to it. Then, you can use Provider.of<GoalCreationProvider>(context) to access the provider state and update the UI accordingly.
 //
-//   Future onSelectNotification(String? payload) async {
-//     // Handle notification click event
-//     showDialog(
-//       context: context,
-//       builder: (_) {
-//         return AlertDialog(
-//           title: Text('Notification Clicked'),
-//           content: Text('You have clicked the notification'),
-//         );
-//       },
-//     );
-//     await showNotification();
-//   }
+// Here is an example of how you could use this provider in your widget:
 //
-//   Future showNotification() async{
-//     DateTime now=DateTime.now();
-//     int currentWeekDayOfMonth = now.weekday;
-//     String formattedDate = '${DateFormat('yyyy-MM').format(DateTime.now())}-$currentWeekDayOfMonth';
-//     QuerySnapshot snapshot = await FirebaseFirestore.instance
-//         .collection('users')
-//         .doc(user.uid)
-//         .collection('habits')
-//         .where('habitType', isEqualTo: 'Weekly')
-//         .get();
-//     List<DocumentSnapshot> habits = [];
-//     snapshot.docs.forEach((doc) {
-//       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-//       if (data.containsKey('completed')) {
-//         Map<String, dynamic> completed = data['completed'];
-//         if (completed.containsKey(formattedDate)) {
-//           List<dynamic> dates = completed[formattedDate]['dates'];
-//           if (dates != null && !dates.contains(now.toString().substring(0,10))) {
-//             habits.add(doc);
-//           }
-//         } else {
-//           habits.add(doc);
-//         }
-//       }
-//     });
+// dart
+// Copy code
+// @override
+// Widget build(BuildContext context) {
+// final goalProvider = Provider.of<GoalCreationProvider>(context);
 //
-//     String notificationBody = '';
-//     if (habits.isNotEmpty) {
-//       notificationBody = 'You have ${habits.length} habits to complete today:\n';
-//       habits.forEach((habit) {
-//         notificationBody += '- ${habit['habitName']}\n';
-//       });
-//     } else {
-//       notificationBody = 'You have completed all your habits for today!';
-//     }
-//     print('Notification body: $notificationBody');
-//
-//     var androidDetails=AndroidNotificationDetails('channelId', 'channelName');
-//     var notificationDetails=NotificationDetails(android: androidDetails);
-//     await flutterLocalNotificationsPlugin.show(
-//         0, 'Habit Tracker', notificationBody, notificationDetails);
-//   }
-//
-//
-//   Future showNotifications() async {
-//     var notificationDetails = await flutterLocalNotificationsPlugin
-//         .resolvePlatformSpecificImplementation<
-//         AndroidFlutterLocalNotificationsPlugin>()
-//         ?.getActiveNotifications();
-//     await showNotification();
-//   }
-//
-//   // Future showNotification() async {
-//   //   var androidDetails = AndroidNotificationDetails(
-//   //       'channel_id', 'channel_name');
-//   //   var notificationDetails =
-//   //   NotificationDetails(android: androidDetails);
-//   //   await flutterLocalNotificationsPlugin.show(
-//   //       0, 'Notification Title', 'Notification Body', notificationDetails);
-//   // }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Notification Example'),
-//       ),
-//       body: Center(
-//         child: ElevatedButton(
-//           onPressed: showNotifications,
-//           child: Text('Show Notifications'),
-//         ),
-//       ),
-//     );
-//   }
+// return AlertDialog(
+// title: Row(
+// mainAxisAlignment: MainAxisAlignment.spaceBetween,
+// children: [
+// Text(
+// 'CreateNewGoal'.tr(),
+// style: TextStyle(fontSize: 15),
+// ),
+// IconButton(
+// icon: const Icon(Icons.cancel),
+// onPressed: () {
+// Navigator.push(context,
+// MaterialPageRoute(builder: (context) => HomePage()));
+// },
+// ),
+// ],
+// ),
+// actions: [
+// Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: Form(
+// key: goalProvider.formKey,
+// child: Column(
+// children: [
+// TextFormField(
+// decoration: InputDecoration(
+// labelText: 'YourGoalName'.tr(),
+// border: OutlineInputBorder(
+// borderRadius: BorderRadius.circular(10),
+// ),
+// ),
+// validator: (value) {
+// if (value?.isEmpty ?? true) {
+// return 'PleaseEnterYourGoal'.tr();
 // }
+// return null;
+// },
+// onSaved: (value) {
+// goalProvider.goalName = value
 //
-// scheduling a habit notification  reminder comes every 2 minutes in
-// flutter app either user open app or not open app
+//
+//
+//
+// User
+// continue here:),
+// ElevatedButton(
+// onPressed: () async {
+// if (_formKey.currentState!.validate()) {
+// _formKey.currentState!.save();
+// try {
+// User user =
+// ChatGPT
+// final currentUser = context.read<User>();
+// String? email = currentUser.email;
+//
+// final userDocRef = await FirebaseFirestore.instance
+//     .collection('users')
+//     .where('email', isEqualTo: email)
+//     .limit(1)
+//     .get()
+//     .then((value) => value.docs.first.reference);
+//
+// await userDocRef.collection('goals').add({
+// 'goalName': _goalNameController.text,
+// 'startDate': _selectStartDate,
+// 'endDate': _selectEndDate.text,
+// 'completed': false,
+// 'createdAt': DateTime.now(),
+// });
+//
+// ScaffoldMessenger.of(context)
+//     .showSnackBar(SnackBar(content: Text('NewGoalSavedSuccessfully'.tr())));
+//
+// _goalNameController.clear();
+// _selectEndDate.clear();
+// Navigator.push(context,
+// MaterialPageRoute(builder: (context) => HomePage()));
+//
+//
+//
+//
+//
+// Regenerate response
+// Send a message.
+//
+// Free Research Preview. ChatGPT may produce inaccurate information about people, places, or facts. ChatGPT Mar 23 Version

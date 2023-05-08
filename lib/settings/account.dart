@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:tracker_habit/provider/themeProvider.dart';
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key:key);
@@ -82,17 +84,20 @@ class _MyAccountState extends State<Account> {
   }
   @override
   Widget build(BuildContext context) {
+    return Consumer<ThemeProvider>(
+        builder: (context,themeProvider,child){
+      final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:themeProvider.isDarkMode ? Colors.black :Color(0xFFFFFFFF) ,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: themeProvider.isDarkMode ? Colors.black :Color(0xFFFFFFFF),
         elevation: 0,
         title: Row(
           children: [
             Text(
               'Account'.tr(),
               style: TextStyle(
-                color: Color(0xff4c505b),
+                color: themeProvider.isDarkMode ? Colors.black:Color(0xff4c505b),
                 fontSize: 27,
                 fontWeight: FontWeight.w700,
               ),
@@ -179,6 +184,5 @@ class _MyAccountState extends State<Account> {
         ],
       ),
     );
-  }
-
-}
+  });
+}}

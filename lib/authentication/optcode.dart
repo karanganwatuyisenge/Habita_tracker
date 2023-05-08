@@ -39,8 +39,8 @@ class OtpCode extends StatelessWidget {
                                   builder: (context)
                               {
                                 return AlertDialog(
-                                  title: Text('VerificationCode'.tr()),
-                                  content: Text('CodeEnteredIs $verificationCode'.tr()),
+                                  title: Text('VerificationCode').tr(),
+                                  content: Text('CodeEnteredIs').tr(args: [verificationCode]),
                                 );
                               });
                     }

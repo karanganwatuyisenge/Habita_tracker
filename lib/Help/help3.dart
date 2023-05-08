@@ -1,3 +1,25 @@
+//   testWidgets('navigates to signup page when signup button is pressed', (WidgetTester tester) async {
+//     await tester.pumpWidget(testWidget);
+//
+//     await tester.tap(find.text('SignUp'));
+//     await tester.pumpAndSettle();
+//
+//     expect(find.byType(SignUp), findsOneWidget);
+//   });
+// });
+
+
+// setUp(() {
+//   mockFirebaseAuth = MockFirebaseAuth();
+//   testWidget = MaterialApp(
+//     home: MyLogin(),
+//     routes: {
+//       'signup': (_) => SignUp(),
+//       'home': (_) => Container(),
+//     },
+//   );
+// });
+
 import 'package:flutter/material.dart';
 import 'package:tracker_habit/screen/Goal/createNewGoal.dart';
 import 'package:tracker_habit/screen/habit/createNewHabit.dart';
