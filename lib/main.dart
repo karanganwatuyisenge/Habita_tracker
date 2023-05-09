@@ -7,6 +7,7 @@ import 'package:tracker_habit/authentication/signup.dart';
 import 'package:tracker_habit/firebase_options.dart';
 import 'package:tracker_habit/geolocation.dart';
 import 'package:tracker_habit/homepage.dart';
+import 'package:tracker_habit/provider/GoalScreen/newGoalModel.dart';
 import 'package:tracker_habit/provider/myThemes.dart';
 import 'package:tracker_habit/provider/themeProvider.dart';
 import 'package:tracker_habit/screen/fetchData.dart';
@@ -52,7 +53,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => ThemeProvider()),
+          ChangeNotifierProvider(
+              create: (_) => ThemeProvider(),
+          ),
+          ChangeNotifierProvider(create: (_) => GoalModel()),
         ],
         child: Consumer<ThemeProvider>(
             builder: (context, themeProvider, child) {

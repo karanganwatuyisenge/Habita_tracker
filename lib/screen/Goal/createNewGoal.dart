@@ -3,38 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../homepage.dart';
-
-class GoalProvider extends ChangeNotifier{
-  String _goalName= '';
-  String _selectStartDate= '';
-  String _selectEndDate = '';
-
-  String get goalName => _goalName;
-  String get selectStartDate => _selectStartDate;
-  String get selectEndDate => _selectEndDate;
-
-  setGoalName(String value){
-    _goalName = value;
-    notifyListeners();
-  }
-
-  setSelectStartDate(String value){
-    _selectStartDate=value;
-    notifyListeners();
-  }
-
-  setSelectEndDate(String value){
-    _selectEndDate=value;
-    notifyListeners();
-  }
-
-  clearFields(){
-    _goalName = '';
-    _selectEndDate='';
-    notifyListeners();
-  }
-}
+import '../../provider/GoalScreen/newGoalModel.dart';
 
 class NewGoal extends StatefulWidget {
 
@@ -56,10 +27,11 @@ class _NewGoal extends State<NewGoal> {
 
   TextEditingController _selectEndDate = TextEditingController();
 
+  void SaveGoal(BuildContext context) async {
+    final goalModel = Provider.of<GoalModel>(context, listen: false);
 
-  void SaveGoal() async {
-    var _selectStartingDate = DateTime.now();
-    var _selectStartDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    var selectStartingDate = DateTime.now();
+    var selectStartDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       try {
@@ -73,48 +45,54 @@ class _NewGoal extends State<NewGoal> {
             .get()
             .then((value) => value.docs.first.reference);
 
+
+        goalModel.setGoalName(_goalNameController.text);
+        goalModel.setStartDate(selectStartDate);
+        goalModel.setEndDate(_selectEndDate.text);
+
         await userDocRef.collection('goals').add({
-          'goalName': _goalNameController.text,
-          'startDate': _selectStartDate,
-          'endDate': _selectEndDate.text,
+          'goalName': goalModel.goalName,
+          'startDate': goalModel.startDate,
+          'endDate': goalModel.endDate,
           'completed': false,
           'createdAt': DateTime.now(),
         });
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('NewGoalSavedSuccessfully'.tr())));
 
-        setState(() {
-          _goalNameController.clear();
-          _selectEndDate.clear();
-        });
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => HomePage()));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('NewGoalSavedSuccessfully'.tr())));
+
+        _goalNameController.clear();
+        _selectEndDate.clear();
+
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
       } catch (e) {
         print('Error Saving Data: Se');
       }
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     currentDate = DateTime.now();
     formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-
-    return AlertDialog(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'CreateNewGoal'.tr(), style: TextStyle(fontSize: 15),),
-          IconButton(
-            icon: const Icon(Icons.cancel),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomePage()));
-            },
-          ),
-        ],
-      ),
+    final goalModel = GoalModel();
+      return AlertDialog(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'CreateNewGoal'.tr(), style: TextStyle(fontSize: 15),),
+            IconButton(
+              icon: const Icon(Icons.cancel),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePage()));
+              },
+            ),
+          ],
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -123,66 +101,72 @@ class _NewGoal extends State<NewGoal> {
               child: Column(
                 children: [
                   TextFormField(
-                      controller: _goalNameController,
-                      decoration: InputDecoration(
-                        labelText: 'YourGoalName'.tr(),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                    controller: _goalNameController,
+                    decoration: InputDecoration(
+                      labelText: 'YourGoalName'.tr(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      validator: (value) {
-                        if (value?.isEmpty ?? true) {
-                          return 'PleaseEnterYourGoal'.tr();
-                        }
-                        return null;
-                      }),
+                    ),
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'PleaseEnterYourGoal'.tr();
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      goalModel.setGoalName(value);
+                    },
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
                     readOnly: true,
                     decoration: InputDecoration(
-                      border:OutlineInputBorder(
+                      border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       labelText: "$formattedDate",
                     ),
-
                   ),
                   SizedBox(height: 20,),
                   TextFormField(
                     controller: _selectEndDate,
                     decoration: InputDecoration(
-                      border:OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      labelText: "SelectEndDate".tr(),
-                      suffixIcon: Icon(Icons.calendar_today_outlined),
+                      labelText: 'Select End Date',
                     ),
-                    onTap: () async{
-                      DateTime? pickedDate= await showDatePicker(
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime(2022),
                         lastDate: DateTime(2025),
                       );
-                      if(pickedDate !=null){
-                        setState(() {
-                          _selectEndDate.text = DateFormat("yyyy-MM-dd").format(pickedDate);
-                          _selectedGoalType=_selectEndDate.text;
-                        });
+                      if (pickedDate != null) {
+                        _selectEndDate.text = DateFormat("yyyy-MM-dd").format(pickedDate);
+                        _selectedGoalType=_selectEndDate.text;
+                          //goalModel.setEndDate(DateFormat("yyyy-MM-dd").format(pickedDate));
+                          //_selectEndDate.text = context.read<GoalModel>().endDate;
                       }
                     },
-
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'PleaseEnterYourGoal'.tr();
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 20,),
+
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
+                      minimumSize: Size.fromHeight(50),
                     ),
-                    onPressed: () {
-                      SaveGoal();},
-                    child: const Text('CreateNew').tr(),
+                    onPressed: (){
+                      SaveGoal(context);
+                    },
+                    child: Text('CreateNew').tr(),
                   )
                 ],
               ),
@@ -194,4 +178,3 @@ class _NewGoal extends State<NewGoal> {
   }
 
 }
-
