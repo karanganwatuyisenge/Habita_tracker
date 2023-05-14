@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tracker_habit/provider/HabitScreen/newHabitModel.dart';
 import 'package:tracker_habit/provider/themeProvider.dart';
 import 'package:tracker_habit/screen/Goal/goalScreens.dart';
 import 'package:tracker_habit/screen/createAchievement.dart';
 import 'package:tracker_habit/screen/fetchData.dart';
+import 'package:tracker_habit/screen/habit/habitAllScreens.dart';
 import 'package:tracker_habit/screen/habit/habitScreen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'settings/setting.dart';
@@ -34,7 +36,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     getCurrentUser();
-    completedToday();
     getHabitCount();
     tz.initializeTimeZones();
     //showNotification();
@@ -46,14 +47,30 @@ class _HomePageState extends State<HomePage> {
 //         const Duration(minutes: 1), 0, showNotification,allowWhileIdle: true );
 // print("Timer scheduled: $s");
 //   }
+
+
+  // Future<void> getHabitCount(BuildContext context) async{
+  //   final habitsRef = FirebaseFirestore.instance
+  //       .collection('users').doc(user.uid).collection('habits');
+  //
+  //   final querySnapshot = await habitsRef.get();
+  //   Provider.of<HabitModel>(context,listen: false).updateHabitCount(querySnapshot.size);
+  //}
   Future<void> getHabitCount() async {
     CollectionReference habitsRef = FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
         .collection('habits');
-    QuerySnapshot querySnapshot = await habitsRef.get();
-    setState(() {
-      habitCount = querySnapshot.size;
+    // QuerySnapshot querySnapshot = await habitsRef.get();
+    // setState(() {
+    //   habitCount = querySnapshot.size;
+    // });
+
+    habitsRef.snapshots().listen((event) {
+      setState(() {
+        habitCount = event.size;
+      });
+      completedToday();
     });
   }
 
@@ -334,7 +351,7 @@ class _HomePageState extends State<HomePage> {
                       // IconButton(
                       //   onPressed: () {
                       //     Navigator.push(context,
-                      //         MaterialPageRoute(builder: (context) => SeeAllHabit()));
+                      //         MaterialPageRoute(builder: (context) => HabitAllScreens()));
                       //   },
                       //   icon: const Icon(Icons.show_chart),
                       // ),

@@ -108,7 +108,6 @@ class _MySignupState extends State<SignUp> {
     return cities;
   }
   void _Register() async {
-    print("Signing up...");
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text,
@@ -123,17 +122,20 @@ class _MySignupState extends State<SignUp> {
         'region': _selectedRegion?.name,
         'city': _selectedCity?.name,
       });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Saved successfully')));
       Navigator.push(context,
-      MaterialPageRoute(builder: (context) => SignUp())
+      MaterialPageRoute(builder: (context) => MyLogin())
       );
     }
     on FirebaseAuthException catch (e) {
       print("Exception here ${e.code}");
       if (e.code == 'weak-password') {
         print('The password provided is too weak');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('The password provided is too weak')));
       }
       else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('The account already exists for that email')));
       } else {
         print(e.message);
       }
@@ -203,6 +205,7 @@ class _MySignupState extends State<SignUp> {
                     height: 60,
                   ),
                   TextFormField(
+                    key: Key('nameField'),
                       controller: _nameController,
                       decoration: InputDecoration(
                         labelText: 'Name'.tr(),
@@ -220,6 +223,7 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   TextFormField(
+                    key: Key('emailField'),
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
@@ -239,6 +243,7 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                    DropdownButtonFormField<Country>(
+                     key: Key('countryField'),
 
                     decoration: InputDecoration(
                         labelText: 'Country'.tr(),
@@ -265,6 +270,7 @@ class _MySignupState extends State<SignUp> {
                   ),
 
                   DropdownButtonFormField<Region>(
+                    key: Key('regionField'),
 
                     decoration: InputDecoration(
                         labelText: 'Region'.tr(),
@@ -295,6 +301,7 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   DropdownButtonFormField<City>(
+                    key: Key('cityField'),
                     decoration: InputDecoration(
                         labelText: 'City'.tr(),
                         border: OutlineInputBorder(
@@ -320,6 +327,7 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   TextFormField(
+                    key: Key('passwordField'),
                     controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -338,6 +346,7 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   TextFormField(
+                    key: Key('confirmField'),
                     controller: _confirmPasswordController,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -368,7 +377,10 @@ class _MySignupState extends State<SignUp> {
                       }
                     },
                     child: Text('SignUp'.tr()),
-                  )
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                 ],
               ),
             ),

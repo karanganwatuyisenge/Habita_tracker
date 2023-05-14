@@ -25,8 +25,8 @@ class _MySettingState extends State<Setting> {
   Language? _selectedLanguage;
 
   var language = [
-    {"name": "France", "icon": '🇺🇸', "locale": const Locale('fr', 'FR')},
-    {"name": "English", "icon": '🇫🇷', "locale": const Locale('en', 'US')},
+    {"name": "France", "icon": '🇫🇷' ,"locale": const Locale('fr', 'FR')},
+    {"name": "English", "icon": '🇺🇸', "locale": const Locale('en', 'US')},
   ];
 
   @override
@@ -51,14 +51,39 @@ class _MySettingState extends State<Setting> {
     });
   }
 
-  Future<void> _signOut(BuildContext context) async {
-    await _auth.signOut();
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const MyLogin()),
-          (route) => false,
+  Future<bool?> _showLogoutDialog(BuildContext context) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you sure you want to logout?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
     );
   }
+
+  Future<void> _signOut(BuildContext context) async {
+    bool? shouldLogout = await _showLogoutDialog(context);
+    if (shouldLogout == true) {
+      await _auth.signOut();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const MyLogin()),
+            (route) => false,
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,21 +98,38 @@ class _MySettingState extends State<Setting> {
           elevation: 0,
         ),
         body: ListView(children: [
-          ListTile(
-            title: Text('Account'.tr()),
-            trailing: IconButton(
-              onPressed: () {
-                context.setLocale(Locale('fr', 'FR'));
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Account()));
-              },
-              icon: const Icon(Icons.arrow_forward_ios),
+
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Account()),
+              );
+            },
+            child: ListTile(
+              title: Text('Account'),
+              trailing: IconButton(
+                onPressed: () {
+                  //context.setLocale(Locale('fr', 'FR'));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Account()),
+                  );
+                },
+                icon: const Icon(Icons.arrow_forward_ios),
+              ),
             ),
           ),
-          ListTile(
-            title: Text('AboutApp'.tr()),
-            trailing: Icon(Icons.arrow_forward_ios),
+
+          GestureDetector(
+            onTap: () {
+            },
+            child: ListTile(
+              title: Text('About App'),
+              trailing: Icon(Icons.arrow_forward_ios),
+            ),
           ),
+
           GestureDetector(
             onTap: () {
               showDialog(
@@ -138,16 +180,18 @@ class _MySettingState extends State<Setting> {
               ),
             ),
           ),
-
-          ListTile(
-            title: Text('Logout'.tr()),
-            trailing: IconButton(
-              onPressed: () async {
-                await _signOut(context);
-              },
-              icon: const Icon(Icons.logout),
+          GestureDetector(
+            onTap: () {
+              _signOut(context);
+            },
+            child: ListTile(
+              title: Text('Logout'),
+              trailing: IconButton(
+                onPressed: () => _signOut(context),
+                icon: Icon(Icons.logout),
+              ),
             ),
-          ),
+          )
         ]),
 
       bottomNavigationBar: Container(

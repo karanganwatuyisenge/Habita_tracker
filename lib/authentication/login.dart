@@ -21,11 +21,14 @@ class _MyLoginState extends State<MyLogin> {
   String _errorMessage='';
   String _userName = '';
   bool showvalue=false;
+  bool isLoading=false;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final auth = FirebaseAuth.instance;
 
   void Login() async{
-    //print('hello');
+    setState(() {
+      isLoading = true;
+    });
     try{
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: _emailController.text,
@@ -36,15 +39,19 @@ class _MyLoginState extends State<MyLogin> {
     }
     on FirebaseAuthException catch(e){
       if(e.code == 'user-not-found'){
-        print('No user found for that email');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No user found for that email')));
       }
       else if(e.code == 'wrong-password'){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('WrongPassword'.tr())));
-        print('Wrong password provided for that user.');
       }
       else{
         print('${e.message}');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please Fill All Fields')));
       }
+    }finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
   @override
@@ -169,12 +176,31 @@ class _MyLoginState extends State<MyLogin> {
                       children: [
                         Container(
                           width:280,
-                          child: ElevatedButton(
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent)),
-                            child:Text('LogIn'.tr()),
-                            onPressed: (){
-                              Login();
-                            }),
+                          child: Stack(
+                            children:[
+                              Center(
+                                child: SizedBox(
+                                  width: 280,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent),
+                                    ),
+                                    child: Text('LogIn'.tr()),
+                                    onPressed: () {
+                                      Login();
+                                    },
+                                  ),
+                                ),
+                              ),
+
+                              Visibility(
+                                visible: isLoading,
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ]
+                          ),
 
                           ),
                       ],

@@ -19,7 +19,6 @@ class _GoalScreens extends State<GoalScreens>{
   bool showvalue = false;
   User user=FirebaseAuth.instance.currentUser!;
 
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
@@ -29,9 +28,6 @@ class _GoalScreens extends State<GoalScreens>{
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            // color: Colors.grey.shade200,
-            // decoration: BoxDecoration(
-            //   borderRadius: BorderRadius.circular(5),
             color: themeProvider.isDarkMode ? Colors.black : Color(0xFFFFFFFF),
           ),
           child: Column(

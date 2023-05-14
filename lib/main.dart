@@ -8,6 +8,7 @@ import 'package:tracker_habit/firebase_options.dart';
 import 'package:tracker_habit/geolocation.dart';
 import 'package:tracker_habit/homepage.dart';
 import 'package:tracker_habit/provider/GoalScreen/newGoalModel.dart';
+import 'package:tracker_habit/provider/HabitScreen/newHabitModel.dart';
 import 'package:tracker_habit/provider/myThemes.dart';
 import 'package:tracker_habit/provider/themeProvider.dart';
 import 'package:tracker_habit/screen/fetchData.dart';
@@ -53,23 +54,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-              create: (_) => ThemeProvider(),
-          ),
+          ChangeNotifierProvider(create: (_) => ThemeProvider()),
           ChangeNotifierProvider(create: (_) => GoalModel()),
+          ChangeNotifierProvider(create: (_) => HabitModel()),
+
         ],
         child: Consumer<ThemeProvider>(
             builder: (context, themeProvider, child) {
-              return EasyLocalization(
-                  supportedLocales: const [
-                  Locale('en', 'US'),
-              Locale('fr', 'FR'),
-              // Locale('rw', 'RW'),
-              // Locale('Kinyarwanda','rw', 'RW'),
-              ],
-              path: 'assets/translations',
-              fallbackLocale: const Locale('en', 'US'),
-              child: MaterialApp(
+              return MaterialApp(
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
               locale: context.locale,
@@ -90,7 +82,7 @@ class MyApp extends StatelessWidget {
               'setting':(context) => Setting()
               },
               home: HomePage(),
-              ));
+              );
             }));
   }
 }

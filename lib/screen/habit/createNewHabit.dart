@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tracker_habit/provider/HabitScreen/newHabitModel.dart';
 import '../../homepage.dart';
 import '../../provider/themeProvider.dart';
 
@@ -40,7 +41,9 @@ class _NewHabit extends State<NewHabit>{
     }
 
   }
-  void SaveHabit() async{
+
+  void SaveHabit(BuildContext context) async{
+    final habitModel=Provider.of<HabitModel>(context,listen: false);
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
       try{
@@ -59,18 +62,24 @@ class _NewHabit extends State<NewHabit>{
         DateTime now = DateTime.now();
         if (_selectedHabitType == 'Monthly') {
           habitPeriod = DateFormat('yyyy-MM').format(DateTime.now());
-        } else if (_selectedHabitType == 'Weekly') {
+        }
+        else if (_selectedHabitType == 'Weekly') {
           int currentWeekDayOfMonth = now.weekday;
           habitPeriod = '${DateFormat('yyyy-MM').format(DateTime.now())}-$currentWeekDayOfMonth';
-        } else {
+        }
+        else {
           habitPeriod = DateFormat('yyyy-MM-dd').format(DateTime.now());
         }
 
+        habitModel.setHabitName(_habitNameController.text);
+        habitModel.setHabitFrequency(otherSelectInt);
+        habitModel.setHabitType(_selectedHabitType!);
+
         if(_selectedHabitType=='Monthly' && _selectedFrequency=='Other'){
           await userDocRef.collection('habits').add({
-            'habitName': _habitNameController.text,
-            'habitType': _selectedHabitType,
-            'habitFrequency': otherSelectInt,
+            'habitName': habitModel.habitName,
+            'habitType': habitModel.habitType,
+            'habitFrequency': habitModel.setHabitFrequency(otherSelectInt),
             'createdAt': DateTime.now(),
             'completed': {
               if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
@@ -80,9 +89,9 @@ class _NewHabit extends State<NewHabit>{
         }
         else if(_selectedHabitType=='Monthly' && _selectedFrequency!='Other'){
           await userDocRef.collection('habits').add({
-            'habitName': _habitNameController.text,
-            'habitType': _selectedHabitType,
-            'habitFrequency':selectedFrequencyInt,
+            'habitName': habitModel.habitName,
+            'habitType': habitModel.habitType,
+            'habitFrequency': habitModel.setHabitFrequency(selectedFrequencyInt),
             'createdAt': DateTime.now(),
             'completed': {
               if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
@@ -92,9 +101,9 @@ class _NewHabit extends State<NewHabit>{
         }
        else if(_selectedHabitType=='Weekly'){
           await userDocRef.collection('habits').add({
-            'habitName': _habitNameController.text,
-            'habitType': _selectedHabitType,
-            'habitFrequency': selectedFrequencyInt,
+            'habitName': habitModel.habitName,
+            'habitType': habitModel.habitType,
+            'habitFrequency': habitModel.setHabitFrequency(selectedFrequencyInt),
             'createdAt': DateTime.now(),
             'completed': {
               if (habitPeriod != null) habitPeriod: {'count': 0, 'dates': [],
@@ -116,11 +125,9 @@ class _NewHabit extends State<NewHabit>{
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('NewHabitSavedSuccessfully'.tr())));
         }
 
-
-        setState(() {
           _habitNameController.clear();
           _otherController.clear();
-        });
+
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => HomePage())
         );
@@ -136,9 +143,9 @@ class _NewHabit extends State<NewHabit>{
 
   @override
   Widget build(BuildContext context) {
+    final habitModel = Provider.of<HabitModel>(context, listen: false);
     return Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
-          final themeProvider = Provider.of<ThemeProvider>(context);
           return AlertDialog(
               content: SingleChildScrollView(
                 child: Column(
@@ -254,7 +261,7 @@ class _NewHabit extends State<NewHabit>{
                             minimumSize: const Size.fromHeight(50),
                           ),
                           onPressed: () {
-                            SaveHabit();
+                            SaveHabit(context);
                           },
                           child: Text('CreateNew'.tr()),
                         )

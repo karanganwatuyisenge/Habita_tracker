@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:tracker_habit/provider/themeProvider.dart';
+import 'package:tracker_habit/settings/setting.dart';
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key:key);
@@ -18,6 +19,7 @@ class _MyAccountState extends State<Account> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool isLoading = true;
 
   Future<void> _updateAccount() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -26,7 +28,6 @@ class _MyAccountState extends State<Account> {
     final password = _passwordController.text.trim();
     final confirmPassword = _confirmPasswordController.text.trim();
 
-    // Only update fields with non-empty values
     if (name.isNotEmpty) {
       await FirebaseFirestore.instance
           .collection('users')
@@ -71,6 +72,9 @@ class _MyAccountState extends State<Account> {
         _nameController.text = data['name'] ?? '';
         _emailController.text = user.email ?? '';
       }
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 
@@ -82,24 +86,40 @@ class _MyAccountState extends State<Account> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-        builder: (context,themeProvider,child){
-      final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
-      backgroundColor:themeProvider.isDarkMode ? Colors.black :Color(0xFFFFFFFF) ,
+      backgroundColor: themeProvider.isDarkMode ? Colors.black : Color(
+          0xFFFFFFFF),
       appBar: AppBar(
-        backgroundColor: themeProvider.isDarkMode ? Colors.black :Color(0xFFFFFFFF),
+        backgroundColor: themeProvider.isDarkMode ? Colors.black : Color(
+            0xFFFFFFFF),
         elevation: 0,
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: themeProvider.isDarkMode ? Colors.white : Colors.black,
+                size: 27,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Setting()),
+                );
+              },
+            ),
             Text(
               'Account'.tr(),
               style: TextStyle(
-                color: themeProvider.isDarkMode ? Colors.black:Color(0xff4c505b),
                 fontSize: 27,
                 fontWeight: FontWeight.w700,
+                color: themeProvider.isDarkMode ? Colors.white : Colors.black,
               ),
             ),
           ],
@@ -109,7 +129,10 @@ class _MyAccountState extends State<Account> {
         children: [
           Container(
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * 0.05,
+              top: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.05,
               right: 35,
               left: 35,
             ),
@@ -181,8 +204,146 @@ class _MyAccountState extends State<Account> {
               ],
             ),
           ),
+          isLoading
+              ? Container(
+            color: Colors.black54,
+            child: Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            ),
+          )
+              : SizedBox(),
         ],
       ),
     );
-  });
-}}
+  }
+}
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer<ThemeProvider>(
+//         builder: (context,themeProvider,child){
+//       final themeProvider = Provider.of<ThemeProvider>(context);
+//     return Scaffold(
+//       backgroundColor:themeProvider.isDarkMode ? Colors.black :Color(0xFFFFFFFF) ,
+//       appBar: AppBar(
+//         backgroundColor: themeProvider.isDarkMode ? Colors.black :Color(0xFFFFFFFF),
+//         elevation: 0,
+//         title:Row(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           children: [
+//             IconButton(
+//               icon: Icon(
+//                 Icons.arrow_back,
+//                 color: themeProvider.isDarkMode ? Colors.white : Colors.black,
+//                 size: 27,
+//               ),
+//               onPressed: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(builder: (context) => Setting()),
+//                 );
+//               },
+//             ),
+//
+//             Text('Account'.tr(),
+//                 style: TextStyle(fontSize: 27,
+//                     fontWeight: FontWeight.w700,
+//                     color: themeProvider.isDarkMode? Colors.white:Colors.black)),
+//           ],
+//         ),
+//         // title: Row(
+//         //   children: [
+//         //     Text(
+//         //       'Account'.tr(),
+//         //       style: TextStyle(
+//         //         color: themeProvider.isDarkMode ? Colors.black:Color(0xff4c505b),
+//         //         fontSize: 27,
+//         //         fontWeight: FontWeight.w700,
+//         //       ),
+//         //     ),
+//         //   ],
+//         // ),
+//       ),
+//       body: Stack(
+//         children: [
+//           Container(
+//             padding: EdgeInsets.only(
+//               top: MediaQuery.of(context).size.height * 0.05,
+//               right: 35,
+//               left: 35,
+//             ),
+//             child: Column(
+//               children: [
+//                 Form(
+//                   key: _formKey,
+//                   child: Expanded(
+//                     child: ListView(
+//                       children: [
+//                         TextFormField(
+//                           controller: _nameController,
+//                           decoration: InputDecoration(
+//                             border: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(10),
+//                             ),
+//                             labelText: 'Name'.tr(),
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: 30,
+//                         ),
+//                         TextFormField(
+//                           controller: _emailController,
+//                           decoration: InputDecoration(
+//                             border: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(10),
+//                             ),
+//                             labelText: 'Email'.tr(),
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: 30,
+//                         ),
+//                         TextFormField(
+//                           controller: _passwordController,
+//                           obscureText: true,
+//                           decoration: InputDecoration(
+//                             border: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(10),
+//                             ),
+//                             labelText: 'Password'.tr(),
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: 30,
+//                         ),
+//                         TextFormField(
+//                           controller: _confirmPasswordController,
+//                           obscureText: true,
+//                           decoration: InputDecoration(
+//                             border: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(10),
+//                             ),
+//                             labelText: 'ConfirmPassword'.tr(),
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: 40,
+//                         ),
+//                         ElevatedButton(
+//                           onPressed: _updateAccount,
+//                           child: Text('Update'.tr()),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   });
+// }}

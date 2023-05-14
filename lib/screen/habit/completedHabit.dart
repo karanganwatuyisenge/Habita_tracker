@@ -16,7 +16,7 @@ class _CompletedHabitState extends State<CompletedHabit> {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot<Map<String,dynamic>>>(
         stream: FirebaseFirestore.instance.collection('users')
-            .doc(user.uid).collection('goals').where("completed",isEqualTo: true).snapshots(),
+            .doc(user.uid).collection('habits').snapshots(),
         builder: (context, streamSnapshot){
           if(streamSnapshot.connectionState==ConnectionState.waiting){
             return const Center(child: CircularProgressIndicator());

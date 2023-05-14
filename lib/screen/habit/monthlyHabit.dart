@@ -1,3 +1,85 @@
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:easy_localization/easy_localization.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// class MonthlyHabit extends StatefulWidget {
+//   const MonthlyHabit({Key? key}) : super(key: key);
+//
+//   @override
+//   State<MonthlyHabit> createState() => _MonthlyHabitState();
+// }
+//
+// class _MonthlyHabitState extends State<MonthlyHabit> {
+//   User user = FirebaseAuth.instance.currentUser!;
+//
+//   Future<List<DocumentSnapshot<Object?>>> showWeeklyHabit() async {
+//     DateTime now = DateTime.now();
+//     String formattedDateMonthly = DateFormat('yyyy-MM').format(DateTime.now());
+//     String formattedDaily = DateFormat('yyyy-MM-dd').format(DateTime.now());
+//
+//     QuerySnapshot monthlySnapshot = await FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(user.uid)
+//         .collection('habits')
+//         .where('habitType', isEqualTo: 'Monthly')
+//         .get();
+//
+//     List<DocumentSnapshot> habits = [];
+//
+//     monthlySnapshot.docs.forEach((doc) {
+//       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+//       if (data.containsKey('completed')) {
+//         Map<String, dynamic> completed = data['completed'];
+//         if (completed.containsKey(formattedDateMonthly)) {
+//           List<dynamic> dates = completed[formattedDateMonthly]['dates'];
+//           if (dates != null &&
+//               !dates.contains(now.toString().substring(0, 10))) {
+//             habits.add(doc);
+//           }
+//         } else {
+//           habits.add(doc);
+//         }
+//       }
+//     });
+//     return habits;
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return FutureBuilder<List<DocumentSnapshot<Object?>>>(
+//       future: showWeeklyHabit(),
+//       builder: (context, snapshot) {
+//         if (snapshot.connectionState == ConnectionState.waiting) {
+//           return Center(child: CircularProgressIndicator());
+//         } else if (snapshot.hasData) {
+//           List<DocumentSnapshot<Object?>> habits = snapshot.data!;
+//           if (habits.isEmpty) {
+//             print('No habits found.');
+//             return Center(child: Text('No habits found.'));
+//           }
+//           return ListView.builder(
+//             itemCount: habits.length,
+//             itemBuilder: (context, index) {
+//               Map<String, dynamic> data = habits[index].data() as Map<String, dynamic>;
+//               return ListTile(
+//                 title: Text(data['habitName']),
+//               );
+//             },
+//           );
+//         } else if (snapshot.hasError) {
+//           print('Error: ${snapshot.error}');
+//           return Center(child: Text('${snapshot.error}'));
+//         } else {
+//           print('No data found.');
+//           return Center(child: Text('No data found.'));
+//         }
+//       },
+//     );
+//   }
+// }
+//
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,7 +120,8 @@ class _MonthlyHabitState extends State<MonthlyHabit> {
             return Center(
                 child:
                 Text("ThereIsAnError: ${streamSnapshot.error}".tr()));
-          } else if (streamSnapshot.hasData) {
+          }
+          else if (streamSnapshot.hasData) {
             var habits = streamSnapshot.data!.docs;
 
             return habits.isEmpty
