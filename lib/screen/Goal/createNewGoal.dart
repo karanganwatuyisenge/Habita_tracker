@@ -123,6 +123,7 @@ class _NewGoal extends State<NewGoal> {
                   ),
                   TextFormField(
                     readOnly: true,
+                    enabled: false,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -133,6 +134,7 @@ class _NewGoal extends State<NewGoal> {
                   SizedBox(height: 20,),
                   TextFormField(
                     controller: _selectEndDate,
+                    readOnly: true, // Set readOnly to true to prevent user input
                     decoration: InputDecoration(
                       labelText: 'Select End Date',
                     ),
@@ -145,9 +147,7 @@ class _NewGoal extends State<NewGoal> {
                       );
                       if (pickedDate != null) {
                         _selectEndDate.text = DateFormat("yyyy-MM-dd").format(pickedDate);
-                        _selectedGoalType=_selectEndDate.text;
-                          //goalModel.setEndDate(DateFormat("yyyy-MM-dd").format(pickedDate));
-                          //_selectEndDate.text = context.read<GoalModel>().endDate;
+                        _selectedGoalType = _selectEndDate.text;
                       }
                     },
                     validator: (value) {
@@ -157,6 +157,33 @@ class _NewGoal extends State<NewGoal> {
                       return null;
                     },
                   ),
+
+                  // TextFormField(
+                  //   controller: _selectEndDate,
+                  //   decoration: InputDecoration(
+                  //     labelText: 'Select End Date',
+                  //   ),
+                  //   onTap: () async {
+                  //     DateTime? pickedDate = await showDatePicker(
+                  //       context: context,
+                  //       initialDate: DateTime.now(),
+                  //       firstDate: DateTime(2022),
+                  //       lastDate: DateTime(2025),
+                  //     );
+                  //     if (pickedDate != null) {
+                  //       _selectEndDate.text = DateFormat("yyyy-MM-dd").format(pickedDate);
+                  //       _selectedGoalType=_selectEndDate.text;
+                  //         //goalModel.setEndDate(DateFormat("yyyy-MM-dd").format(pickedDate));
+                  //         //_selectEndDate.text = context.read<GoalModel>().endDate;
+                  //     }
+                  //   },
+                  //   validator: (value) {
+                  //     if (value?.isEmpty ?? true) {
+                  //       return 'PleaseEnterYourGoal'.tr();
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   SizedBox(height: 20,),
 
                   ElevatedButton(

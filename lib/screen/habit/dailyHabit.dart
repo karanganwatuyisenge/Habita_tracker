@@ -82,7 +82,12 @@ class _DailyHabitState extends State<DailyHabit> {
                   children: habits.map((habit) {
                     // int indexes = habits.indexOf(habit);
                     int frequency=habit['habitFrequency'];
-                    int count=habit['completed.$formattedNow.count'];
+                    int count=0;
+                    try {
+                      count=habit.get('completed.$formattedNow.count');
+                    }catch(e){
+                      count=0;
+                    }
                     int remaining=frequency-count;
                     double percentage = frequency == 0 || count == 0 ? 0.0 : count / frequency;
                     return Padding(
@@ -149,7 +154,7 @@ class _DailyHabitState extends State<DailyHabit> {
                                         fontSize: 20),
                                   ),
                                   trailing: Checkbox(
-                                    value: false,
+                                    value: count!=0,
                                     onChanged: (bool? newValue) async {
                                       final docRef = FirebaseFirestore
                                           .instance
@@ -160,57 +165,8 @@ class _DailyHabitState extends State<DailyHabit> {
                                       final currentDate = DateTime.now();
                                       DateTime dateTime = DateTime.now();
                                       String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+
                                       if (habit['habitType'] ==
-                                          "Weekly") {
-                                        DateTime now = DateTime.now();
-                                        int currentWeekDayOfMonth =
-                                            now.weekday;
-                                        habitPeriod =
-                                        '${DateFormat('yyyy-MM').format(DateTime.now())}-$currentWeekDayOfMonth';
-                                        try {
-                                          await docRef.update({
-                                            "completed.$habitPeriod.dates":
-                                            FieldValue.arrayUnion([
-                                              formattedDate.toString()
-                                            ]),
-                                            "completed.$habitPeriod.count":
-                                            newValue == true
-                                                ? FieldValue
-                                                .increment(1)
-                                                : FieldValue
-                                                .increment(-1),
-                                          });
-                                          //print("Update successful");
-                                        } catch (e) {
-                                          print(
-                                              "Error updating document: $e");
-                                        }
-                                      }
-                                      else if (habit['habitType'] ==
-                                          "Monthly") {
-                                        final yearMonth =
-                                        DateFormat('yyyy-MM').format(DateTime.now());
-                                        //print("yearMonth: $yearMonth");
-                                        try {
-                                          await docRef.update({
-                                            "completed.$yearMonth.dates":
-                                            FieldValue.arrayUnion([
-                                              formattedDate.toString()
-                                            ]),
-                                            "completed.$yearMonth.count":
-                                            newValue == true
-                                                ? FieldValue
-                                                .increment(1)
-                                                : FieldValue
-                                                .increment(-1),
-                                          });
-                                          //print("Update successful");
-                                        } catch (e) {
-                                          print(
-                                              "Error updating document: $e");
-                                        }
-                                      }
-                                      else if (habit['habitType'] ==
                                           "Daily") {
                                         final yearDaily =
                                         DateFormat('yyyy-MM-dd')

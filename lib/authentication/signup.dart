@@ -31,7 +31,10 @@ class _MySignupState extends State<SignUp> {
   Region? _selectedRegion;
   List<City> _city = [];
   City? _selectedCity;
-  bool _isLoading = false;
+  bool _isLoadingSignUp = false;
+  bool _isLoadingCountry = false;
+  bool _isLoadingRegion = false;
+
 
   @override
   void initState() {
@@ -107,7 +110,7 @@ class _MySignupState extends State<SignUp> {
     });
     return cities;
   }
-  void _Register() async {
+  Future<bool> _Register() async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text,
@@ -143,6 +146,7 @@ class _MySignupState extends State<SignUp> {
     catch (e) {
       print(e);
     }
+    return true;
   }
 
 
@@ -242,7 +246,9 @@ class _MySignupState extends State<SignUp> {
                   const SizedBox(
                     height: 20,
                   ),
-                   DropdownButtonFormField<Country>(
+                  _isLoadingCountry
+                      ? Center(child: CircularProgressIndicator())
+                      : DropdownButtonFormField<Country>(
                      key: Key('countryField'),
 
                     decoration: InputDecoration(
@@ -256,20 +262,32 @@ class _MySignupState extends State<SignUp> {
                         .map((e) =>
                         DropdownMenuItem(value: e, child: Text(e.name)))
                         .toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedCountry = newValue;
-                        _isLoading=true;
-                      });
-                      fetchRegions(newValue!.wikiDataId);
+                    // onChanged: (newValue) {
+                    //   setState(() {
+                    //     _selectedCountry = newValue;
+                    //     _isLoading=true;
+                    //   });
+                    //   fetchRegions(newValue!.wikiDataId);
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedCountry = newValue;
+                          _isLoadingCountry = true;
+                        });
+                        fetchRegions(newValue!.wikiDataId).then((_) {
+                          setState(() {
+                            _isLoadingCountry = false;
+                          });
+                        });
+
                     },
                     validator: (value) => value == null ? 'PleaseSelectCountry' .tr(): null,
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-
-                  DropdownButtonFormField<Region>(
+                  _isLoadingRegion
+                      ? Center(child: CircularProgressIndicator())
+                      : DropdownButtonFormField<Region>(
                     key: Key('regionField'),
 
                     decoration: InputDecoration(
@@ -288,13 +306,26 @@ class _MySignupState extends State<SignUp> {
                     onChanged: (newValue) async {
                       setState(() {
                         _selectedRegion = newValue;
+                        _isLoadingRegion = true;
                       });
-                      var cities = await fetchCities(
-                          newValue!.isoCode, newValue.countryCode);
+                      var cities = await fetchCities(newValue!.isoCode, newValue.countryCode);
                       setState(() {
                         _city = cities;
+                        _isLoadingRegion = false;
                       });
                     },
+
+
+                    // onChanged: (newValue) async {
+                    //   setState(() {
+                    //     _selectedRegion = newValue;
+                    //   });
+                    //   var cities = await fetchCities(
+                    //       newValue!.isoCode, newValue.countryCode);
+                    //   setState(() {
+                    //     _city = cities;
+                    //   });
+                    // },
                     validator: (value) => value == null ? 'PleaseSelectRegion'.tr() : null,
                   ),
                   const SizedBox(
@@ -367,20 +398,47 @@ class _MySignupState extends State<SignUp> {
                   const SizedBox(
                     height: 40,
                   ),
-                  ElevatedButton(
+                  _isLoadingSignUp
+                      ? Center(child: CircularProgressIndicator())
+                      : ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50), // NEW
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        _Register();
+                        setState(() {
+                          _isLoadingSignUp = true;
+                        });
+                        _Register().then((success) {
+                          setState(() {
+                            _isLoadingSignUp = false;
+                          });
+                          if (success) {
+                            // Handle successful registration
+                          } else {
+                            // Handle registration error
+                          }
+                        });
                       }
                     },
                     child: Text('SignUp'.tr()),
                   ),
+
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     minimumSize: const Size.fromHeight(50), // NEW
+                  //   ),
+                  //   onPressed: () {
+                  //     if (_formKey.currentState!.validate()) {
+                  //       _Register();
+                  //     }
+                  //   },
+                  //   child: Text('SignUp'.tr()),
+                  // ),
                   SizedBox(
                     height: 20,
                   ),
+
                 ],
               ),
             ),
