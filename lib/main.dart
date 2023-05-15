@@ -45,8 +45,6 @@ void main() async {
   );
 }
 
-
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -54,7 +52,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => ThemeProvider()),
+          ChangeNotifierProvider(create: (_) => ThemeProvider()..initTheme()),
           ChangeNotifierProvider(create: (_) => GoalModel()),
           ChangeNotifierProvider(create: (_) => HabitModel()),
 

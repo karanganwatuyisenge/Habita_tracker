@@ -1,29 +1,49 @@
-import 'myThemes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class ThemeProvider with ChangeNotifier {
   bool _isDarkMode = false;
 
-  ThemeData lightTheme = ThemeData(
-    brightness: Brightness.light,
-    primarySwatch: Colors.deepOrange
-    // Add other light mode theme properties here
-  );
-
-  ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    // Add other dark mode theme properties here
-  );
-
-  ThemeData get themeData => _isDarkMode ? darkTheme : lightTheme;
-
   bool get isDarkMode => _isDarkMode;
 
-  void setTheme(bool value) {
+  ThemeData get themeData => _isDarkMode ? ThemeData.dark() : ThemeData.light();
+
+  Future<void> initTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _isDarkMode = prefs.getBool('isDarkMode') ?? false;
+    notifyListeners();
+  }
+
+  Future<void> setTheme(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     _isDarkMode = value;
+    await prefs.setBool('isDarkMode', value);
     notifyListeners();
   }
 }
+
+// class ThemeProvider with ChangeNotifier {
+//   bool _isDarkMode = false;
+//
+//   ThemeData lightTheme = ThemeData(
+//     brightness: Brightness.light,
+//     primarySwatch: Colors.deepOrange
+//   );
+//
+//   ThemeData darkTheme = ThemeData(
+//     brightness: Brightness.dark,
+//   );
+//
+//   ThemeData get themeData => _isDarkMode ? darkTheme : lightTheme;
+//
+//   bool get isDarkMode => _isDarkMode;
+//
+//   void setTheme(bool value) {
+//     _isDarkMode = value;
+//     notifyListeners();
+//   }
+// }
 
 
 
