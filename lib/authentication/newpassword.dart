@@ -44,7 +44,6 @@ class NewPassword extends StatelessWidget {
                               });
                         }
                     ),
-
                     SizedBox(
                       height: 40,
                     ),

@@ -75,6 +75,8 @@
   "PleaseSelectCity": "Please Select City",
   "PleaseEnterYourPassword": "Please Enter Your Password",
   "PleaseEnterYourConfirmPassword": "Please Enter Your Confirm Password",
-  "PasswordDoNotMatch": "Password Do Not Match"
+  "PasswordDoNotMatch": "Password Do Not Match",
+  "oldPassword": "Old Password",
+  "newPassword": "New Password"
 
 }

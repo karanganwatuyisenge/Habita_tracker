@@ -150,27 +150,19 @@ class _MyLoginState extends State<MyLogin> {
                     SizedBox(
                       height: 40,
                     ),
-                    Row(
-                      children: [
-                        Checkbox(
-                            value: showvalue,
-                            onChanged: (bool? value){
-                              setState((){
-                                showvalue=value!;
-                              });
-                            }),
-                        //Text('RememberMe'.tr(),style: TextStyle(color: Colors.grey),),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: TextButton(
-                              onPressed:(){
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) => ForgotPassword())
-                                );
-                              },
-                              child:Text('ForgotPassword'.tr(),style: TextStyle(color: Colors.deepOrangeAccent),)),
-                        ),
-                      ],
+                    ListTile(
+                      trailing: TextButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => ForgotPassword())
+                          );
+                        },
+                        child: Text('ForgotPassword'.tr(),
+                          style: TextStyle(color: Colors.deepOrangeAccent), ),
+                    ),
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     Row(
                       children: [
