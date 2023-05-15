@@ -43,6 +43,9 @@ class _NewHabit extends State<NewHabit>{
   }
 
   void SaveHabit(BuildContext context) async{
+    setState(() {
+      showvalue = true;
+    });
     final habitModel=Provider.of<HabitModel>(context,listen: false);
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
@@ -139,6 +142,9 @@ class _NewHabit extends State<NewHabit>{
       //   print('Error Saving data: {$e}');
       // }
     }
+    setState(() {
+      showvalue=false;
+    });
   }
 
   @override
@@ -215,7 +221,7 @@ class _NewHabit extends State<NewHabit>{
                         ),
                         SizedBox(height: 20,),
                         _selectedHabitType != 'Daily' ? DropdownButtonFormField(
-                          hint: Text('Select $_selectedHabitType'.tr()),
+                          hint: Text('Select times'),
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -256,6 +262,7 @@ class _NewHabit extends State<NewHabit>{
                         const SizedBox(
                           height: 20,
                         ),
+                        if (showvalue) CircularProgressIndicator(),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size.fromHeight(50),

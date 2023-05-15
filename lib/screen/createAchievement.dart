@@ -49,11 +49,11 @@ class _NewAchievement extends State<NewAchievement>{
           return AlertDialog(
             backgroundColor: themeProvider.isDarkMode ? Colors.black :Color(0xFFFBFBFB),
             contentPadding: EdgeInsets.symmetric(horizontal: 20),
-            title: Column(
+            title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('CreateNewHabitorGoal'.tr(),
-                    style: TextStyle(fontSize: 20, color: themeProvider.isDarkMode? Colors.white:Colors.black)),
+                    style: TextStyle(fontSize: 16, color: themeProvider.isDarkMode? Colors.white:Colors.black)),
                 IconButton(
                   icon: Icon(Icons.cancel, color: themeProvider.isDarkMode? Colors.white:Colors.black,),
                   onPressed: () {

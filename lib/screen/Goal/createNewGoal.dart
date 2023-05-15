@@ -28,6 +28,9 @@ class _NewGoal extends State<NewGoal> {
   TextEditingController _selectEndDate = TextEditingController();
 
   void SaveGoal(BuildContext context) async {
+    setState(() {
+      showvalue = true;
+    });
     final goalModel = Provider.of<GoalModel>(context, listen: false);
 
     var selectStartingDate = DateTime.now();
@@ -70,6 +73,9 @@ class _NewGoal extends State<NewGoal> {
         print('Error Saving Data: Se');
       }
     }
+    setState(() {
+      showvalue = false;
+    });
   }
 
 
@@ -158,43 +164,27 @@ class _NewGoal extends State<NewGoal> {
                     },
                   ),
 
-                  // TextFormField(
-                  //   controller: _selectEndDate,
-                  //   decoration: InputDecoration(
-                  //     labelText: 'Select End Date',
-                  //   ),
-                  //   onTap: () async {
-                  //     DateTime? pickedDate = await showDatePicker(
-                  //       context: context,
-                  //       initialDate: DateTime.now(),
-                  //       firstDate: DateTime(2022),
-                  //       lastDate: DateTime(2025),
-                  //     );
-                  //     if (pickedDate != null) {
-                  //       _selectEndDate.text = DateFormat("yyyy-MM-dd").format(pickedDate);
-                  //       _selectedGoalType=_selectEndDate.text;
-                  //         //goalModel.setEndDate(DateFormat("yyyy-MM-dd").format(pickedDate));
-                  //         //_selectEndDate.text = context.read<GoalModel>().endDate;
-                  //     }
-                  //   },
-                  //   validator: (value) {
-                  //     if (value?.isEmpty ?? true) {
-                  //       return 'PleaseEnterYourGoal'.tr();
-                  //     }
-                  //     return null;
-                  //   },
-                  // ),
                   SizedBox(height: 20,),
-
+                  if (showvalue) CircularProgressIndicator(),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size.fromHeight(50),
                     ),
-                    onPressed: (){
+                    onPressed: () {
                       SaveGoal(context);
                     },
                     child: Text('CreateNew').tr(),
-                  )
+                  ),
+
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     minimumSize: Size.fromHeight(50),
+                  //   ),
+                  //   onPressed: (){
+                  //     SaveGoal(context);
+                  //   },
+                  //   child: Text('CreateNew').tr(),
+                  // )
                 ],
               ),
             ),

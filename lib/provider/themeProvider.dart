@@ -7,7 +7,15 @@ class ThemeProvider with ChangeNotifier {
 
   bool get isDarkMode => _isDarkMode;
 
-  ThemeData get themeData => _isDarkMode ? ThemeData.dark() : ThemeData.light();
+  ThemeData get themeData {
+    if (_isDarkMode) {
+      return ThemeData.dark();
+    } else {
+      return ThemeData.light().copyWith(
+        primaryColor: Colors.deepOrange, // Set the primary color to deepOrange
+      );
+    }
+  }
 
   Future<void> initTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -22,6 +30,35 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+
+
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:flutter/foundation.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+//
+// class ThemeProvider with ChangeNotifier {
+//   bool _isDarkMode = false;
+//
+//   bool get isDarkMode => _isDarkMode;
+//
+//   ThemeData get themeData => _isDarkMode ? ThemeData.dark() : ThemeData.light();
+//
+//   Future<void> initTheme() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     _isDarkMode = prefs.getBool('isDarkMode') ?? false;
+//     notifyListeners();
+//   }
+//
+//   Future<void> setTheme(bool value) async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     _isDarkMode = value;
+//     await prefs.setBool('isDarkMode', value);
+//     notifyListeners();
+//   }
+// }
 
 // class ThemeProvider with ChangeNotifier {
 //   bool _isDarkMode = false;
