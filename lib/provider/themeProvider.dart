@@ -9,10 +9,18 @@ class ThemeProvider with ChangeNotifier {
 
   ThemeData get themeData {
     if (_isDarkMode) {
-      return ThemeData.dark();
+      return ThemeData.dark().copyWith(
+        primaryColor: Colors.deepOrange,
+        colorScheme: ColorScheme.dark(
+          primary: Colors.deepOrange, // Set the primary color to deepOrange
+        ),
+      );
     } else {
       return ThemeData.light().copyWith(
-        primaryColor: Colors.deepOrange, // Set the primary color to deepOrange
+        primaryColor: Colors.deepOrange,
+        colorScheme: ColorScheme.light(
+          primary: Colors.deepOrange, // Set the primary color to deepOrange
+        ),
       );
     }
   }
@@ -30,6 +38,8 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+
+
 
 
 

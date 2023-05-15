@@ -163,7 +163,6 @@ class _NewGoal extends State<NewGoal> {
                       return null;
                     },
                   ),
-
                   SizedBox(height: 20,),
                   if (showvalue) CircularProgressIndicator(),
                   ElevatedButton(
