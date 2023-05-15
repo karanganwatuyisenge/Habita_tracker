@@ -24,23 +24,35 @@ class _NewAchievement extends State<NewAchievement>{
   String? _selectedGoalOrHabitType;
   List<String> _goalOrHabitTypes=['Goal','Habit'];
 
-  Future<void> _dialogBuilder(BuildContext context){
-    if(_selectedGoalOrHabitType=='Goal'){
-      return showDialog(
-          context: context,
-          builder: (BuildContext context){
-            return NewGoal();
-          });
-    }
-    else if(_selectedGoalOrHabitType == 'Habit'){
-      return showDialog(
-          context: context,
-          builder: (BuildContext context){
-            return NewHabit();
-          });
-    }
-    return Future.value();
+  Future<void> _showDialog(BuildContext context, Widget content) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent, // Set background color to transparent
+          child: content,
+        );
+      },
+    );
   }
+
+  // Future<void> _dialogBuilder(BuildContext context){
+  //   if(_selectedGoalOrHabitType=='Goal'){
+  //     return showDialog(
+  //         context: context,
+  //         builder: (BuildContext context){
+  //           return NewGoal();
+  //         });
+  //   }
+  //   else if(_selectedGoalOrHabitType == 'Habit'){
+  //     return showDialog(
+  //         context: context,
+  //         builder: (BuildContext context){
+  //           return NewHabit();
+  //         });
+  //   }
+  //   return Future.value();
+  // }
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
@@ -68,12 +80,13 @@ class _NewAchievement extends State<NewAchievement>{
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewGoal(),
-                        ),
-                      );
+                      _showDialog(context,NewGoal());
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => NewGoal(),
+                      //   ),
+                      // );
                     },
                     child: Container(
                       width: MediaQuery
@@ -106,12 +119,13 @@ class _NewAchievement extends State<NewAchievement>{
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewHabit(),
-                        ),
-                      );
+                      _showDialog(context,NewHabit());
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => NewHabit(),
+                      //   ),
+                      // );
                     },
                     child: Container(
                       width: MediaQuery

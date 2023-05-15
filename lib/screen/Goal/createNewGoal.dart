@@ -77,8 +77,6 @@ class _NewGoal extends State<NewGoal> {
       showvalue = false;
     });
   }
-
-
   @override
   Widget build(BuildContext context) {
     currentDate = DateTime.now();
