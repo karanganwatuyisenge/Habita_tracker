@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tracker_habit/authentication/login.dart';
 import 'package:tracker_habit/authentication/optcode.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -10,18 +11,28 @@ class ForgotPassword extends StatefulWidget {
   State<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
+
 class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController _emailController = TextEditingController();
 
-  Future<void> sendOTPCode(String email) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
+  Future<void> sendOTPCode(String email) async{
+    FirebaseAuth auth=FirebaseAuth.instance;
 
-    try {
-      await auth.sendPasswordResetEmail(email: email);
-    } catch (e) {
-      print('Error sending OTP code: $e');
+    try{
+      List<String> signInMethods=await auth.fetchSignInMethodsForEmail(email);
+      if(signInMethods.isNotEmpty){
+        await auth.sendPasswordResetEmail(email: email);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('OTP code sent successfully')));
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Email is not registered')));
+      }
+    }catch(e){
+      print('Error sending OTP code :$e');
     }
+
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +66,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               onPressed: () {
                 String email = _emailController.text.trim();
                 sendOTPCode(email);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => OtpCode()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MyLogin()));
               },
               child: Text('Submit'),
             ),
@@ -65,6 +76,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 }
+
 
 
 // class ForgotPassword extends StatelessWidget {

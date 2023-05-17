@@ -28,8 +28,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await NotificationService().init(); // Initialize NotificationService
-  await NotificationService().scheduleNotification(); // Schedule notification
+
   runApp(
     EasyLocalization(
       supportedLocales: const [

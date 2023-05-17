@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:tracker_habit/models/country.dart';
 import 'package:tracker_habit/models/city.dart';
 import 'package:tracker_habit/models/region.dart';
+import '../constants/contstants.dart';
 import '../geolocation.dart';
 
 class SignUp extends StatefulWidget {
@@ -17,6 +18,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _MySignupState extends State<SignUp> {
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -125,20 +127,21 @@ class _MySignupState extends State<SignUp> {
         'region': _selectedRegion?.name,
         'city': _selectedCity?.name,
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Saved successfully')));
-      Navigator.push(context,
-      MaterialPageRoute(builder: (context) => MyLogin())
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Saved successfully')));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MyLogin()),
       );
     }
     on FirebaseAuthException catch (e) {
       print("Exception here ${e.code}");
       if (e.code == 'weak-password') {
         print('The password provided is too weak');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('The password provided is too weak')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('The password provided is too weak')));
       }
       else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('The account already exists for that email')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('The account already exists for that email')));
       } else {
         print(e.message);
       }
@@ -171,7 +174,7 @@ class _MySignupState extends State<SignUp> {
                     children: [
                       Text(
                         'SignUp'.tr(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xff4c505b),
                           fontSize: 27,
                           fontWeight: FontWeight.w700,
@@ -182,7 +185,7 @@ class _MySignupState extends State<SignUp> {
                           TextButton(
                             child: Text(
                               'LogIn'.tr(),
-                              style: TextStyle(color: Colors.deepOrangeAccent),
+                              style: const TextStyle(color: Colors.deepOrangeAccent),
                             ),
                             onPressed: () {
                               // print('Login');
@@ -209,7 +212,7 @@ class _MySignupState extends State<SignUp> {
                     height: 60,
                   ),
                   TextFormField(
-                    key: Key('nameField'),
+                    key: const Key('nameField'),
                       controller: _nameController,
                       decoration: InputDecoration(
                         labelText: 'Name'.tr(),
@@ -227,7 +230,7 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   TextFormField(
-                    key: Key('emailField'),
+                    key: const Key('emailField'),
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
@@ -247,9 +250,9 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   _isLoadingCountry
-                      ? Center(child: CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : DropdownButtonFormField<Country>(
-                     key: Key('countryField'),
+                     key: const Key('countryField'),
 
                     decoration: InputDecoration(
                         labelText: 'Country'.tr(),
@@ -286,9 +289,9 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   _isLoadingRegion
-                      ? Center(child: CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : DropdownButtonFormField<Region>(
-                    key: Key('regionField'),
+                    key: const Key('regionField'),
 
                     decoration: InputDecoration(
                         labelText: 'Region'.tr(),
@@ -332,7 +335,7 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   DropdownButtonFormField<City>(
-                    key: Key('cityField'),
+                    key: const Key('cityField'),
                     decoration: InputDecoration(
                         labelText: 'City'.tr(),
                         border: OutlineInputBorder(
@@ -358,7 +361,7 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   TextFormField(
-                    key: Key('passwordField'),
+                    key: const Key('passwordField'),
                     controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -377,7 +380,7 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   TextFormField(
-                    key: Key('confirmField'),
+                    key: confirmField,
                     controller: _confirmPasswordController,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -399,7 +402,7 @@ class _MySignupState extends State<SignUp> {
                     height: 40,
                   ),
                   _isLoadingSignUp
-                      ? Center(child: CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50), // NEW
@@ -414,9 +417,9 @@ class _MySignupState extends State<SignUp> {
                             _isLoadingSignUp = false;
                           });
                           if (success) {
-                            // Handle successful registration
+
                           } else {
-                            // Handle registration error
+
                           }
                         });
                       }
@@ -435,7 +438,7 @@ class _MySignupState extends State<SignUp> {
                   //   },
                   //   child: Text('SignUp'.tr()),
                   // ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
 

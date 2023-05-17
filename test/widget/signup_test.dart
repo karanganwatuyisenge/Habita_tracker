@@ -2,69 +2,43 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tracker_habit/authentication/signup.dart';
+import 'package:tracker_habit/constants/contstants.dart';
+import 'package:tracker_habit/models/city.dart';
+import 'package:tracker_habit/models/country.dart';
+import 'package:tracker_habit/models/region.dart';
 
 import '../translation/rootSetUp.dart';
 
 void main() {
-  late Widget widget;
+  late Widget root;
   setUp(() async {
-    widget = await rootSetUp(
-        root: SignUp(),
-        local: Locale('en', 'US'));
+    root = await rootSetUp(root: const SignUp(), local: const Locale('en', 'US'));
   });
+
   testWidgets("description", (tester) async {
     await tester.runAsync(() async {
-      await tester.pumpWidget(widget);
+      await tester.pumpWidget(root);
       await tester.idle();
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(TextFormField, 'Email'), findsOneWidget);
+      expect(find.text('Email'), findsOneWidget);
+      expect(find.byType(TextFormField), findsNWidgets(2));
+      expect(find.byType(DropdownButtonFormField<City>), findsNWidgets(1));
+      expect(find.byType(DropdownButtonFormField<Region>), findsNWidgets(1));
+      expect(find.byType(DropdownButtonFormField<Country>), findsNWidgets(1));
+
+      //expect(find.widgetWithText(TextFormField, 'Password'), findsOneWidget);
+      //tester.ensureVisible(find.text("Password"));
+      //expect(find.byKey(confirmField), findsOneWidget);
+
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pump();
-     expect(find.text('Email'),findsOneWidget);
+
+
+
     });
   });
 }
 
-// void main() {
-//   testWidgets('SignUp form validation', (WidgetTester tester) async {
-//     await tester.pumpWidget(MaterialApp(home: SignUp()));
-//     // var textFieldName = find.byKey(Key('nameField'));
-//     // await tester.enterText(textFieldName, 'John');
-//     // var textFieldEmail = find.byKey(Key('emailField'));
-//     // await tester.enterText(textFieldEmail, 'John@gmail.com');
-//     // var dropDownButtonCountry = find.byKey(Key('countryField'));
-//     // await tester.tap(dropDownButtonCountry);
-//     // await tester.pumpAndSettle();
-//     // var dropDownButtonRegion = find.byKey(Key('regionField'));
-//     // await tester.tap(dropDownButtonRegion);
-//     // await tester.pumpAndSettle();
-//     // var dropDownButtonCity = find.byKey(Key('cityField'));
-//     // await tester.tap(dropDownButtonCity);
-//     // await tester.pumpAndSettle();
-//     // var textFieldPassword = find.byKey(Key('passwordField'));
-//     // await tester.enterText(textFieldPassword, 'password123');
-//     // var textFieldConfirm = find.byKey(Key('confirmField'));
-//     // await tester.enterText(textFieldConfirm, 'password123');
-//     // await tester.tap(find.text('SignUp'));
-//     // await tester.pumpAndSettle();
-//   });
-// }
 
-//testWidgets('Signup', (WidgetTester tester) async{
-//   await tester.pumpWidget(MaterialApp(
-//     home: SignUp(),
-//   ));
-//   var textField=find.byType(TextFormField);
-//    expect(textField, findsNWidgets(4));
-//
-//
-// });
-// await tester.tap(find.byType(ElevatedButton));
-// await tester.pump();
-
-// void main() {
-//
-//     final Finder signUpButtonFinder = find.widgetWithText(ElevatedButton, 'SIGN UP');
-//     expect(signUpButtonFinder, findsOneWidget);
-//     await tester.tap(signUpButtonFinder);
-//     await tester.pumpAndSettle();
-//     // Add your assertions here
-//   });
-// }

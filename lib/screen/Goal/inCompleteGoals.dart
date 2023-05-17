@@ -55,29 +55,67 @@ class _IncompleteGoalsState extends State<IncompleteGoals> {
                               child: Column(
                                 children: [
                                   ListTile(
-                                    title: Text(goal['goalName'],
+                                    title: Text(
+                                      goal['goalName'],
                                       style: TextStyle(
-                                          color: themeProvider.isDarkMode?Colors.white:Colors.green, fontSize: 20),
+                                        color: themeProvider.isDarkMode ? Colors.white : Colors.green,
+                                        fontSize: 20,
+                                      ),
                                     ),
-                                    trailing: Checkbox(
-                                        value: goal["completed"],
-                                        onChanged: (bool? newValue) async {
-                                          final docRef = FirebaseFirestore
-                                              .instance
-                                              .collection("users").doc(user.uid)
-                                              .collection("goals").doc(goal.id);
-                                          try {
-                                            await docRef.update(
-                                                {"completed": newValue});
-                                          } catch (e) {
-                                            print(
-                                                "Error updating document: $e");
-                                          }
-                                        }
-                                    ),
-
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Checkbox(
+                                          value: goal["completed"],
+                                          onChanged: (bool? newValue) async {
+                                            final docRef = FirebaseFirestore.instance
+                                                .collection("users")
+                                                .doc(user.uid)
+                                                .collection("goals")
+                                                .doc(goal.id);
+                                            try {
+                                              await docRef.update({"completed": newValue});
+                                            } catch (e) {
+                                              print("Error updating document: $e");
+                                            }
+                                          },
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            showMenu(
+                                              context: context,
+                                              position: RelativeRect.fromLTRB(0, 0, 0, 0),
+                                              items: [
+                                                PopupMenuItem(
+                                                  child: ListTile(
+                                                    leading: Icon(Icons.edit),
+                                                    title: Text('Update'),
+                                                    onTap: () {
+                                                      // Handle update action
+                                                      Navigator.pop(context); // Close the menu
+                                                    },
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  child: ListTile(
+                                                    leading: Icon(Icons.delete),
+                                                    title: Text('Delete'),
+                                                    onTap: () {
+                                                      // Handle delete action
+                                                      Navigator.pop(context); // Close the menu
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                          icon: Icon(Icons.more_vert),
+                                        ),
+                                      ],
+                                    )
 
                                   ),
+
 
                                 ],
                               ),

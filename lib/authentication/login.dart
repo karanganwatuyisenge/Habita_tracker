@@ -33,7 +33,7 @@ class _MyLoginState extends State<MyLogin> {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text);
-      Navigator.push(context,
+      Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => HomePage())
       );
     }
@@ -148,7 +148,7 @@ class _MyLoginState extends State<MyLogin> {
                       ),
                     ),
                     SizedBox(
-                      height: 40,
+                      height: 10,
                     ),
                     ListTile(
                       trailing: TextButton(
@@ -164,39 +164,18 @@ class _MyLoginState extends State<MyLogin> {
                     SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      children: [
-                        Container(
-                          width:280,
-                          child: Stack(
-                            children:[
-                              Center(
-                                child: SizedBox(
-                                  width: 280,
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent),
-                                    ),
-                                    child: Text('LogIn'.tr()),
-                                    onPressed: () {
-                                      Login();
-                                    },
-                                  ),
-                                ),
-                              ),
+                    isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(50), // NEW
+                      ),
+                      onPressed: () {
+                       Login();
+                        },
+                      child: Text('LogIn'.tr()),
+                    ),
 
-                              Visibility(
-                                visible: isLoading,
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                            ]
-                          ),
-
-                          ),
-                      ],
-                    )
                   ],
                 ),
               ),

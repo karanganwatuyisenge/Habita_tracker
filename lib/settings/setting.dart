@@ -97,102 +97,104 @@ class _MySettingState extends State<Setting> {
               style: TextStyle(fontSize: 27,color: themeProvider.isDarkMode ? Color(0xFFFFFFFF):Colors.black)),
           elevation: 0,
         ),
-        body: ListView(children: [
+      body: ListView(children: [
 
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Account()),
-              );
-            },
-            child: ListTile(
-              title: Text('Account'),
-              trailing: IconButton(
-                onPressed: () {
-                  //context.setLocale(Locale('fr', 'FR'));
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Account()),
-                  );
-                },
-                icon: const Icon(Icons.arrow_forward_ios),
-              ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Account()),
+            );
+          },
+          child: ListTile(
+            title: Text('Account'.tr()),
+            trailing: IconButton(
+              onPressed: () {
+                //context.setLocale(Locale('fr', 'FR'));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Account()),
+                );
+              },
+              icon: const Icon(Icons.arrow_forward_ios),
             ),
           ),
+        ),
 
-          GestureDetector(
-            onTap: () {
-            },
-            child: ListTile(
-              title: Text('About App'),
-              trailing: Icon(Icons.arrow_forward_ios),
-            ),
+        GestureDetector(
+          onTap: () {
+          },
+          child: ListTile(
+            title: Text('AboutApp'.tr()),
+            trailing: Icon(Icons.arrow_forward_ios),
           ),
+        ),
 
-          GestureDetector(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (_) =>
-                    AlertDialog(
-                      title: Text('SelectLanguage'.tr()),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: language.map((lang) {
-                          return RadioListTile<String>(
-                            title: Row(
-                              children: [
-                                Text("${lang["name"]}"),
-                                const Spacer(),
-                                Text("${lang["icon"]}"),
-                              ],
-                            ),
-                            value: (lang["locale"] as Locale).languageCode,
-                            groupValue: context.locale.languageCode,
-                            onChanged: (value) {
-                              print("Kigali: ${context.locale.languageCode}");
-                              context.setLocale(lang["locale"] as Locale);
-                              // context.setLocale(_selectedLanguage)
-                              // print("Locale : ${value!.name.toLowerCase()}");
-                              // _changeLanguage(context, Locale(value!.name.toLowerCase()));
-                              Navigator.pop(context);
-                            },
-                          );
-                        }).toList(),
-                      ),
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (_) =>
+                  AlertDialog(
+                    title: Text('SelectLanguage'.tr()),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: language.map((lang) {
+                        return RadioListTile<String>(
+                          title: Row(
+                            children: [
+                              Text("${lang["name"]}"),
+                              const Spacer(),
+                              Text("${lang["icon"]}"),
+                            ],
+                          ),
+                          value: (lang["locale"] as Locale).languageCode,
+                          groupValue: context.locale.languageCode,
+                          onChanged: (value) {
+                            print("Kigali: ${context.locale.languageCode}");
+                            context.setLocale(lang["locale"] as Locale);
+                            // context.setLocale(_selectedLanguage)
+                            // print("Locale : ${value!.name.toLowerCase()}");
+                            // _changeLanguage(context, Locale(value!.name.toLowerCase()));
+                            Navigator.pop(context);
+                          },
+                        );
+                      }).toList(),
                     ),
-              );
-            },
-            child: ListTile(
-              title: Text('Language'.tr()),
-              trailing: Icon(Icons.language),
+                  ),
+            );
+          },
+          child: ListTile(
+            title: Text('Language'.tr()),
+            trailing: Icon(Icons.language),
+          ),
+        ),
+
+        ListTile(
+          title: Text('LightDarkTheme'.tr()),
+          trailing: Consumer<ThemeProvider>(
+            builder: (context, themeProvider, _) => Switch(
+              value: themeProvider.isDarkMode,
+              onChanged: (value) {
+                themeProvider.setTheme(value);
+              },
             ),
           ),
-          ListTile(
-            title: Text('LightDarkTheme'.tr()),
-            trailing: Consumer<ThemeProvider>(
-              builder: (context, themeProvider, _) => Switch(
-                value: themeProvider.isDarkMode,
-                onChanged: (value) {
-                  themeProvider.setTheme(value);
-                },
-              ),
+        ),
+
+        GestureDetector(
+          onTap: () {
+            _signOut(context);
+          },
+          child: ListTile(
+            title: Text('Logout'),
+            trailing: IconButton(
+              onPressed: () => _signOut(context),
+              icon: Icon(Icons.logout),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              _signOut(context);
-            },
-            child: ListTile(
-              title: Text('Logout'),
-              trailing: IconButton(
-                onPressed: () => _signOut(context),
-                icon: Icon(Icons.logout),
-              ),
-            ),
-          )
-        ]),
+        )
+      ]),
 
       bottomNavigationBar: Container(
           child: Row(

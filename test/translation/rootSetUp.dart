@@ -11,11 +11,11 @@ Future<Widget> rootSetUp(
   var d=json.decode(await rootBundle.loadString(path));
   return Builder(builder: (context) {
     return EasyLocalization(
-        fallbackLocale: Locale('en','US'),
+        fallbackLocale: const Locale('en','US'),
         startLocale: local,
         assetLoader: JsonAssetLoader(data: Map<String,dynamic>.from(d)),
         saveLocale: false,
-        supportedLocales:[
+        supportedLocales:const [
           Locale('en','US'),
           Locale('fr','FR'),
         ],
@@ -25,6 +25,7 @@ Future<Widget> rootSetUp(
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
+          home: root,
         );
       },),
 

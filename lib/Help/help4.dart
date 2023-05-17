@@ -1339,3 +1339,110 @@
 // Send a message.
 //
 // Free Research Preview. ChatGPT may produce inaccurate information about people, places, or facts. ChatGPT Mar 23 Version
+
+
+
+
+
+// void main() {
+//   testWidgets('Test TextFormField visibility', (WidgetTester tester) async {
+//     // Build your widget
+//     await tester.pumpWidget(
+//       MaterialApp(
+//         home: Scaffold(
+//           body: Column(
+//             children: [
+//               TextFormField(
+//                 key: const Key('nameField'),
+//                 decoration: InputDecoration(
+//                   labelText: 'Name',
+//                   border: OutlineInputBorder(
+//                     borderRadius: BorderRadius.circular(10),
+//                   ),
+//                 ),
+//                 validator: (value) {
+//                   if (value?.isEmpty ?? true) {
+//                     return 'Please enter your name';
+//                   }
+//                   return null;
+//                 },
+//               ),
+//               const SizedBox(height: 20),
+//               TextFormField(
+//                 key: const Key('emailField'),
+//                 decoration: InputDecoration(
+//                   labelText: 'Email',
+//                   border: OutlineInputBorder(
+//                     borderRadius: BorderRadius.circular(10),
+//                   ),
+//                 ),
+//                 validator: (value) {
+//                   if (value?.isEmpty ?? true) {
+//                     return 'Please enter your email';
+//                   }
+//                   return null;
+//                 },
+//               ),
+//               const SizedBox(height: 20),
+//               DropdownButtonFormField<Country>(
+//                 key: const Key('countryField'),
+//                 decoration: InputDecoration(
+//                   labelText: 'Country',
+//                   border: OutlineInputBorder(
+//                     borderRadius: BorderRadius.circular(10),
+//                   ),
+//                 ),
+//                 items: [],
+//                 onChanged: null,
+//                 validator: null,
+//               ),
+//               const SizedBox(height: 20),
+//               DropdownButtonFormField<Region>(
+//                 key: const Key('regionField'),
+//                 decoration: InputDecoration(
+//                   labelText: 'Region',
+//                   border: OutlineInputBorder(
+//                     borderRadius: BorderRadius.circular(10),
+//                   ),
+//                 ),
+//                 items: [],
+//                 onChanged: null,
+//                 validator: null,
+//               ),
+//               const SizedBox(height: 20),
+//               TextFormField(
+//                 key: const Key('passwordField'),
+//                 decoration: InputDecoration(
+//                   labelText: 'Password',
+//                   border: OutlineInputBorder(
+//                     borderRadius: BorderRadius.circular(10),
+//                   ),
+//                 ),
+//                 validator: (value) {
+//                   if (value?.isEmpty ?? true) {
+//                     return 'Please enter your password';
+//                   }
+//                   return null;
+//                 },
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//
+//     await tester.pumpAndSettle();
+//
+//     // Check the presence of widgets
+//     expect(find.byType(TextFormField), findsNWidgets(4));
+//     expect(find.byType(DropdownButtonFormField<Country>), findsOneWidget);
+//     expect(find.byType(DropdownButtonFormField<Region>), findsOneWidget);
+//
+//     // Check the presence of specific keys
+//     expect(find.byKey(const Key('nameField')), findsOneWidget);
+//     expect(find.byKey(const Key('emailField')), findsOneWidget);
+//     expect(find.byKey(const Key('countryField')), findsOneWidget);
+//     expect(find.byKey(const Key('regionField')), findsOneWidget);
+//     expect(find.byKey(const Key('passwordField')), findsOneWidget);
+//   });
+// }

@@ -60,15 +60,52 @@ class _CompletedGoalsState extends State<CompletedGoals> {
                                           color: themeProvider.isDarkMode?Colors.white:Colors.green, fontSize: 20),
                                     ),
 
-                                    trailing: Checkbox(
-                                        value: goal["completed"],
-                                        onChanged: (bool? newValue) {
-                                          FirebaseFirestore.instance
-                                              .collection("users").doc(user.uid)
-                                              .collection("goals").doc(goal.id)
-                                              .update(
-                                              {"completed": newValue ?? false});
-                                        }
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Checkbox(
+                                            value: goal["completed"],
+                                            onChanged: (bool? newValue) {
+                                              FirebaseFirestore.instance
+                                                  .collection("users").doc(user.uid)
+                                                  .collection("goals").doc(goal.id)
+                                                  .update(
+                                                  {"completed": newValue ?? false});
+                                            }
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            showMenu(
+                                              context: context,
+                                              position: RelativeRect.fromLTRB(0, 0, 0, 0),
+                                              items: [
+                                                PopupMenuItem(
+                                                  child: ListTile(
+                                                    leading: Icon(Icons.edit),
+                                                    title: Text('Update'),
+                                                    onTap: () {
+                                                      // Handle update action
+                                                      Navigator.pop(context); // Close the menu
+                                                    },
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  child: ListTile(
+                                                    leading: Icon(Icons.delete),
+                                                    title: Text('Delete'),
+                                                    onTap: () {
+                                                      // Handle delete action
+                                                      Navigator.pop(context); // Close the menu
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                          icon: Icon(Icons.more_vert),
+                                        ),
+
+                                      ],
                                     ),
 
                                   ),
