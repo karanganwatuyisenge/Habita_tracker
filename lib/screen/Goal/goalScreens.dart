@@ -65,7 +65,7 @@ class _GoalScreens extends State<GoalScreens>{
                           return Padding(
                             padding: const EdgeInsets.only(top: 12,left: 15,right: 15),
                             child: Container(
-                              height: 60,
+                              height: 80,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                                 color:themeProvider.isDarkMode?Colors.grey:Colors.lightGreen.shade100,
@@ -75,8 +75,21 @@ class _GoalScreens extends State<GoalScreens>{
                                 child: Column(
                                   children: [
                                     ListTile(
-                                      title: Text(goal['goalName'],
-                                        style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Colors.green,fontSize: 20),
+                                      title: Row(
+                                        children: [
+                                          Text('Goal Name:',style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Color(0xFF2F2F2F),fontSize: 20),),
+                                          Text(goal['goalName'],
+                                            style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Colors.green,fontSize: 20),
+                                          ),
+                                        ],
+                                      ),
+                                      subtitle:Row(
+                                        children: [
+                                          Text('End Date:',style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Color(0xFF2F2F2F),fontSize: 20),),
+                                          Text(goal['endDate'],
+                                style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Colors.green,fontSize: 20),
+                              ),
+                                        ],
                                       ),
                                       trailing: Checkbox(
                                           value: goal["completed"],
@@ -92,7 +105,6 @@ class _GoalScreens extends State<GoalScreens>{
                                           }
                                       ),
                                     ),
-
                                   ],
                                 ),
                               ),

@@ -16,6 +16,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController _emailController = TextEditingController();
 
   Future<void> sendOTPCode(String email) async{
+    setState(() {
+
+    });
     FirebaseAuth auth=FirebaseAuth.instance;
 
     try{

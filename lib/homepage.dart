@@ -318,7 +318,7 @@ class _HomePageState extends State<HomePage> {
                         child: GoalScreens(),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 40,
                       ),
                     ],
                   ),
