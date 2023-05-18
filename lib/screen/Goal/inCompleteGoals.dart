@@ -66,9 +66,9 @@ class _IncompleteGoalsState extends State<IncompleteGoals> {
                                   ),
                                   subtitle:Row(
                                     children: [
-                                      Text('End Date:',style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Color(0xFF2F2F2F),fontSize: 16),),
+                                      Text('End Date:',style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Color(0xFF2F2F2F),fontSize: 14),),
                                       Text(goal['endDate'],
-                                        style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Colors.green,fontSize: 20),
+                                        style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Colors.green,fontSize: 18),
                                       ),
                                     ],
                                   ),
