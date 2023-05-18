@@ -17,6 +17,7 @@ class MyLogin extends StatefulWidget {
 class _MyLoginState extends State<MyLogin> {
   final FirebaseAuth _auth=FirebaseAuth.instance;
   TextEditingController _emailController =TextEditingController();
+  bool _showPassword = false;
   TextEditingController _passwordController=TextEditingController();
   String _errorMessage='';
   String _userName = '';
@@ -135,18 +136,28 @@ class _MyLoginState extends State<MyLogin> {
                     SizedBox(
                       height: 30,
                     ),
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        hintText: 'Password'.tr(),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
+                    TextFormField(
+                controller: _passwordController,
+                obscureText: !_showPassword,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintText: 'Password'.tr(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _showPassword ? Icons.visibility : Icons.visibility_off,
                     ),
+                    onPressed: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                  ),
+                ),
+              ),
                     SizedBox(
                       height: 10,
                     ),

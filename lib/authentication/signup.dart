@@ -112,7 +112,11 @@ class _MySignupState extends State<SignUp> {
     });
     return cities;
   }
+
   Future<bool> _Register() async {
+    setState(() {
+      _isLoadingSignUp = true;
+    });
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text,
@@ -130,7 +134,7 @@ class _MySignupState extends State<SignUp> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Saved successfully')));
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MyLogin()),
+        MaterialPageRoute(builder: (context) => const MyLogin()),
       );
     }
     on FirebaseAuthException catch (e) {
@@ -140,79 +144,80 @@ class _MySignupState extends State<SignUp> {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('The password provided is too weak')));
       }
       else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+       // print('The account already exists for that email.');
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('The account already exists for that email')));
       } else {
         print(e.message);
       }
     }
     catch (e) {
-      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please Fill All Fields')));
+    }
+    finally {
+      setState(() {
+        _isLoadingSignUp = false;
+      });
     }
     return true;
   }
-
 
   @override
   Widget build(BuildContext context) {
     //print("length ${_country.length}");
     return Scaffold(
-        backgroundColor: const Color(0xFFEDEDED),
-        body: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 88.0,
-              left: 25.0,
-              right: 25.0,
-            ),
-            child: ClipRect(
-              child: ListView(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title:Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'SignUp'.tr(),
+                style: const TextStyle(
+                  color: Color(0xff4c505b),
+                  fontSize: 27,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Row(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'SignUp'.tr(),
-                        style: const TextStyle(
-                          color: Color(0xff4c505b),
-                          fontSize: 27,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          TextButton(
-                            child: Text(
-                              'LogIn'.tr(),
-                              style: const TextStyle(color: Colors.deepOrangeAccent),
-                            ),
-                            onPressed: () {
-                              // print('Login');
-                              Navigator.of(context).pushNamed('login');
-                            },
-                          ),
-                          Container(
-                            child: IconButton(
-                              color: Colors.deepOrangeAccent,
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const MyLogin()));
-                              },
-                              icon: const Icon(Icons.arrow_forward_ios),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+                  TextButton(
+                    child: Text(
+                      'LogIn'.tr(),
+                      style: const TextStyle(color: Colors.deepOrangeAccent),
+                    ),
+                    onPressed: () {
+                      // print('Login');
+                      Navigator.of(context).pushNamed('login');
+                    },
                   ),
-                  const SizedBox(
-                    height: 60,
+                  Container(
+                    child: IconButton(
+                      color: Colors.deepOrangeAccent,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyLogin()));
+                      },
+                      icon: const Icon(Icons.arrow_forward_ios),
+                    ),
                   ),
+                ],
+              )
+            ],
+          ),
+        ),
+        body:Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
                   TextFormField(
-                    key: const Key('nameField'),
+                      key: const Key('nameField'),
                       controller: _nameController,
                       decoration: InputDecoration(
                         labelText: 'Name'.tr(),
@@ -252,7 +257,7 @@ class _MySignupState extends State<SignUp> {
                   _isLoadingCountry
                       ? const Center(child: CircularProgressIndicator())
                       : DropdownButtonFormField<Country>(
-                     key: const Key('countryField'),
+                    key: const Key('countryField'),
 
                     decoration: InputDecoration(
                         labelText: 'Country'.tr(),
@@ -271,16 +276,16 @@ class _MySignupState extends State<SignUp> {
                     //     _isLoading=true;
                     //   });
                     //   fetchRegions(newValue!.wikiDataId);
-                      onChanged: (newValue) {
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedCountry = newValue;
+                        _isLoadingCountry = true;
+                      });
+                      fetchRegions(newValue!.wikiDataId).then((_) {
                         setState(() {
-                          _selectedCountry = newValue;
-                          _isLoadingCountry = true;
+                          _isLoadingCountry = false;
                         });
-                        fetchRegions(newValue!.wikiDataId).then((_) {
-                          setState(() {
-                            _isLoadingCountry = false;
-                          });
-                        });
+                      });
 
                     },
                     validator: (value) => value == null ? 'PleaseSelectCountry' .tr(): null,
@@ -380,7 +385,7 @@ class _MySignupState extends State<SignUp> {
                     height: 20,
                   ),
                   TextFormField(
-                    key: confirmField,
+                    key: const Key('confirmField'),
                     controller: _confirmPasswordController,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -389,7 +394,7 @@ class _MySignupState extends State<SignUp> {
                           borderRadius: BorderRadius.circular(10),
                         )),
                     validator: (value) {
-                      if (value?.isEmpty ?? true) {
+                      if (value == "") {
                         return 'PleaseEnterYourConfirmPassword'.tr();
                       }
                       if (value != _passwordController.text) {
@@ -407,37 +412,14 @@ class _MySignupState extends State<SignUp> {
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50), // NEW
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        setState(() {
-                          _isLoadingSignUp = true;
-                        });
-                        _Register().then((success) {
-                          setState(() {
-                            _isLoadingSignUp = false;
-                          });
-                          if (success) {
-
-                          } else {
-
-                          }
-                        });
+                    onPressed: () async {
+                      if(_formKey.currentState!.validate()){
+                        _Register();
                       }
                     },
                     child: Text('SignUp'.tr()),
                   ),
 
-                  // ElevatedButton(
-                  //   style: ElevatedButton.styleFrom(
-                  //     minimumSize: const Size.fromHeight(50), // NEW
-                  //   ),
-                  //   onPressed: () {
-                  //     if (_formKey.currentState!.validate()) {
-                  //       _Register();
-                  //     }
-                  //   },
-                  //   child: Text('SignUp'.tr()),
-                  // ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -446,6 +428,7 @@ class _MySignupState extends State<SignUp> {
               ),
             ),
           ),
-        ));
+        ),
+    );
   }
 }

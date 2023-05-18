@@ -13,7 +13,6 @@ void main() {
 
   setUp(() async {
    TestWidgetsFlutterBinding.ensureInitialized();
-
     root = await rootSetUp(root: const MyLogin(),
         local: const Locale('en', 'US'));
   });

@@ -344,3 +344,61 @@ Widget build(BuildContext context) {
 //     );
 //   }
 // }
+
+To mock the API response for the fetchCountries function and populate the dropdown with
+the mocked data, you can modify the previous example as follows:
+
+Create a mock implementation for the fetchCountries function that returns a mocked
+ list of countries:
+dart
+Copy code
+import 'package:your_app/models/country.dart'; // Replace with your Country model
+
+Future<List<Country>> fetchCountriesMock() async {
+  // Create a list of mocked countries
+  List<Country> countries = [
+    Country(name: 'Country 1', wikiDataId: '1'),
+    Country(name: 'Country 2', wikiDataId: '2'),
+    Country(name: 'Country 3', wikiDataId: '3'),
+  ];
+
+  return countries;
+}
+In this mock implementation, we create a list of mocked countries and
+return it as the result of the fetchCountries function.
+
+In your test, before pumping the widget, you can replace the original
+fetchCountries function with the mock implementation:
+dart
+Copy code
+import 'package:flutter_test/flutter_test.dart';
+import 'package:your_app/firebase/firestore.dart'; // Replace with your
+app's Firestore import
+
+void main() {
+  testWidgets('Dropdown Test', (WidgetTester tester) async {
+    // Replace the original fetchCountries function with the mock implementation
+    fetchCountries = fetchCountriesMock;
+
+    // Build and pump your widget
+    await tester.pumpWidget(YourWidget());
+
+    // Let the widget initialize and populate the dropdown
+    await tester.pumpAndSettle();
+
+    // Verify the dropdown options
+    expect(find.text('Country 1'), findsOneWidget);
+    expect(find.text('Country 2'), findsOneWidget);
+    expect(find.text('Country 3'), findsOneWidget);
+  });
+}
+In the test above, we replace the original fetchCountries function with
+the mock implementation fetchCountriesMock by assigning it to the fetchCountries variable.
+This ensures that when your widget calls fetchCountries, it will use the mock implementation
+instead.
+
+Finally, when you pump the widget and let it initialize, the dropdown will be populated
+with the mocked data, and you can verify the dropdown options accordingly.
+
+Make sure to adjust the imports and variable
+names (YourWidget, fetchCountries, Country) to match your specific codebase.

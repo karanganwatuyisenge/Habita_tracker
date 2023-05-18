@@ -77,7 +77,7 @@ class _GoalScreens extends State<GoalScreens>{
                                     ListTile(
                                       title: Row(
                                         children: [
-                                          Text('Goal Name:',style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Color(0xFF2F2F2F),fontSize: 20),),
+                                          Text('Goal Name:',style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Color(0xFF2F2F2F),fontSize: 16),),
                                           Text(goal['goalName'],
                                             style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Colors.green,fontSize: 20),
                                           ),
@@ -85,7 +85,7 @@ class _GoalScreens extends State<GoalScreens>{
                                       ),
                                       subtitle:Row(
                                         children: [
-                                          Text('End Date:',style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Color(0xFF2F2F2F),fontSize: 20),),
+                                          Text('End Date:',style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Color(0xFF2F2F2F),fontSize: 16),),
                                           Text(goal['endDate'],
                                 style: TextStyle(color:themeProvider.isDarkMode?Colors.white: Colors.green,fontSize: 20),
                               ),
