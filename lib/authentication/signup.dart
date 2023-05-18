@@ -36,6 +36,8 @@ class _MySignupState extends State<SignUp> {
   bool _isLoadingSignUp = false;
   bool _isLoadingCountry = false;
   bool _isLoadingRegion = false;
+  bool _showPassword = false;
+  bool _showConfirmPassword=false;
 
 
   @override
@@ -47,6 +49,7 @@ class _MySignupState extends State<SignUp> {
   fetchCountries() async {
     final response = await Dio().get(
       'https://wft-geo-db.p.rapidapi.com/v1/geo/countries',
+      //'https://wft-geo-db.p.rapidapi.com/v1/geo/countries?namePrefix=R',
       options: Options(
         headers: {
           'X-RapidAPI-Key':
@@ -55,6 +58,7 @@ class _MySignupState extends State<SignUp> {
         },
       ),
     );
+
     final jsonData = response.data;
     List<Country> countries = [];
     for (var country in jsonData['data']) {
@@ -146,7 +150,10 @@ class _MySignupState extends State<SignUp> {
       else if (e.code == 'email-already-in-use') {
        // print('The account already exists for that email.');
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('The account already exists for that email')));
-      } else {
+      } else if (e.code == 'invalid-email') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('The email address is badly formatted')));
+      }
+      else {
         print(e.message);
       }
     }
@@ -368,12 +375,23 @@ class _MySignupState extends State<SignUp> {
                   TextFormField(
                     key: const Key('passwordField'),
                     controller: _passwordController,
-                    obscureText: true,
+                    obscureText: ! _showPassword,
                     decoration: InputDecoration(
                         labelText: 'Password'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                        )),
+                        ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _showPassword ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _showPassword = !_showPassword;
+                          });
+                        },
+                      ),
+                    ),
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return 'PleaseEnterYourPassword'.tr();
@@ -387,12 +405,23 @@ class _MySignupState extends State<SignUp> {
                   TextFormField(
                     key: const Key('confirmField'),
                     controller: _confirmPasswordController,
-                    obscureText: true,
+                    obscureText: ! _showConfirmPassword,
                     decoration: InputDecoration(
                         labelText: 'ConfirmPassword'.tr(),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                        )),
+                        ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _showConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _showConfirmPassword = !_showConfirmPassword;
+                          });
+                        },
+                      ),
+                    ),
                     validator: (value) {
                       if (value == "") {
                         return 'PleaseEnterYourConfirmPassword'.tr();
@@ -419,11 +448,9 @@ class _MySignupState extends State<SignUp> {
                     },
                     child: Text('SignUp'.tr()),
                   ),
-
                   const SizedBox(
                     height: 20,
                   ),
-
                 ],
               ),
             ),
