@@ -97,7 +97,8 @@ class _MySettingState extends State<Setting> {
               style: TextStyle(fontSize: 27,color: themeProvider.isDarkMode ? Color(0xFFFFFFFF):Colors.black)),
           elevation: 0,
         ),
-      body: ListView(children: [
+      body: ListView(
+          children: [
 
         GestureDetector(
           onTap: () {
@@ -108,15 +109,18 @@ class _MySettingState extends State<Setting> {
           },
           child: ListTile(
             title: Text('Account'.tr()),
-            trailing: IconButton(
-              onPressed: () {
-                //context.setLocale(Locale('fr', 'FR'));
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Account()),
-                );
-              },
-              icon: const Icon(Icons.arrow_forward_ios),
+            trailing: Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: IconButton(
+                onPressed: () {
+                  //context.setLocale(Locale('fr', 'FR'));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Account()),
+                  );
+                },
+                icon: const Icon(Icons.arrow_forward_ios),
+              ),
             ),
           ),
         ),
@@ -126,7 +130,10 @@ class _MySettingState extends State<Setting> {
           },
           child: ListTile(
             title: Text('AboutApp'.tr()),
-            trailing: Icon(Icons.arrow_forward_ios),
+            trailing: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Icon(Icons.arrow_forward_ios),
+            ),
           ),
         ),
 
@@ -166,7 +173,10 @@ class _MySettingState extends State<Setting> {
           },
           child: ListTile(
             title: Text('Language'.tr()),
-            trailing: Icon(Icons.language),
+            trailing: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Icon(Icons.language),
+            ),
           ),
         ),
 
@@ -190,7 +200,10 @@ class _MySettingState extends State<Setting> {
             title: Text('Logout'),
             trailing: IconButton(
               onPressed: () => _signOut(context),
-              icon: Icon(Icons.logout),
+              icon: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Icon(Icons.logout),
+              ),
             ),
           ),
         )
