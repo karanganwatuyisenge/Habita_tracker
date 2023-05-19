@@ -17,26 +17,31 @@ class _HabitScreenState extends State<HabitScreen> {
   Widget build(BuildContext context) =>DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 0,
-          centerTitle: true,
-          bottom: TabBar(
-            isScrollable: false,
-            tabs: [
-              Tab(
-                  child:Text('Daily'.tr(),
-                      style:TextStyle(fontSize: 18))),
-              Tab(
-                  child:Text('Weekly'.tr(),
-                    style: TextStyle(fontSize: 18),
-                  )
-              ),
-              Tab(
-                  child:Text('Monthly'.tr(),
-                    style: TextStyle(fontSize: 18),
-                  )
-              ),
-            ],
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60),
+          child: DecoratedBox(
+            decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+            child: TabBar(
+              isScrollable: false,
+              indicatorColor: Theme.of(context).primaryColor,
+              //unselectedLabelColor: Theme.of(context).textTheme.bodyMedium?.color,
+              labelColor: Theme.of(context).primaryColor,
+              tabs: [
+                Tab(
+                    child:Text('Daily'.tr(),
+                        style:TextStyle(fontSize: 18,color: Colors.white))),
+                Tab(
+                    child:Text('Weekly'.tr(),
+                      style: TextStyle(fontSize: 18,color: Colors.white),
+                    )
+                ),
+                Tab(
+                    child:Text('Monthly'.tr(),
+                      style: TextStyle(fontSize: 18,color: Colors.white),
+                    )
+                ),
+              ],
+            ),
           ),
         ),
         body: TabBarView(
