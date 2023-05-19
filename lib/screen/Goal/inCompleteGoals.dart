@@ -90,132 +90,125 @@ class _IncompleteGoalsState extends State<IncompleteGoals> {
                                           }
                                         },
                                       ),
-                                      IconButton(
-                                        onPressed: () {
-                                          showMenu(
-                                            context: context,
-                                            position: RelativeRect.fromLTRB(100, 230, 30, 0),
-                                            items: [
-                                              PopupMenuItem(
-                                                child: ListTile(
-                                                  leading: Icon(Icons.edit),
-                                                  title: Text('Update'),
-                                                  onTap: () {
-                                                    TextEditingController _goalNameController = TextEditingController(text: goal['goalName']);
-                                                    TextEditingController _endDateController = TextEditingController(text: goal['endDate']);
-                                                    String? _selectedGoalType;
-                                                    Navigator.pop(context); // Close the menu
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext dialogContext) => AlertDialog(
-                                                        title: Text('Update Goal'),
-                                                        content: Column(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            TextFormField(
-                                                              controller: _goalNameController,
-                                                              decoration: InputDecoration(
-                                                                labelText: 'New Goal Name',
-                                                                border: OutlineInputBorder(
-                                                                  borderRadius: BorderRadius.circular(10),
-                                                                ),
-                                                              ),
+                                      PopupMenuButton(itemBuilder: (context) {
+                                        return [
+                                          PopupMenuItem(
+                                            child: ListTile(
+                                              leading: Icon(Icons.edit),
+                                              title: Text('Update'),
+                                              onTap: () {
+                                                TextEditingController _goalNameController = TextEditingController(text: goal['goalName']);
+                                                TextEditingController _endDateController = TextEditingController(text: goal['endDate']);
+                                                String? _selectedGoalType;
+                                                Navigator.pop(context); // Close the menu
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext dialogContext) => AlertDialog(
+                                                    title: Text('Update Goal'),
+                                                    content: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        TextFormField(
+                                                          controller: _goalNameController,
+                                                          decoration: InputDecoration(
+                                                            labelText: 'New Goal Name',
+                                                            border: OutlineInputBorder(
+                                                              borderRadius: BorderRadius.circular(10),
                                                             ),
-
-                                                            TextFormField(
-                                                              controller: _endDateController,
-                                                              readOnly: true,
-                                                              decoration: InputDecoration(
-                                                                labelText: 'Select End Date',
-                                                              ),
-                                                              onTap: () async {
-                                                                DateTime? pickedDate = await showDatePicker(
-                                                                  context: dialogContext,
-                                                                  initialDate: DateTime.now(),
-                                                                  firstDate: DateTime(2022),
-                                                                  lastDate: DateTime(2025),
-                                                                );
-                                                                if (pickedDate != null) {
-                                                                  _endDateController.text = DateFormat("yyyy-MM-dd").format(pickedDate);
-                                                                  _selectedGoalType = _endDateController.text;
-                                                                }
-                                                              },
-                                                              validator: (value) {
-                                                                if (value?.isEmpty ?? true) {
-                                                                  return 'PleaseEnterYourGoal'.tr();
-                                                                }
-                                                                return null;
-                                                              },
-                                                            ),
-                                                          ],
+                                                          ),
                                                         ),
-                                                        actions: [
-                                                          ElevatedButton(
-                                                            onPressed: () {
-                                                              String newGoalName = _goalNameController.text.trim();
-                                                              String newEndDate = _endDateController.text.trim(); // Get the updated end date value
-                                                              FirebaseFirestore.instance
-                                                                  .collection("users")
-                                                                  .doc(user.uid)
-                                                                  .collection("goals")
-                                                                  .doc(goal.id)
-                                                                  .update({
-                                                                "goalName": newGoalName,
-                                                                "endDate": newEndDate, // Update the end date value in the document
-                                                              });
-                                                              Navigator.pop(dialogContext); // Close the dialog
-                                                            },
-                                                            child: Text('Save'),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
 
-                                              PopupMenuItem(
-                                                child: ListTile(
-                                                  leading: Icon(Icons.delete),
-                                                  title: Text('Delete'),
-                                                  onTap: () {
-                                                    Navigator.pop(context); // Close the menu
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext dialogContext) => AlertDialog(
-                                                        title: Text('Delete Goal'),
-                                                        content: Text('Are you sure you want to delete this goal?'),
-                                                        actions: [
-                                                          ElevatedButton(
-                                                            onPressed: () {
-                                                              FirebaseFirestore.instance
-                                                                  .collection("users")
-                                                                  .doc(user.uid)
-                                                                  .collection("goals")
-                                                                  .doc(goal.id)
-                                                                  .delete();
-                                                              Navigator.pop(dialogContext); // Close the dialog
-                                                            },
-                                                            child: Text('Delete'),
+                                                        TextFormField(
+                                                          controller: _endDateController,
+                                                          readOnly: true,
+                                                          decoration: InputDecoration(
+                                                            labelText: 'Select End Date',
                                                           ),
-                                                          ElevatedButton(
-                                                            onPressed: () {
-                                                              Navigator.pop(dialogContext); // Close the dialog
-                                                            },
-                                                            child: Text('Cancel'),
-                                                          ),
-                                                        ],
+                                                          onTap: () async {
+                                                            DateTime? pickedDate = await showDatePicker(
+                                                              context: dialogContext,
+                                                              initialDate: DateTime.now(),
+                                                              firstDate: DateTime(2022),
+                                                              lastDate: DateTime(2025),
+                                                            );
+                                                            if (pickedDate != null) {
+                                                              _endDateController.text = DateFormat("yyyy-MM-dd").format(pickedDate);
+                                                              _selectedGoalType = _endDateController.text;
+                                                            }
+                                                          },
+                                                          validator: (value) {
+                                                            if (value?.isEmpty ?? true) {
+                                                              return 'PleaseEnterYourGoal'.tr();
+                                                            }
+                                                            return null;
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    actions: [
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          String newGoalName = _goalNameController.text.trim();
+                                                          String newEndDate = _endDateController.text.trim(); // Get the updated end date value
+                                                          FirebaseFirestore.instance
+                                                              .collection("users")
+                                                              .doc(user.uid)
+                                                              .collection("goals")
+                                                              .doc(goal.id)
+                                                              .update({
+                                                            "goalName": newGoalName,
+                                                            "endDate": newEndDate, // Update the end date value in the document
+                                                          });
+                                                          Navigator.pop(dialogContext); // Close the dialog
+                                                        },
+                                                        child: Text('Save'),
                                                       ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
 
-                                            ],
-                                          );
-                                        },
-                                        icon: Icon(Icons.more_vert),
-                                      ),
+                                          PopupMenuItem(
+                                            child: ListTile(
+                                              leading: Icon(Icons.delete),
+                                              title: Text('Delete'),
+                                              onTap: () {
+                                                Navigator.pop(context); // Close the menu
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext dialogContext) => AlertDialog(
+                                                    title: Text('Delete Goal'),
+                                                    content: Text('Are you sure you want to delete this goal?'),
+                                                    actions: [
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          FirebaseFirestore.instance
+                                                              .collection("users")
+                                                              .doc(user.uid)
+                                                              .collection("goals")
+                                                              .doc(goal.id)
+                                                              .delete();
+                                                          Navigator.pop(dialogContext); // Close the dialog
+                                                        },
+                                                        child: Text('Delete'),
+                                                      ),
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(dialogContext); // Close the dialog
+                                                        },
+                                                        child: Text('Cancel'),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+
+                                        ];
+                                      },)
                                     ],
                                   )
                               ),

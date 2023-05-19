@@ -208,32 +208,6 @@ class _MySettingState extends State<Setting> {
           ),
         )
       ]),
-
-      bottomNavigationBar: Container(
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
-                  },
-                  icon: const Icon(Icons.home),
-                ),
-                // IconButton(
-                //   onPressed: () {
-                //     Navigator.push(context,
-                //         MaterialPageRoute(builder: (context) => SeeAllHabit()));
-                //   },
-                //   icon: const Icon(Icons.show_chart),
-                // ),
-                IconButton(
-                  onPressed: () {
-                  },
-                  icon: Icon(Icons.settings,color: themeProvider.isDarkMode?Colors.blue:Colors.orangeAccent,),
-                ),
-              ] ),
-      ),
           );
   });
 }
